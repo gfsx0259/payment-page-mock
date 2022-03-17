@@ -1,0 +1,54 @@
+version: '3.4'
+services:
+    nginx:
+        container_name: nginx
+        image: nginx:latest
+        ports:
+            - "8082:80"
+        volumes:
+            - ./hosts:/etc/nginx/conf.d
+            - ./www:/var/www
+            - ./logs/nginx:/var/log/nginx
+        links:
+            - php
+    php:
+        container_name: php
+        build:
+            context: ./images/php
+            args:
+                UID: 1000
+                GID: 1000
+        extra_hosts:
+            -   "host.docker.internal:host-gateway"
+        volumes:
+            - ./www:/var/www:rw
+        links:
+            - db
+    db:
+        container_name: db
+        image: mysql:latest
+        ports:
+            - "3306:3306"
+        volumes:
+            - dbdata:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_DATABASE: "app"
+            MYSQL_USER: "user"
+            MYSQL_PASSWORD: "password"
+        expose:
+            - "3306"
+    nodejs:
+        container_name: nodejs
+        image: node:latest
+        ports:
+            - "8083:8080"
+        working_dir: /home/node/app
+        user: "node"
+        environment:
+            - NODE_ENV=develop
+        volumes:
+            - ./www/ui:/home/node/app
+        command: "npm run serve"
+volumes:
+    dbdata:
