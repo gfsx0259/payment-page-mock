@@ -8,7 +8,10 @@ use App\Stub\Entity\Callback;
 use App\Stub\StubRepository;
 use Neomerx\Cors\Contracts\Constants\CorsResponseHeaders;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
+use Yiisoft\Http\Method;
+use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
 final class ApiStubController
 {
@@ -39,6 +42,23 @@ final class ApiStubController
 
         return $this->responseFactory
             ->createResponse($stubs)
+            ->withHeader(CorsResponseHeaders::ALLOW_ORIGIN, '*');
+    }
+
+    public function callback(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
+    {
+        if ($request->getMethod() === Method::OPTIONS) {
+            return $this->responseFactory
+                ->createResponse()
+                ->withHeader(CorsResponseHeaders::ALLOW_ORIGIN, '*')
+                ->withHeader(CorsResponseHeaders::ALLOW_HEADERS, 'Content-Type');
+        }
+
+        $data = json_decode($request->getBody()->getContents());
+
+
+        return $this->responseFactory
+            ->createResponse($data)
             ->withHeader(CorsResponseHeaders::ALLOW_ORIGIN, '*');
     }
 }

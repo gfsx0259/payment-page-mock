@@ -4,16 +4,18 @@
             v-model="mock.route"
             placeholder="Gate route"
         />
-        <vue-json-editor
-            v-for="callback in mock.callbacks"
-            v-bind:value="callback"
-            mode="code"
-            :show-btns="false"
-            :expandedOnStart="true">
-        </vue-json-editor>
+
+        <div v-for="(callback, index) in mock.callbacks">
+            <vue-json-editor
+                @json-save="onCallbackEdit(index, $event)"
+                v-bind:value="callback"
+                mode="code"
+                :show-btns="true"
+                :expandedOnStart="true">
+            </vue-json-editor>
+      </div>
 
         <button class="btn" @click="onAdd">Добавить колбек</button>
-        <button class="btn" @click="onSave">Сохранить</button>
   </form>
 </template>
 
@@ -37,9 +39,9 @@ export default {
 
             this.mock.callbacks.push({})
         },
-        onSave() {
-            this.$emit('create', this.mock);
-        }
+        onCallbackEdit(index, event) {
+            this.$emit('updateCallback', index, event);
+        },
     },
 }
 </script>

@@ -86,14 +86,19 @@ return [
             Route::get('/user')
                 ->name('api/user/index')
                 ->action([ApiUserController::class, 'index']),
-            Route::get('/stub')
-                ->name('api/stub/index')
-                ->middleware(FormatDataResponseAsJson::class)
-                ->action([ApiStubController::class, 'index']),
             Route::get('/user/{login}')
                 ->name('api/user/profile')
                 ->middleware(FormatDataResponseAsJson::class)
-                ->action([ApiUserController::class, 'profile'])
+                ->action([ApiUserController::class, 'profile']),
+             Route::get('/stub')
+                 ->name('api/stub/index')
+                 ->middleware(FormatDataResponseAsJson::class)
+                 ->action([ApiStubController::class, 'index']),
+            Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
+                ->name('api/stub/callback')
+                ->disableMiddleware(CsrfMiddleware::class)
+                ->middleware(FormatDataResponseAsJson::class)
+                ->action([ApiStubController::class, 'callback']),
         ),
 
     Group::create('/v2')

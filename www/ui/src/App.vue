@@ -4,7 +4,7 @@
             <MockForm
                 v-if="mocks.length"
                 :mock="mocks[index]"
-                @create="createMock"
+                @updateCallback="updateCallback"
             />
         </div>
         <div class="column">
@@ -37,8 +37,11 @@ export default {
         this.mocks = response.data.data;
     },
     methods: {
-        createMock(mock) {
-            console.log(mock);
+        updateCallback(index, callback) {
+            axios.post('http://localhost:8082/api/stub/callback', {
+                index,
+                callback
+            })
         },
         onSelect(id) {
             this.index = id - 1;
