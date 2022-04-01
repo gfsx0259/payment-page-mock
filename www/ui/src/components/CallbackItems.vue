@@ -1,14 +1,9 @@
 <template>
   <form @submit.prevent>
-        <input
-            v-model="mock.route"
-            placeholder="Gate route"
-        />
-
-        <div v-for="(callback, index) in mock.callbacks">
+        <div v-for="callback in callbacks">
             <vue-json-editor
-                @json-save="onCallbackEdit(index, $event)"
-                v-bind:value="callback"
+                v-bind:value="callback.body"
+                @json-save="onCallbackEdit(callback.id, $event)"
                 mode="code"
                 :show-btns="true"
                 :expandedOnStart="true">
@@ -21,11 +16,13 @@
 
 <script>
 import vueJsonEditor from 'vue-json-editor'
+
 export default {
-    name: "MockForm",
+    name: "CallbackItems",
     props: {
-        mock: {
-            type: Object
+        callbacks: {
+            type: Array,
+            required: true,
         }
     },
     components: {
@@ -33,11 +30,11 @@ export default {
     },
     methods: {
         onAdd() {
-            if (!this.mock.callbacks) {
-                this.mock.callbacks = [];
+            if (!this.callbacks) {
+                this.callbacks = [];
             }
 
-            this.mock.callbacks.push({})
+            this.callbacks.push({})
         },
         onCallbackEdit(index, event) {
             this.$emit('updateCallback', index, event);
@@ -45,18 +42,3 @@ export default {
     },
 }
 </script>
-
-<style>
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.btn {
-  align-self: end;
-  margin-top: 15px;
-  padding: 15px;
-  background: #fff;
-  border: 1px solid #0f5132;
-}
-</style>

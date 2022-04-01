@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Stub;
 
-use App\Stub\Entity\Stub;
 use Cycle\ORM\Select;
 
 /**
@@ -13,5 +12,12 @@ use Cycle\ORM\Select;
  */
 final class StubRepository extends Select\Repository
 {
-
+    /**
+     * @param int $routeId
+     * @return Stub[]
+     */
+    public function findByRoute(int $routeId): array
+    {
+        return $this->select()->where(['route_id' => $routeId])->fetchAll();
+    }
 }

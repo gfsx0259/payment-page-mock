@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Stub;
+namespace App\Stub\Session;
 
 class State
 {

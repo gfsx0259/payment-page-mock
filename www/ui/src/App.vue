@@ -1,75 +1,33 @@
 <template>
-    <div class="row">
-        <div class="column">
-            <MockForm
-                v-if="mocks.length"
-                :mock="mocks[index]"
-                @updateCallback="updateCallback"
-            />
-        </div>
-        <div class="column">
-            <MockList
-                @select="onSelect"
-                :mocks="mocks"
-            />
-        </div>
+    <div class="app">
+        <CNavbar  color-scheme="light" class="bg-light">
+            <CContainer>
+            <CNavbarNav>
+                <CNavItem>
+                    <CNavLink href="#" active>
+                        <router-link to='/'>
+                            Routes
+                        </router-link>
+                    </CNavLink>
+                </CNavItem>
+            </CNavbarNav>
+            </CContainer>
+        </CNavbar>
+        <CContainer class="mt-5">
+            <router-view/>
+        </CContainer>
     </div>
 </template>
 
 <script>
-import MockForm from "@/components/MockForm";
-import MockList from "@/components/MockList";
-import axios from 'axios';
+import '@coreui/coreui/dist/css/coreui.min.css';
 
-export default {
-    components: {
-        MockForm,
-        MockList,
-    },
-    data() {
-        return {
-            index: 0,
-            mocks: [],
-        }
-    },
-    async mounted() {
-        const response = await axios.get('http://localhost:8082/api/stub');
-        this.mocks = response.data.data;
-    },
-    methods: {
-        updateCallback(index, callback) {
-            axios.post('http://localhost:8082/api/stub/callback', {
-                index,
-                callback
-            })
-        },
-        onSelect(id) {
-            this.index = id - 1;
-        },
-    },
-}
+export default {}
 </script>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background-color: #1d1b2b;
-    color: #fff;
-    font-family: Rubik,sans-serif;
-}
-
-.row {
-    display: flex;
-}
-
-.column {
-    flex: 30%;
-    padding: 50px;
+:root {
+    --cui-header-border-width: 0;
 }
 
 .jsoneditor-menu {

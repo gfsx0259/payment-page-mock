@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Stub\Controller;
+namespace App\Stub;
 
-use App\Stub\State;
-use App\Stub\StubRepository;
+use App\Stub\Session\State;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\SimpleCache\CacheInterface;
@@ -17,16 +16,16 @@ final class StubController
 {
     private DataResponseFactoryInterface $responseFactory;
     private CacheInterface $cache;
-    private StubRepository $stubRepository;
+    private RouteRepository $stubRepository;
 
     public function __construct(
         DataResponseFactoryInterface $responseFactory,
         CacheInterface $cache,
-        StubRepository $stubRepository
+        RouteRepository $routeRepository
     ) {
         $this->responseFactory = $responseFactory;
         $this->cache = $cache;
-        $this->stubRepository = $stubRepository;
+        $this->stubRepository = $routeRepository;
     }
 
     /**

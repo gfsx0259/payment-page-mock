@@ -15,8 +15,10 @@ use App\Controller\Actions\ApiInfo;
 use App\Controller\SiteController;
 use App\Middleware\AccessChecker;
 use App\Middleware\ApiDataWrapper;
-use App\Stub\Controller\ApiStubController;
-use App\Stub\Controller\StubController;
+use App\Stub\Api\CallbackController;
+use App\Stub\Api\RouteController;
+use App\Stub\Api\StubController as ApiStubController;
+use App\Stub\StubController;
 use App\User\Controller\ApiUserController;
 use App\User\Controller\UserController;
 use Psr\Http\Message\ServerRequestInterface;
@@ -90,15 +92,29 @@ return [
                 ->name('api/user/profile')
                 ->middleware(FormatDataResponseAsJson::class)
                 ->action([ApiUserController::class, 'profile']),
-             Route::get('/stub')
-                 ->name('api/stub/index')
+
+             Route::get('/route')
+                 ->name('api/route/index')
                  ->middleware(FormatDataResponseAsJson::class)
-                 ->action([ApiStubController::class, 'index']),
+                 ->action([RouteController::class, 'index']),
+            Route::methods([Method::OPTIONS, Method::POST],'/stub')
+                ->name('api/stub/create')
+                ->disableMiddleware(CsrfMiddleware::class)
+                ->middleware(FormatDataResponseAsJson::class)
+                ->action([ApiStubController::class, 'create']),
+            Route::get('/stub/{routeId}')
+                ->name('api/stub/index')
+                ->middleware(FormatDataResponseAsJson::class)
+                ->action([ApiStubController::class, 'index']),
+            Route::get('/callback')
+                ->name('api/callback/index')
+                ->middleware(FormatDataResponseAsJson::class)
+                ->action([CallbackController::class, 'index']),
             Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
                 ->name('api/stub/callback')
                 ->disableMiddleware(CsrfMiddleware::class)
                 ->middleware(FormatDataResponseAsJson::class)
-                ->action([ApiStubController::class, 'callback']),
+                ->action([CallbackController::class, 'callback']),
         ),
 
     Group::create('/v2')
