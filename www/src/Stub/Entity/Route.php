@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Stub;
+namespace App\Stub\Entity;
 
+use App\Stub\Repository\RouteRepository;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 

@@ -29,16 +29,4 @@ export default {}
 :root {
     --cui-header-border-width: 0;
 }
-
-.jsoneditor-menu {
-    display: none;
-}
-
-.jsoneditor-vue {
-    margin-top: 20px;
-}
-
-.ace-jsoneditor {
-    min-height: 400px;
-}
 </style>

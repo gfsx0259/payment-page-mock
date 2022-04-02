@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Stub\Callback;
+namespace App\Stub\Entity;
 
+use App\Stub\Repository\CallbackRepository;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use stdClass;
@@ -19,6 +20,16 @@ class Callback
 
     #[Column(type: 'json')]
     private string $body;
+
+    /**
+     * @param int $stubId
+     * @param string $body
+     */
+    public function __construct(int $stubId, string $body)
+    {
+        $this->stub_id = $stubId;
+        $this->body = $body;
+    }
 
     public function getId(): int
     {

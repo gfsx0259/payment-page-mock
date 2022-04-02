@@ -23,11 +23,6 @@ export default {
         required: true
     }
   },
-  methods: {
-      onSelect (id) {
-          this.$emit('select', id)
-      }
-  },
 }
 </script>
 

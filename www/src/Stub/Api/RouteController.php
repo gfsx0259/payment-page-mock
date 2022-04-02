@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Stub\Api;
 
-use App\Stub\RouteRepository;
+use App\Stub\Repository\RouteRepository;
 use Neomerx\Cors\Contracts\Constants\CorsResponseHeaders;
 use Psr\Http\Message\ResponseInterface;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;

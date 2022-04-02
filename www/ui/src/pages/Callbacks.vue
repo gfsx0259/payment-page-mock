@@ -19,14 +19,15 @@ export default {
         }
     },
     async mounted() {
-        const response = await axios.get('http://localhost:8082/api/callback');
+        const response = await axios.get('http://localhost:8082/api/callback/' + this.$route.params.id);
         this.callbacks = response.data.data;
     },
     methods: {
-        updateCallback(index, callback) {
+        updateCallback(id, callbackBody) {
             axios.post('http://localhost:8082/api/stub/callback', {
-                index,
-                callback
+                id,
+                stubId: this.$route.params.id,
+                callback: callbackBody || {}
             })
         },
     }

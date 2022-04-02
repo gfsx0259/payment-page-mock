@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Stub;
 
+use App\Stub\Repository\RouteRepository;
 use App\Stub\Session\State;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

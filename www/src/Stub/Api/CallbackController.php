@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Stub\Api;
 
-use App\Stub\Callback\CallbackRepository;
+use App\Stub\Entity\Callback;
+use App\Stub\Repository\CallbackRepository;
 use Neomerx\Cors\Contracts\Constants\CorsResponseHeaders;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
 use Yiisoft\Http\Method;
+use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
 final class CallbackController
@@ -26,13 +28,17 @@ final class CallbackController
         $this->callbackRepository = $callbackRepository;
     }
 
-    public function index(): ResponseInterface
+    public function index(
+        CurrentRoute $route
+    ): ResponseInterface
     {
+        $stubId = (int)$route->getArgument('stubId');
+
         $callbacks = [];
-        foreach ($this->callbackRepository->findAll() as $stub) {
+        foreach ($this->callbackRepository->findByStub($stubId) as $callback) {
             $callbacks[] = [
-                'id' => $stub->getId(),
-                'body' => $stub->getBody(),
+                'id' => $callback->getId(),
+                'body' => $callback->getBody(),
             ];
         }
 
@@ -55,8 +61,13 @@ final class CallbackController
 
         $data = json_decode($request->getBody()->getContents());
 
-        $callback = $this->callbackRepository->findByPK($data->index);
-        $callback->setBody($data->callback);
+        if (isset($data->id)) {
+            $callback = $this->callbackRepository->findByPK($data->id);
+            $callback->setBody($data->callback);
+        } else {
+            $callback = new Callback((int)$data->stubId, json_encode($data->callback));
+        }
+
         $entityWriter->write([$callback]);
 
         return $this->responseFactory

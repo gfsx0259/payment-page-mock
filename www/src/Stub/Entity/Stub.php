@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Stub;
+namespace App\Stub\Entity;
 
-use App\Stub\Callback\Callback;
+use App\Stub\Repository\StubRepository;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\HasMany;

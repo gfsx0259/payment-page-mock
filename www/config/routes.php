@@ -97,16 +97,17 @@ return [
                  ->name('api/route/index')
                  ->middleware(FormatDataResponseAsJson::class)
                  ->action([RouteController::class, 'index']),
+            Route::get('/stub/{routeId}')
+                ->name('api/stub/index')
+                ->middleware(FormatDataResponseAsJson::class)
+                ->action([ApiStubController::class, 'index']),
             Route::methods([Method::OPTIONS, Method::POST],'/stub')
                 ->name('api/stub/create')
                 ->disableMiddleware(CsrfMiddleware::class)
                 ->middleware(FormatDataResponseAsJson::class)
                 ->action([ApiStubController::class, 'create']),
-            Route::get('/stub/{routeId}')
-                ->name('api/stub/index')
-                ->middleware(FormatDataResponseAsJson::class)
-                ->action([ApiStubController::class, 'index']),
-            Route::get('/callback')
+
+            Route::get('/callback/{stubId}')
                 ->name('api/callback/index')
                 ->middleware(FormatDataResponseAsJson::class)
                 ->action([CallbackController::class, 'index']),

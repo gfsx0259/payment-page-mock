@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Stub;
+namespace App\Stub\Repository;
 
+use App\Stub\Entity\Route;
 use Cycle\ORM\Select;
 
 /**

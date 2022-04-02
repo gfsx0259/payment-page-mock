@@ -1,6 +1,7 @@
 <template>
-  <form @submit.prevent>
-        <div v-for="callback in callbacks">
+    <CButton color="dark" @click="onAdd">Add callback</CButton>
+    <CRow>
+        <CCol md="6" v-for="callback in callbacks">
             <vue-json-editor
                 v-bind:value="callback.body"
                 @json-save="onCallbackEdit(callback.id, $event)"
@@ -8,10 +9,8 @@
                 :show-btns="true"
                 :expandedOnStart="true">
             </vue-json-editor>
-      </div>
-
-        <button class="btn" @click="onAdd">Добавить колбек</button>
-  </form>
+        </CCol>
+    </CRow>
 </template>
 
 <script>
@@ -26,7 +25,7 @@ export default {
         }
     },
     components: {
-      vueJsonEditor,
+        vueJsonEditor,
     },
     methods: {
         onAdd() {
@@ -42,3 +41,17 @@ export default {
     },
 }
 </script>
+
+<style>
+.jsoneditor-menu {
+    display: none;
+}
+
+.jsoneditor-vue {
+    margin-top: 20px;
+}
+
+.jsoneditor,.ace-jsoneditor {
+    min-height: 700px;
+}
+</style>

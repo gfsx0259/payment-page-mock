@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Stub\Api;
 
-use App\Stub\Callback\Callback;
-use App\Stub\Stub;
-use App\Stub\StubRepository;
+use App\Stub\Entity\Callback;
+use App\Stub\Entity\Stub;
+use App\Stub\Repository\StubRepository;
 use Neomerx\Cors\Contracts\Constants\CorsResponseHeaders;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
