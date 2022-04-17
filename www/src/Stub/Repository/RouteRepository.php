@@ -13,5 +13,12 @@ use Cycle\ORM\Select;
  */
 final class RouteRepository extends Select\Repository
 {
-
+    /**
+     * @param string $path
+     * @return Route
+     */
+    public function findByPath(string $path): Route
+    {
+        return $this->select()->where(['route' => $path])->fetchOne();
+    }
 }

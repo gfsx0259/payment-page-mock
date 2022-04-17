@@ -5,28 +5,42 @@ declare(strict_types=1);
 namespace App\Stub;
 
 use App\Stub\Repository\RouteRepository;
+use App\Stub\Repository\StubRepository;
+use App\Stub\Service\ActionProcessorFactory;
+use App\Stub\Service\OverrideProcessor;
 use App\Stub\Session\State;
+use App\Stub\Session\StateManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
+use Yiisoft\Http\Status;
+use Yiisoft\Router\CurrentRoute;
 
 final class StubController
 {
     private DataResponseFactoryInterface $responseFactory;
-    private CacheInterface $cache;
-    private RouteRepository $stubRepository;
+    private RouteRepository $routeRepository;
+    private StubRepository $stubRepository;
+    private ActionProcessorFactory $actionProcessorFactory;
+    private OverrideProcessor $overrideProcessor;
+    private StateManager $stateManager;
 
     public function __construct(
         DataResponseFactoryInterface $responseFactory,
-        CacheInterface $cache,
-        RouteRepository $routeRepository
+        RouteRepository $routeRepository,
+        StubRepository $stubRepository,
+        ActionProcessorFactory $actionProcessorFactory,
+        OverrideProcessor $overrideProcessor,
+        StateManager $stateManager,
     ) {
         $this->responseFactory = $responseFactory;
-        $this->cache = $cache;
-        $this->stubRepository = $routeRepository;
+        $this->routeRepository = $routeRepository;
+        $this->stubRepository = $stubRepository;
+        $this->actionProcessorFactory = $actionProcessorFactory;
+        $this->overrideProcessor = $overrideProcessor;
+        $this->stateManager = $stateManager;
     }
 
     /**
@@ -39,7 +53,7 @@ final class StubController
     ): ResponseInterface {
         $body = json_decode($request->getBody()->getContents());
 
-        if (!$state = $this->getState(ArrayHelper::getValueByPath($body, 'general.payment_id'))) {
+        if (!$state = $this->stateManager->get(ArrayHelper::getValueByPath($body, 'general.payment_id'))) {
             return $this->responseNotFound();
         }
 
@@ -56,40 +70,38 @@ final class StubController
     ): ResponseInterface {
         $body = json_decode($request->getBody()->getContents());
 
-        if (!$state = $this->getState(ArrayHelper::getValueByPath($body, 'request_id'))) {
+        if (!$state = $this->stateManager->get(ArrayHelper::getValueByPath($body, 'request_id'))) {
             return $this->responseNotFound();
         }
 
         return $this->responseByState($state);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function sale(ServerRequestInterface $request): ResponseInterface
+    public function sale(
+        ServerRequestInterface $request,
+        CurrentRoute $currentRoute
+    ): ResponseInterface
     {
-        $body = json_decode($request->getBody()->getContents());
+        if (!$route = $this->routeRepository->findByPath($currentRoute->getArgument('route'))) {
+            $this->responseFactory
+                ->createResponse()
+                ->withStatus(Status::NOT_FOUND);
+        }
 
-        $paymentId = ArrayHelper::getValueByPath($body, 'general.payment_id');
-        $projectId = ArrayHelper::getValueByPath($body, 'general.project_id');
-        $requestId = uniqid('generated_request_id');
+        $initialRequest = json_decode($request->getBody()->getContents(), true);
 
-        $this->cache->set(
-            $requestId,
-            new State(
-                $requestId,
-                str_replace('/en', '', $request->getUri()->getPath())
-            )
+        $state = new State(
+            $requestId = uniqid('generated_request_id'),
+            $route->getId(),
+            $initialRequest
         );
-        $this->cache->set(
-            $paymentId,
-            $requestId
-        );
+
+       $this->stateManager->save($state);
 
         $responseData = [
             'status' => 'success',
-            'project_id' => $projectId,
-            'payment_id' => $paymentId,
+            'project_id' => $state->getInitialRequest()->get('general.project_id'),
+            'payment_id' => $state->getInitialRequest()->get('general.payment_id'),
             'request_id' => $requestId,
         ];
 
@@ -104,40 +116,37 @@ final class StubController
     }
 
     /**
-     * @throws InvalidArgumentException
-     */
-    private function getState(string $key): ?State
-    {
-        $state = $this->cache->get($key);
-
-        if ($state instanceof State) {
-            return $state;
-        } elseif ($state) {
-            return $this->cache->get($state);
-        } else {
-            return null;
-        }
-    }
-
-    /**
+     * @param State $state
+     * @return ResponseInterface
      * @throws InvalidArgumentException
      */
     private function responseByState(State $state): ResponseInterface
     {
-        $stub = $this->stubRepository->findOne([
-            'route'=> $state->getRoute()
-        ]);
+        $route = $this->routeRepository->findByPK($state->getRouteId());
+        $stubs = $this->stubRepository->findByRoute($route->getId());
 
-        $callbacks = $stub->getCallbacks();
-        $callbackIndex = max(0, min($state->getCount(), $callbacks->count()) - 1);
+        $callbacks = current($stubs)->getCallbacks();
 
-        $this->cache->set(
-            $state->getRequestId(),
-            $state->increaseCount()
-        );
+        $cursor = min($state->getCount(), $callbacks->count()) - 1;
+
+        if ($cursor < 0) {
+            $cursor = 0;
+        }
+
+        $callbackCollection = $callbacks->get($cursor)->getBody();
+
+        $this->overrideProcessor->process($callbackCollection, $state);
+
+        if ($actionProcessor = $this->actionProcessorFactory->createProcessor($callbackCollection)) {
+            $actionProcessor->process($callbackCollection, $state);
+        } else {
+            $state->increaseCount();
+        }
+
+        $this->stateManager->save($state);
 
         return $this->responseFactory
-            ->createResponse($callbacks->get($callbackIndex)->getBody());
+            ->createResponse($callbackCollection->data);
     }
 
     private function responseNotFound(): ResponseInterface

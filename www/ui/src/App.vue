@@ -1,19 +1,7 @@
 <template>
     <div class="app">
-        <CNavbar  color-scheme="light" class="bg-light">
-            <CContainer>
-            <CNavbarNav>
-                <CNavItem>
-                    <CNavLink href="#" active>
-                        <router-link to='/'>
-                            Routes
-                        </router-link>
-                    </CNavLink>
-                </CNavItem>
-            </CNavbarNav>
-            </CContainer>
-        </CNavbar>
-        <CContainer class="mt-5">
+        <NavBar/>
+        <CContainer class="mt-4">
             <router-view/>
         </CContainer>
     </div>
@@ -21,8 +9,13 @@
 
 <script>
 import '@coreui/coreui/dist/css/coreui.min.css';
+import NavBar from "@/components/common/NavBar";
 
-export default {}
+export default {
+    components: {
+        NavBar,
+    },
+}
 </script>
 
 <style>

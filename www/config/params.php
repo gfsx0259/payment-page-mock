@@ -28,6 +28,7 @@ return [
         'adminEmail' => 'admin@example.com',
         'senderEmail' => 'sender@example.com',
     ],
+    'host' => 'http://localhost:8082',
     'middlewares' => [
         ErrorCatcher::class,
         SessionMiddleware::class,

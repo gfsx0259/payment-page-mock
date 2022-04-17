@@ -24,6 +24,18 @@ class Route
     private string $logo = '';
 
     /**
+     * @param string $route
+     * @param string $title
+     * @param string $logo
+     */
+    public function __construct(string $route, string $title, string $logo)
+    {
+        $this->route = $route;
+        $this->title = $title;
+        $this->logo = $logo;
+    }
+
+    /**
      * @return int
      */
     public function getId(): int

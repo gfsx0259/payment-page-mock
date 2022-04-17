@@ -6,8 +6,8 @@
     >
         <StubForm :route-id="this.$route.params.id"/>
     </Modal>
-    <div class="d-flex justify-content-end mb-2">
-        <CButton color="success" @click="showForm">Add</CButton>
+    <div class="d-flex justify-content-start mb-4">
+        <CButton color="light" @click="showForm">Add stub</CButton>
     </div>
 
     <StubItems :stubs="stubs"/>

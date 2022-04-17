@@ -38,7 +38,17 @@ const UIComponents = [
     Components.CFormText,
     Components.CFormTextarea,
     Components.CSpinner,
+    Components.CPlaceholder,
+    Components.CBadge,
 ];
+
+const UIDirectives = [
+    Components.vcplaceholder,
+];
+
+UIDirectives.forEach((directive) => {
+    app.directive(directive.name, directive);
+})
 
 UIComponents.forEach((component) => {
     app.component(component.name, component);

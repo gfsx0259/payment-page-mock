@@ -15,6 +15,7 @@ use App\Controller\Actions\ApiInfo;
 use App\Controller\SiteController;
 use App\Middleware\AccessChecker;
 use App\Middleware\ApiDataWrapper;
+use App\Stub\ActionController;
 use App\Stub\Api\CallbackController;
 use App\Stub\Api\RouteController;
 use App\Stub\Api\StubController as ApiStubController;
@@ -97,11 +98,16 @@ return [
                  ->name('api/route/index')
                  ->middleware(FormatDataResponseAsJson::class)
                  ->action([RouteController::class, 'index']),
+            Route::methods([Method::OPTIONS, Method::POST], '/route')
+                ->name('api/route/create')
+                ->disableMiddleware(CsrfMiddleware::class)
+                ->middleware(FormatDataResponseAsJson::class)
+                ->action([RouteController::class, 'create']),
             Route::get('/stub/{routeId}')
                 ->name('api/stub/index')
                 ->middleware(FormatDataResponseAsJson::class)
                 ->action([ApiStubController::class, 'index']),
-            Route::methods([Method::OPTIONS, Method::POST],'/stub')
+            Route::methods([Method::OPTIONS, Method::POST], '/stub')
                 ->name('api/stub/create')
                 ->disableMiddleware(CsrfMiddleware::class)
                 ->middleware(FormatDataResponseAsJson::class)
@@ -129,8 +135,18 @@ return [
             Route::post('/payment/status/request')
                 ->action([StubController::class, 'statusByRequest']),
 
-            Route::post('/payment/card/sale')
+            Route::post('/payment/{route:[\w\/]+/[sale|auth]}')
                 ->action([StubController::class, 'sale']),
+            Route::post('/payment/card/3ds_result')
+                ->action([ActionController::class, 'completeAcs']),
+        ),
+
+    Group::create('/actions')
+        ->disableMiddleware(CsrfMiddleware::class)
+        ->routes(
+            Route::post('/renderAcs')
+                ->name('actions/renderAcs')
+                ->action([ActionController::class, 'renderAcs']),
         ),
 
     // Blog routes

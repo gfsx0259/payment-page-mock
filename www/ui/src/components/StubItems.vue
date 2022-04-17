@@ -11,7 +11,7 @@
                 <CTableDataCell>{{ stub.description }}</CTableDataCell>
                 <CTableDataCell>
                     <router-link :to="'/stub/' + stub.id">
-                        <CButton color="dark">Edit callbacks</CButton>
+                        <CButton color="dark">Callbacks</CButton>
                     </router-link>
                 </CTableDataCell>
             </CTableRow>

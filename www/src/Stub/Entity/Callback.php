@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Stub\Entity;
 
+use App\Stub\Collection\CallbackCollection;
 use App\Stub\Repository\CallbackRepository;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
-use stdClass;
 
 #[Entity(repository: CallbackRepository::class)]
 class Callback
@@ -36,15 +36,15 @@ class Callback
         return $this->id;
     }
 
-    public function getBody(): stdClass
+    public function getBody(): CallbackCollection
     {
-        return json_decode($this->body);
+        return new CallbackCollection(json_decode($this->body, true));
     }
 
     /**
-     * @param stdClass $body
+     * @param CallbackCollection $body
      */
-    public function setBody(stdClass $body): void
+    public function setBody(CallbackCollection $body): void
     {
         $this->body = json_encode($body);
     }

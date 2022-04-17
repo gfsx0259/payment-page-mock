@@ -33,7 +33,6 @@ export default {
         ...mapMutations({
             setTitle: 'stub/setFormTitle',
             setDescription: 'stub/setFormDescription',
-
         }),
         create() {
             this.$emit('create', this.stub);
