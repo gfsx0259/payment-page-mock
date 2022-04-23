@@ -19,3 +19,7 @@ Unit tests:
 docker-compose exec php bash -c "php ./vendor/bin/codecept run tests/Unit"
 ```
 
+Dump application tables:
+```shell
+docker-compose exec db bash -c "mysqldump --no-tablespaces -proot app route callback stub -r "/docker-entrypoint-initdb.d/app.sql""
+```
