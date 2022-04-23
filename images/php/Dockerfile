@@ -2,20 +2,15 @@ FROM php:8.0-fpm
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
-        soap \
         zip \
         curl \
         bcmath \
         exif \
-        gd \
         iconv \
         intl \
         mbstring \
         opcache \
         pdo_mysql \
-        pdo_pgsql \
-        imagick \
-        mongodb \
         xdebug
 
 

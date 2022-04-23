@@ -2,7 +2,7 @@
 
 namespace App\Stub\Session;
 
-use App\Stub\Collection\InitialRequestCollection;
+use App\Stub\Collection\ArrayCollection;
 
 class State
 {
@@ -21,7 +21,11 @@ class State
      */
     private array $initialRequest;
 
-    private int $count = 0;
+    /**
+     * @var int Indicates position of next available collection callback
+     */
+    private int $cursor = 0;
+
     private array $actions = [];
 
     /**
@@ -41,26 +45,24 @@ class State
         return $this->requestId;
     }
 
-    public function getRouteId(): string
+    public function getRouteId(): int
     {
         return $this->routeId;
     }
 
-    public function getInitialRequest(): InitialRequestCollection
+    public function getInitialRequest(): ArrayCollection
     {
-        return new InitialRequestCollection($this->initialRequest);
+        return new ArrayCollection($this->initialRequest);
     }
 
-    public function getCount(): int
+    public function getCursor(): int
     {
-        return $this->count;
+        return $this->cursor;
     }
 
-    public function increaseCount(): self
+    public function next(): void
     {
-        $this->count += 1;
-
-        return $this;
+        $this->cursor += 1;
     }
 
     public function registerAction(string $key): self

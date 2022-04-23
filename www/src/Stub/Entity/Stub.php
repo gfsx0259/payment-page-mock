@@ -9,7 +9,6 @@ use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\HasMany;
 use Doctrine\Common\Collections\ArrayCollection;
-use JetBrains\PhpStorm\Pure;
 
 #[Entity(repository: StubRepository::class)]
 class Stub
@@ -34,7 +33,7 @@ class Stub
      * @param string $title
      * @param string $description
      */
-    #[Pure] public function __construct(int $routeId, string $title, string $description)
+    public function __construct(int $routeId, string $title, string $description)
     {
         $this->route_id = $routeId;
         $this->title = $title;

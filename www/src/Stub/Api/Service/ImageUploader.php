@@ -12,7 +12,8 @@ class ImageUploader
         'jpg',
         'jpeg',
         'png',
-        'svg'
+        'svg',
+        'svg+xml',
     ];
 
     private string $fileNamePattern = 'img.%s';

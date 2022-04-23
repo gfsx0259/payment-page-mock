@@ -2,10 +2,10 @@
 
 namespace App\Stub\Service;
 
-use App\Stub\Collection\CallbackCollection;
+use App\Stub\Collection\ArrayCollection;
 use App\Stub\Session\State;
 
 interface ProcessorInterface
 {
-    public function process(CallbackCollection $callback, State $state): void;
+    public function process(ArrayCollection $callback, State $state): void;
 }

@@ -18,6 +18,8 @@ services:
             args:
                 UID: 1000
                 GID: 1000
+        environment:
+            PHP_IDE_CONFIG: "serverName=docker"
         extra_hosts:
             -   "host.docker.internal:host-gateway"
         volumes:

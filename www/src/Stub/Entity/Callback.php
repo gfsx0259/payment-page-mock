@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Stub\Entity;
 
-use App\Stub\Collection\CallbackCollection;
 use App\Stub\Repository\CallbackRepository;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
@@ -36,15 +35,15 @@ class Callback
         return $this->id;
     }
 
-    public function getBody(): CallbackCollection
+    public function getBody(): array
     {
-        return new CallbackCollection(json_decode($this->body, true));
+        return json_decode($this->body, true);
     }
 
     /**
-     * @param CallbackCollection $body
+     * @param array $body
      */
-    public function setBody(CallbackCollection $body): void
+    public function setBody(array $body): void
     {
         $this->body = json_encode($body);
     }

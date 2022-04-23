@@ -7,7 +7,7 @@ namespace App\Stub\Collection;
 use Yiisoft\Arrays\ArrayAccessTrait;
 use Yiisoft\Arrays\ArrayHelper;
 
-abstract class ArrayCollection
+class ArrayCollection
 {
     use ArrayAccessTrait;
 
@@ -23,5 +23,10 @@ abstract class ArrayCollection
     public function set(string $key, mixed $value): void
     {
         ArrayHelper::setValueByPath($this->data, $key, $value);
+    }
+
+    public function replace(string $needle, string $value): static
+    {
+        return (new ReplaceIterator())->replace($this, $needle, $value);
     }
 }

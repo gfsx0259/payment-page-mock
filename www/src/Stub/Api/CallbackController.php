@@ -63,7 +63,7 @@ final class CallbackController
 
         if (isset($data->id)) {
             $callback = $this->callbackRepository->findByPK($data->id);
-            $callback->setBody($data->callback);
+            $callback->setBody((array)$data->callback);
         } else {
             $callback = new Callback((int)$data->stubId, json_encode($data->callback));
         }
