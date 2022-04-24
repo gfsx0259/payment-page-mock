@@ -10,7 +10,7 @@
         <CButton color="light" @click="showForm">Add stub</CButton>
     </div>
 
-    <StubItems :stubs="stubs"/>
+    <StubItems :stubs="stubs" @setDefault="changeDefault"/>
     <CSpinner color="warning" v-if="isLoading"/>
 </template>
 
@@ -36,19 +36,25 @@ export default {
       }
     },
     mounted() {
-        this.setRoute(this.$route.params.id);
+        this.setRoute(parseInt(this.$route.params.id));
         this.fetch();
     },
     methods: {
         ...mapMutations({
             setRoute: 'stub/setFormRouteId',
+            setDefault: 'stub/setDefault',
         }),
         ...mapActions({
-            fetch: 'stub/fetchStubs',
-            create: 'stub/createStub',
+            fetch: 'stub/fetch',
+            create: 'stub/create',
+            saveDefault: 'stub/saveDefault',
         }),
         showForm() {
             this.visible = true;
+        },
+        changeDefault(id) {
+            this.setDefault(id);
+            this.saveDefault();
         },
     },
     computed: {

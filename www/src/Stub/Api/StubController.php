@@ -12,22 +12,15 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
-use Yiisoft\Http\Method;
 use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
 final class StubController
 {
-    private DataResponseFactoryInterface $responseFactory;
-    private StubRepository $stubRepository;
-
     public function __construct(
-        DataResponseFactoryInterface $responseFactory,
-        StubRepository $stubRepository,
-    ) {
-        $this->responseFactory = $responseFactory;
-        $this->stubRepository = $stubRepository;
-    }
+        private DataResponseFactoryInterface $responseFactory,
+        private StubRepository $stubRepository,
+    ) {}
 
     public function index(
         CurrentRoute $route
@@ -41,6 +34,7 @@ final class StubController
                 'id' => $stub->getId(),
                 'title' => $stub->getTitle(),
                 'description' => $stub->getDescription(),
+                'default' => $stub->getDefault(),
                 'callbacks' => $stub->getCallbacks()->map(function (Callback $callback) {
                     return [
                         'id' => $callback->getId(),
@@ -60,13 +54,6 @@ final class StubController
      */
     public function create(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
     {
-        if ($request->getMethod() === Method::OPTIONS) {
-            return $this->responseFactory
-                ->createResponse()
-                ->withHeader(CorsResponseHeaders::ALLOW_ORIGIN, '*')
-                ->withHeader(CorsResponseHeaders::ALLOW_HEADERS, 'Content-Type');
-        }
-
         $data = json_decode($request->getBody()->getContents());
         $stub = new Stub(
             (int)$data->routeId,
@@ -76,7 +63,24 @@ final class StubController
         $entityWriter->write([$stub]);
 
         return $this->responseFactory
-            ->createResponse(['success' => $data])
-            ->withHeader(CorsResponseHeaders::ALLOW_ORIGIN, '*');
+            ->createResponse(['success' => $data]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function setDefault(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
+    {
+        $data = json_decode($request->getBody()->getContents());
+        $stubs = $this->stubRepository->findByRoute($data->routeId);
+
+        foreach ($stubs as $stub) {
+            $stub->setDefault($stub->getId() === $data->stubId);
+        }
+
+        $entityWriter->write($stubs);
+
+        return $this->responseFactory
+            ->createResponse(['success' => $data]);
     }
 }

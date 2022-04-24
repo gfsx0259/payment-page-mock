@@ -1,4 +1,7 @@
 import { createApp } from 'vue'
+import { CIcon } from '@coreui/icons-vue';
+import { cilFlagAlt } from '@coreui/icons'
+
 import App from './App'
 import Router from "@/router/router";
 import Store from "@/store";
@@ -40,11 +43,16 @@ const UIComponents = [
     Components.CSpinner,
     Components.CPlaceholder,
     Components.CBadge,
+    CIcon,
 ];
 
 const UIDirectives = [
     Components.vcplaceholder,
 ];
+
+app.provide('icons', {
+    cilFlagAlt,
+})
 
 UIDirectives.forEach((directive) => {
     app.directive(directive.name, directive);

@@ -6,27 +6,19 @@ namespace App\Stub\Api;
 
 use App\Stub\Entity\Callback;
 use App\Stub\Repository\CallbackRepository;
-use Neomerx\Cors\Contracts\Constants\CorsResponseHeaders;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
-use Yiisoft\Http\Method;
 use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
 final class CallbackController
 {
-    private DataResponseFactoryInterface $responseFactory;
-    private CallbackRepository $callbackRepository;
-
     public function __construct(
-        DataResponseFactoryInterface $responseFactory,
-        CallbackRepository $callbackRepository,
-    ) {
-        $this->responseFactory = $responseFactory;
-        $this->callbackRepository = $callbackRepository;
-    }
+        private DataResponseFactoryInterface $responseFactory,
+        private CallbackRepository $callbackRepository,
+    ) {}
 
     public function index(
         CurrentRoute $route
@@ -43,8 +35,7 @@ final class CallbackController
         }
 
         return $this->responseFactory
-            ->createResponse($callbacks)
-            ->withHeader(CorsResponseHeaders::ALLOW_ORIGIN, '*');
+            ->createResponse($callbacks);
     }
 
     /**
@@ -52,13 +43,6 @@ final class CallbackController
      */
     public function callback(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
     {
-        if ($request->getMethod() === Method::OPTIONS) {
-            return $this->responseFactory
-                ->createResponse()
-                ->withHeader(CorsResponseHeaders::ALLOW_ORIGIN, '*')
-                ->withHeader(CorsResponseHeaders::ALLOW_HEADERS, 'Content-Type');
-        }
-
         $data = json_decode($request->getBody()->getContents());
 
         if (isset($data->id)) {
@@ -71,7 +55,6 @@ final class CallbackController
         $entityWriter->write([$callback]);
 
         return $this->responseFactory
-            ->createResponse($data)
-            ->withHeader(CorsResponseHeaders::ALLOW_ORIGIN, '*');
+            ->createResponse($data);
     }
 }

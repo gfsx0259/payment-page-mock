@@ -25,6 +25,9 @@ class Stub
     #[Column(type: 'text')]
     private string $description = '';
 
+    #[Column(type: 'boolean')]
+    private bool $default;
+
     #[HasMany(Callback::class)]
     private ArrayCollection $callbacks;
 
@@ -71,5 +74,22 @@ class Stub
     public function getCallbacks(): ArrayCollection
     {
         return $this->callbacks;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDefault(): bool
+    {
+        return $this->default;
+    }
+
+    /**
+     * @param bool $default
+     * @return void
+     */
+    public function setDefault(bool $default): void
+    {
+        $this->default = $default;
     }
 }

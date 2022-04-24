@@ -23,6 +23,7 @@ use App\Stub\StubController;
 use App\User\Controller\ApiUserController;
 use App\User\Controller\UserController;
 use Psr\Http\Message\ServerRequestInterface;
+use Tuupola\Middleware\CorsMiddleware;
 use Yiisoft\Auth\Middleware\Authentication;
 use Yiisoft\Csrf\CsrfMiddleware;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
@@ -94,34 +95,35 @@ return [
                 ->middleware(FormatDataResponseAsJson::class)
                 ->action([ApiUserController::class, 'profile']),
 
-             Route::get('/route')
-                 ->name('api/route/index')
-                 ->middleware(FormatDataResponseAsJson::class)
-                 ->action([RouteController::class, 'index']),
-            Route::methods([Method::OPTIONS, Method::POST], '/route')
-                ->name('api/route/create')
+            Group::create()
+                ->middleware(FormatDataResponseAsJson::class)
+                ->middleware(CorsMiddleware::class)
                 ->disableMiddleware(CsrfMiddleware::class)
-                ->middleware(FormatDataResponseAsJson::class)
-                ->action([RouteController::class, 'create']),
-            Route::get('/stub/{routeId}')
-                ->name('api/stub/index')
-                ->middleware(FormatDataResponseAsJson::class)
-                ->action([ApiStubController::class, 'index']),
-            Route::methods([Method::OPTIONS, Method::POST], '/stub')
-                ->name('api/stub/create')
-                ->disableMiddleware(CsrfMiddleware::class)
-                ->middleware(FormatDataResponseAsJson::class)
-                ->action([ApiStubController::class, 'create']),
+                ->routes(
+                    Route::get('/route')
+                        ->name('api/route/index')
+                        ->action([RouteController::class, 'index']),
+                    Route::methods([Method::OPTIONS, Method::POST], '/route')
+                        ->name('api/route/create')
+                        ->action([RouteController::class, 'create']),
 
-            Route::get('/callback/{stubId}')
-                ->name('api/callback/index')
-                ->middleware(FormatDataResponseAsJson::class)
-                ->action([CallbackController::class, 'index']),
-            Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
-                ->name('api/stub/callback')
-                ->disableMiddleware(CsrfMiddleware::class)
-                ->middleware(FormatDataResponseAsJson::class)
-                ->action([CallbackController::class, 'callback']),
+                    Route::get('/stub/{routeId}')
+                        ->name('api/stub/index')
+                        ->action([ApiStubController::class, 'index']),
+                    Route::methods([Method::OPTIONS, Method::POST], '/stub')
+                        ->name('api/stub/create')
+                        ->action([ApiStubController::class, 'create']),
+                    Route::methods([Method::OPTIONS, Method::POST], '/stub/setDefault')
+                        ->name('api/stub/setDefault')
+                        ->action([ApiStubController::class, 'setDefault']),
+
+                    Route::get('/callback/{stubId}')
+                        ->name('api/callback/index')
+                        ->action([CallbackController::class, 'index']),
+                    Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
+                        ->name('api/stub/callback')
+                        ->action([CallbackController::class, 'callback']),
+                ),
         ),
 
     Group::create('/v2')

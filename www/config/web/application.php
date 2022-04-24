@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Handler\NotFoundHandler;
 use App\Middleware\LocaleMiddleware;
+use Neomerx\Cors\Contracts\Constants\CorsResponseHeaders;
+use Tuupola\Middleware\CorsMiddleware;
 use Yiisoft\Definitions\DynamicReference;
 use Yiisoft\Definitions\Reference;
 use Yiisoft\Injector\Injector;
@@ -24,6 +26,16 @@ return [
     LocaleMiddleware::class => [
         '__construct()' => [
             'locales' => $params['locales'],
+        ],
+    ],
+    CorsMiddleware::class => [
+        '__construct()' => [
+            'options' => [
+                'headers.allow' => [
+                    CorsResponseHeaders::ALLOW_ORIGIN => '*',
+                    CorsResponseHeaders::ALLOW_HEADERS => 'Content-Type',
+                ],
+            ],
         ],
     ],
 ];
