@@ -1,20 +1,30 @@
 version: '3.4'
 services:
-    nginx:
-        container_name: nginx
+    server:
         image: nginx:latest
         ports:
             - "8082:80"
         volumes:
-            - ./hosts:/etc/nginx/conf.d
-            - ./www:/var/www
-            - ./logs/nginx:/var/log/nginx
+            - ./build/hosts:/etc/nginx/conf.d
+            - ./runtime/logs/nginx:/var/log/nginx
+            - ./src/server:/var/www
         links:
             - php
-    php:
-        container_name: php
+    client:
         build:
-            context: ./images/php
+            context: ./src/client
+            dockerfile: ../../build/images/client/Dockerfile
+        ports:
+            - "8083:8080"
+        user: "node"
+        environment:
+            - NODE_ENV=develop
+        volumes:
+            - ./src/client:/home/node/app:rw
+        command: "npm run serve"
+    php:
+        build:
+            context: ./build/images/server
             args:
                 UID: 1000
                 GID: 1000
@@ -23,17 +33,16 @@ services:
         extra_hosts:
             -   "host.docker.internal:host-gateway"
         volumes:
-            - ./www:/var/www:rw
+            - ./src/server:/var/www:rw
         links:
             - db
     db:
-        container_name: db
         image: mysql:latest
         ports:
             - "3306:3306"
         volumes:
+            - ./build/dump:/docker-entrypoint-initdb.d
             - dbdata:/var/lib/mysql
-            - ./example:/docker-entrypoint-initdb.d
         environment:
             MYSQL_ROOT_PASSWORD: "root"
             MYSQL_DATABASE: "app"
@@ -41,17 +50,5 @@ services:
             MYSQL_PASSWORD: "password"
         expose:
             - "3306"
-    nodejs:
-        container_name: nodejs
-        image: node:latest
-        ports:
-            - "8083:8080"
-        working_dir: /home/node/app
-        user: "node"
-        environment:
-            - NODE_ENV=develop
-        volumes:
-            - ./www/ui:/home/node/app
-        command: "npm run serve"
 volumes:
     dbdata:

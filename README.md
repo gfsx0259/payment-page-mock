@@ -1,7 +1,7 @@
 ## Description
 Payment page mock application
 
-![UI example](./example/ui.png)
+![UI example](./build/static/example.png)
 
 ## Installation
 
