@@ -24,7 +24,8 @@ services:
         command: "npm run serve"
     php:
         build:
-            context: ./build/images/server
+            context: ./src/server
+            dockerfile: ../../build/images/server/Dockerfile
             args:
                 UID: 1000
                 GID: 1000

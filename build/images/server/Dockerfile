@@ -4,11 +4,9 @@ WORKDIR /var/www
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
-        curl \
+        zip \
         bcmath \
-        iconv \
         intl \
-        mbstring \
         opcache \
         pdo_mysql \
         xdebug
@@ -24,8 +22,17 @@ ENV UID=${UID}
 ENV GID=${GID}
 
 RUN usermod -u $UID www-data \
-  && groupmod -g $GID www-data
+ && groupmod -g $GID www-data
+
+RUN mkdir -p /var/www/.composer /var/www/vendor /var/www/config \
+ && chown -R $UID /var/www;
 
 USER $UID
+
+COPY ["composer.json", "composer.lock", "./"]
+
+RUN composer install --prefer-dist --no-dev --no-scripts --no-progress;
+
+COPY . ./
 
 CMD ["php-fpm"]
