@@ -1,41 +1,14 @@
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 jobs:
-  test:
-    name: Test server application
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./src/server
-    steps:
-      - name: Checkout project
-        uses: actions/checkout@v3
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-              ${{ runner.os }}-php-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-
-      - name: Run test suite
-        run: composer run-script test
-
   build-and-push:
     name: Build and push images
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Get version
         id: get_version
@@ -51,8 +24,7 @@ jobs:
         id: build-x
         uses: docker/setup-buildx-action@v1
 
-      - name: Build and push server image
-        id: docker_build
+      - name: Build and push API image
         uses: docker/build-push-action@v3
         with:
           context: src/server
@@ -62,3 +34,11 @@ jobs:
           build-args: |
             UID=1000
             GID=1000
+
+      - name: Build and push UI image
+        uses: docker/build-push-action@v3
+        with:
+          context: src/client
+          file: build/images/client/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/payment-page-mock-client:${{ steps.get_version.outputs.VERSION }}

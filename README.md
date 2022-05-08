@@ -14,9 +14,9 @@ http://localhost:8083
 API will be available at:
 http://localhost:8082
 
-Unit tests:
+Run tests:
 ```bash
-docker-compose exec php bash -c "php ./vendor/bin/codecept run tests/Unit"
+docker-compose exec php bash -c "composer test"
 ```
 
 Dump application tables:
