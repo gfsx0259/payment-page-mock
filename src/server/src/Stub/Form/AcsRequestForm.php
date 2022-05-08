@@ -45,9 +45,9 @@ class AcsRequestForm extends FormModel
     public function getRules(): array
     {
         return [
-            'PaReq' => [Required::rule()],
-            'MD' => [Required::rule()],
-            'TermUrl' => [Required::rule()],
+            'PaReq' => [new Required()],
+            'MD' => [new Required()],
+            'TermUrl' => [new Required()],
         ];
     }
 }

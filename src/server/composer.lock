@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "432922db6d694cee765a8cba81b865a4",
+    "content-hash": "10b000f9dce64774624562fb60cbbe12",
     "packages": [
         {
             "name": "alexkart/curl-builder",
@@ -1795,27 +1795,22 @@
         },
         {
             "name": "psr/container",
-            "version": "1.0.0",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=7.4.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Psr\\Container\\": "src/"
@@ -1828,7 +1823,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "homepage": "https://www.php-fig.org/"
                 }
             ],
             "description": "Common Container Interface (PHP FIG PSR-11)",
@@ -1842,9 +1837,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/master"
+                "source": "https://github.com/php-fig/container/tree/1.1.2"
             },
-            "time": "2017-02-14T16:28:37+00:00"
+            "time": "2021-11-05T16:50:12+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -7501,18 +7496,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/validator.git",
-                "reference": "30cbd83eff595c26bca45f1b1ddcec5d2935a791"
+                "reference": "5491880d3358128848d55c9c6cfd6b06eb4374cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/validator/zipball/30cbd83eff595c26bca45f1b1ddcec5d2935a791",
-                "reference": "30cbd83eff595c26bca45f1b1ddcec5d2935a791",
+                "url": "https://api.github.com/repos/yiisoft/validator/zipball/5491880d3358128848d55c9c6cfd6b06eb4374cb",
+                "reference": "5491880d3358128848d55c9c6cfd6b06eb4374cb",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "php": "^7.4|^8.0",
+                "jetbrains/phpstorm-attributes": "^1.0",
+                "php": "^8.0",
                 "yiisoft/arrays": "^2.0",
                 "yiisoft/friendly-exception": "^1.0",
                 "yiisoft/network-utilities": "^1.0",
@@ -7523,6 +7519,9 @@
                 "roave/infection-static-analysis-plugin": "^1.16",
                 "spatie/phpunit-watcher": "^1.23",
                 "vimeo/psalm": "^4.18"
+            },
+            "suggest": {
+                "ext-intl": "Allows using IDN validation for emails"
             },
             "default-branch": true,
             "type": "library",
@@ -7570,7 +7569,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2022-02-17T13:03:39+00:00"
+            "time": "2022-05-02T18:00:47+00:00"
         },
         {
             "name": "yiisoft/var-dumper",
@@ -7955,12 +7954,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii-cycle.git",
-                "reference": "2168f744a6ae14c640a37ba19664d45f1f2c048e"
+                "reference": "19d068b374c1b62af34ffb74675c1cc49d8cbbad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii-cycle/zipball/2168f744a6ae14c640a37ba19664d45f1f2c048e",
-                "reference": "2168f744a6ae14c640a37ba19664d45f1f2c048e",
+                "url": "https://api.github.com/repos/yiisoft/yii-cycle/zipball/19d068b374c1b62af34ffb74675c1cc49d8cbbad",
+                "reference": "19d068b374c1b62af34ffb74675c1cc49d8cbbad",
                 "shasum": ""
             },
             "require": {
@@ -7975,18 +7974,18 @@
                 "spiral/attributes": "^2.7",
                 "yiisoft/aliases": "^1.1|^2.0",
                 "yiisoft/data": "@dev",
-                "yiisoft/definitions": "^1.0",
                 "yiisoft/friendly-exception": "^1.0",
-                "yiisoft/injector": "^1.0.3",
+                "yiisoft/injector": "^1.0",
                 "yiisoft/yii-console": "^1.0"
             },
             "require-dev": {
                 "cycle/entity-behavior": "^1.0",
+                "jetbrains/phpstorm-attributes": "^1.0",
                 "phpunit/phpunit": "^9.5",
-                "roave/infection-static-analysis-plugin": "^1.5",
+                "roave/infection-static-analysis-plugin": "^1.18",
                 "spatie/phpunit-watcher": "^1.23",
-                "vimeo/psalm": "^4.10",
-                "yiisoft/test-support": "^1.0"
+                "vimeo/psalm": "^4.22",
+                "yiisoft/test-support": "^1.4"
             },
             "type": "library",
             "extra": {
@@ -8022,11 +8021,11 @@
                 "yii"
             ],
             "support": {
-                "forum": "http://www.yiiframework.com/forum/",
+                "forum": "https://www.yiiframework.com/forum/",
                 "irc": "irc://irc.freenode.net/yii",
                 "issues": "https://github.com/yiisoft/yii-cycle/issues?state=open",
                 "source": "https://github.com/yiisoft/yii-cycle",
-                "wiki": "http://www.yiiframework.com/wiki/"
+                "wiki": "https://www.yiiframework.com/wiki/"
             },
             "funding": [
                 {
@@ -8038,7 +8037,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-12-28T20:26:01+00:00"
+            "time": "2022-04-17T18:44:01+00:00"
         },
         {
             "name": "yiisoft/yii-dataview",
@@ -15399,9 +15398,9 @@
         "yiisoft/validator": 20,
         "yiisoft/yii-bootstrap5": 20,
         "yiisoft/yii-cycle": 20,
+        "yiisoft/yii-dataview": 20,
         "yiisoft/yii-debug": 20,
         "yiisoft/yii-debug-api": 20,
-        "yiisoft/yii-dataview": 20,
         "yiisoft/yii-middleware": 20,
         "roave/security-advisories": 20,
         "yiisoft/yii-debug-viewer": 20
