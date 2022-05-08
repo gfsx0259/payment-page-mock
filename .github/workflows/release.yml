@@ -5,6 +5,9 @@ jobs:
   test:
     name: Test server application
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/server
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
