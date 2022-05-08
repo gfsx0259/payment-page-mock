@@ -1,15 +1,5 @@
 version: '3.4'
 services:
-    server:
-        image: nginx:latest
-        ports:
-            - "8082:80"
-        volumes:
-            - ./build/hosts:/etc/nginx/conf.d
-            - ./runtime/logs/nginx:/var/log/nginx
-            - ./src/server:/var/www
-        links:
-            - php
     client:
         build:
             context: ./src/client
@@ -22,7 +12,17 @@ services:
         volumes:
             - ./src/client:/home/node/app:rw
         command: "npm run serve"
-    php:
+    nginx:
+        build:
+            context: ./src/server
+            dockerfile: ../../build/images/nginx/Dockerfile
+        ports:
+            - "8082:80"
+        volumes:
+            - ./src/server:/var/www
+        links:
+            - api
+    api:
         build:
             context: ./src/server
             dockerfile: ../../build/images/server/Dockerfile
@@ -32,7 +32,7 @@ services:
         environment:
             PHP_IDE_CONFIG: "serverName=docker"
         extra_hosts:
-            -   "host.docker.internal:host-gateway"
+            - "host.docker.internal:host-gateway"
         volumes:
             - ./src/server:/var/www:rw
         links:

@@ -1,0 +1,34 @@
+version: '3.4'
+services:
+    client:
+        image: konstantinpopov/payment-page-mock-client:main
+        ports:
+            - "8083:8080"
+        environment:
+            - NODE_ENV=production
+    nginx:
+        image: konstantinpopov/payment-page-mock-nginx:main
+        ports:
+            - "8082:80"
+        links:
+            - api
+    api:
+        image: konstantinpopov/payment-page-mock-api:main
+        links:
+            - db
+    db:
+        image: mysql:latest
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./build/dump:/docker-entrypoint-initdb.d
+            - dbdata:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_DATABASE: "app"
+            MYSQL_USER: "user"
+            MYSQL_PASSWORD: "password"
+        expose:
+            - "3306"
+volumes:
+    dbdata:

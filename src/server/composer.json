@@ -111,7 +111,7 @@
             "App\\Installer::postUpdate",
             "App\\Installer::copyEnvFile"
         ],
-        "post-create-project-cmd": [
+        "post-install-cmd": [
             "App\\Installer::copyEnvFile"
         ],
         "test": "codecept run tests/Unit"

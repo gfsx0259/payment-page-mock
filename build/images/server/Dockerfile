@@ -31,8 +31,10 @@ USER $UID
 
 COPY ["composer.json", "composer.lock", "./"]
 
-RUN composer install --prefer-dist --no-dev --no-scripts --no-progress;
+RUN composer install --prefer-dist --no-progress;
 
-COPY . ./
+COPY --chown=$UID:$GID . ./
+
+RUN composer run-script post-install-cmd
 
 CMD ["php-fpm"]
