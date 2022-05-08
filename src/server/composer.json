@@ -114,8 +114,7 @@
         "post-create-project-cmd": [
             "App\\Installer::copyEnvFile"
         ],
-        "test": "phpunit --testdox --no-interaction",
-        "test-watch": "phpunit-watcher watch"
+        "test": "codecept run tests/Unit"
     },
     "extra": {
         "branch-alias": {

@@ -2,8 +2,33 @@ on:
   push:
     branches: [main]
 jobs:
-  build-server:
-    name: Build API
+  test:
+    name: Test server application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+              ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run test suite
+        run: composer run-script test
+
+  build-and-push:
+    name: Build and push images
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project
@@ -23,15 +48,14 @@ jobs:
         id: build-x
         uses: docker/setup-buildx-action@v1
 
-      - name: Build and push API image
+      - name: Build and push server image
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: src/server
           file: build/images/server/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/payment-page-mock-api:${{ steps.get_version.outputs.VERSION }}
+          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/payment-page-mock-server:${{ steps.get_version.outputs.VERSION }}
           build-args: |
             UID=1000
             GID=1000
-
