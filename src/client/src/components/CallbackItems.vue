@@ -4,11 +4,10 @@
         <CCol md="6" v-for="callback in callbacks">
             <vue-json-editor
                 v-bind:value="callback.body"
-                @json-save="onCallbackEdit(callback.id, $event)"
-                mode="code"
+                @json-save="onUpdate(callback.id, $event)"
                 :show-btns="true"
-                :expandedOnStart="true">
-            </vue-json-editor>
+                mode="code"
+            />
         </CCol>
     </CRow>
 </template>
@@ -29,14 +28,10 @@ export default {
     },
     methods: {
         onAdd() {
-            if (!this.callbacks) {
-                this.callbacks = [];
-            }
-
             this.callbacks.push({})
         },
-        onCallbackEdit(index, event) {
-            this.$emit('updateCallback', index, event);
+        onUpdate(id, event) {
+            this.$emit('update', id, event);
         },
     },
 }
@@ -46,12 +41,19 @@ export default {
 .jsoneditor-menu {
     display: none;
 }
-
 .jsoneditor-vue {
     margin-top: 20px;
 }
-
 .jsoneditor,.ace-jsoneditor {
     min-height: 700px;
+}
+.jsoneditor-btns .json-save-btn {
+  --cui-btn-bg: #4f5d73;
+  background-color: var(--cui-btn-bg, transparent);
+  padding: 0.375rem 0.75rem;
+}
+.jsoneditor-btns .json-save-btn:hover {
+  --cui-btn-hover-bg: #697588;
+  background-color: var(--cui-btn-hover-bg, transparent);
 }
 </style>

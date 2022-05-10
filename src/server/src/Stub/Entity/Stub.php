@@ -25,7 +25,7 @@ class Stub
     #[Column(type: 'text')]
     private string $description = '';
 
-    #[Column(type: 'boolean')]
+    #[Column(type: 'boolean', default: false)]
     private bool $default;
 
     #[HasMany(Callback::class)]

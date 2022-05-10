@@ -1,4 +1,4 @@
-import axios from "axios";
+import HttpClient from "@/network/client";
 
 export const routeStore = {
     state: () => ({
@@ -30,14 +30,14 @@ export const routeStore = {
     actions: {
         async fetchRoutes({commit}) {
             commit('setIsLoading', true);
-            const response = await axios.get('http://localhost:8082/api/route');
+            const response = await HttpClient.get('route');
 
             commit('setRoutes', response.data.data);
             commit('setIsLoading', false);
         },
         async createRoute({state, dispatch}) {
-            const response = await axios.post(
-                'http://localhost:8082/api/route',
+            const response = await HttpClient.post(
+                'route',
                 state.routeForm
             );
             if (response.status === 200) {

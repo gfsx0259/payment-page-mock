@@ -31,3 +31,6 @@ c3.php
 /config/.merge-plan.php
 .composer
 .bash_history
+
+# Runtime
+/public/uploads

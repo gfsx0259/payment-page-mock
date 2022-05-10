@@ -1,35 +1,51 @@
 <template>
+  <CRow>
+    <CSpinner class="m-sm-auto" color="dark" v-if="isLoading"/>
+  </CRow>
    <CallbackItems
        :callbacks="callbacks"
-       @updateCallback="updateCallback"
+       @update="updateCallback"
+       v-if="!isLoading"
    />
 </template>
 
 <script>
-import axios from 'axios';
 import CallbackItems from "@/components/CallbackItems";
+import {
+  mapActions,
+  mapState,
+  mapMutations,
+} from "vuex";
 
 export default {
     components: {
         CallbackItems,
     },
-    data() {
-        return {
-            callbacks: [],
-        }
-    },
     async mounted() {
-        const response = await axios.get('http://localhost:8082/api/callback/' + this.$route.params.id);
-        this.callbacks = response.data.data;
+        this.setStub(this.$route.params.id);
+        this.fetch();
     },
     methods: {
-        updateCallback(id, callbackBody) {
-            axios.post('http://localhost:8082/api/stub/callback', {
-                id,
-                stubId: this.$route.params.id,
-                callback: callbackBody || {}
-            })
-        },
+        ...mapMutations({
+          setStub: 'callback/setFormStubId',
+          setBody: 'callback/setFormBody',
+          setId: 'callback/setFormId',
+        }),
+        ...mapActions({
+          fetch: 'callback/fetch',
+          update: 'callback/update',
+        }),
+        updateCallback(id, body) {
+          this.setId(id);
+          this.setBody(body);
+          this.update();
+        }
+    },
+    computed: {
+      ...mapState({
+        callbacks: state => state.callback.callbacks,
+        isLoading: state => state.callback.isLoading,
+      }),
     }
 }
 </script>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import HttpClient from "@/network/client";
 
 export const stubStore = {
     state: () => ({
@@ -36,14 +36,14 @@ export const stubStore = {
     actions: {
         async fetch({state, commit}) {
             commit('setIsLoading', true);
-            const response = await axios.get('http://localhost:8082/api/stub/' + state.stubForm.routeId);
+            const response = await HttpClient.get('stub/' + state.stubForm.routeId);
 
             commit('setStubs', response.data.data);
             commit('setIsLoading', false);
         },
         async create({state, dispatch}) {
-            const response = await axios.post(
-                'http://localhost:8082/api/stub',
+            const response = await HttpClient.post(
+                'stub',
                 state.stubForm
             );
             if (response.status === 200) {
@@ -53,8 +53,8 @@ export const stubStore = {
         async saveDefault({state, dispatch}) {
             const defaultStub = state.stubs.find(stub => stub.default);
 
-            const response = await axios.post(
-                'http://localhost:8082/api/stub/setDefault',
+            const response = await HttpClient.post(
+                'stub/setDefault',
                 {
                     routeId: state.stubForm.routeId,
                     stubId: defaultStub.id,

@@ -1,17 +1,24 @@
 <template>
+    <CRow>
+      <CSpinner class="m-sm-auto" color="dark" v-if="isLoading"/>
+    </CRow>
     <Modal
         title="Create stub"
-        v-model:visible="visible"
         :saveCallback="create"
+        v-model:visible="visible"
     >
         <StubForm :route-id="this.$route.params.id"/>
     </Modal>
-    <div class="d-flex justify-content-start mb-4">
+    <CRow v-if="!isLoading">
+      <div class="d-flex justify-content-start mb-4">
         <CButton color="light" @click="showForm">Add stub</CButton>
-    </div>
+      </div>
 
-    <StubItems :stubs="stubs" @setDefault="changeDefault"/>
-    <CSpinner color="warning" v-if="isLoading"/>
+      <StubItems
+          :stubs="stubs"
+          @setDefault="changeDefault"
+      />
+    </CRow>
 </template>
 
 <script>
