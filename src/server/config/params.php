@@ -28,7 +28,7 @@ return [
         'adminEmail' => 'admin@example.com',
         'senderEmail' => 'sender@example.com',
     ],
-    'host' => 'http://localhost:8082',
+    'host' => getenv('API_URL'),
     'middlewares' => [
         ErrorCatcher::class,
         SessionMiddleware::class,
@@ -157,11 +157,11 @@ return [
             'connections' => [
                 'mysql' => new \Cycle\Database\Config\MySQLDriverConfig(
                     connection: new \Cycle\Database\Config\MySQL\TcpConnectionConfig(
-                        database: 'app',
+                        database: getenv('MYSQL_DATABASE'),
                         host: 'db',
                         port: 3306,
-                        user:'user',
-                        password: 'password',
+                        user: getenv('MYSQL_USER'),
+                        password: getenv('MYSQL_PASSWORD'),
                     )
                 ),
             ],

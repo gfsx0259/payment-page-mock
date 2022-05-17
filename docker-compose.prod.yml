@@ -1,34 +1,41 @@
 version: '3.4'
+
+x-environments: &environments
+    MYSQL_ROOT_PASSWORD: "root"
+    MYSQL_DATABASE: "app"
+    MYSQL_USER: "user"
+    MYSQL_PASSWORD: "password"
+    API_URL: "http://localhost:8082"
+    NODE_ENV: "production"
+
 services:
     client:
         image: konstantinpopov/payment-page-mock-client:main
         ports:
-            - "8083:8080"
-        environment:
-            - NODE_ENV=production
+            - target: 8080
+              published: 8081
+        environment: *environments
     nginx:
         image: konstantinpopov/payment-page-mock-nginx:main
+        volumes:
+            - static:/var/www/public
         ports:
-            - "8082:80"
-        links:
-            - api
+            - target: 80
+              published: 8082
     api:
         image: konstantinpopov/payment-page-mock-api:main
-        links:
-            - db
+        environment: *environments
+        volumes:
+            - static:/var/www/public
     db:
         image: mysql:latest
         ports:
-            - "3306:3306"
+            - target: 3306
+              published: 3306
+        environment: *environments
         volumes:
             - ./build/dump:/docker-entrypoint-initdb.d
             - dbdata:/var/lib/mysql
-        environment:
-            MYSQL_ROOT_PASSWORD: "root"
-            MYSQL_DATABASE: "app"
-            MYSQL_USER: "user"
-            MYSQL_PASSWORD: "password"
-        expose:
-            - "3306"
 volumes:
     dbdata:
+    static:
