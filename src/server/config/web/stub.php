@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 /** @var array $params */
 
-use App\Stub\Service\Action\Processor\AcsProcessor;
+use App\Stub\Service\OverrideProcessor;
 use Yiisoft\Router\UrlGeneratorInterface;
 
 return [
-    AcsProcessor::class => static fn (UrlGeneratorInterface $urlGenerator) => new AcsProcessor(
+    OverrideProcessor::class => static fn (UrlGeneratorInterface $urlGenerator) => new OverrideProcessor(
         $urlGenerator,
         $params['host'],
     ),

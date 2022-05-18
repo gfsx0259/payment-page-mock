@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Stub;
 
 use App\Stub\Collection\ArrayCollection;
+use App\Stub\Repository\CallbackRepository;
 use App\Stub\Repository\RouteRepository;
-use App\Stub\Repository\StubRepository;
 use App\Stub\Service\Action\ActionProcessorFactory;
 use App\Stub\Service\OverrideProcessor;
 use App\Stub\Session\State;
@@ -24,7 +24,7 @@ final class StubController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private RouteRepository $routeRepository,
-        private StubRepository $stubRepository,
+        private CallbackRepository $callbackRepository,
         private ActionProcessorFactory $actionProcessorFactory,
         private OverrideProcessor $overrideProcessor,
         private StateManager $stateManager,
@@ -109,17 +109,8 @@ final class StubController
      */
     private function responseByState(State $state): ResponseInterface
     {
-        $stubs = $this->stubRepository->findDefaultByRoute($state->getRouteId());
-
-        $callbacks = current($stubs)->getCallbacks();
-
-        $cursor = min($state->getCursor(), $callbacks->count()) - 1;
-
-        if ($cursor < 0) {
-            $cursor = 0;
-        }
-
-        $callbackCollection = new ArrayCollection($callbacks->get($cursor)->getBody());
+        $currentCallback = $this->callbackRepository->findCurrentOne($state);
+        $callbackCollection = new ArrayCollection($currentCallback->getBody());
 
         $this->overrideProcessor->process($callbackCollection, $state);
 

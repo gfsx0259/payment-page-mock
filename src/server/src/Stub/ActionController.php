@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Stub;
 
+use App\Stub\Collection\ArrayCollection;
 use App\Stub\Form\AcsRequestForm;
+use App\Stub\Repository\CallbackRepository;
+use App\Stub\Service\Action\ActionProcessorFactory;
+use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
@@ -19,15 +23,21 @@ final class ActionController
 {
     private ViewRenderer $viewRenderer;
     private DataResponseFactoryInterface $responseFactory;
+    private CallbackRepository $callbackRepository;
+    private ActionProcessorFactory $actionProcessorFactory;
 
     public function __construct(
         ViewRenderer $viewRenderer,
-        DataResponseFactoryInterface $responseFactory
+        DataResponseFactoryInterface $responseFactory,
+        CallbackRepository $callbackRepository,
+        ActionProcessorFactory $actionProcessorFactory,
     ) {
         $this->viewRenderer = $viewRenderer
             ->withControllerName('stub/action')
             ->withLayout(null);
         $this->responseFactory = $responseFactory;
+        $this->callbackRepository = $callbackRepository;
+        $this->actionProcessorFactory = $actionProcessorFactory;
     }
 
     public function renderAcs(
@@ -51,16 +61,59 @@ final class ActionController
         StateManager $stateManager,
     ): ResponseInterface
     {
-        $body = json_decode($request->getBody()->getContents());
+        $body = json_decode($request->getBody()->getContents(), true);
 
         if (!$state = $stateManager->get(ArrayHelper::getValueByPath($body, 'general.payment_id'))) {
             throw new LogicException('State must be exists');
         }
 
-        $state->completeAction(ArrayHelper::getValueByPath($body, 'md'));
+        $this->completeAction($state, new ArrayCollection($body));
 
         $stateManager->save($state);
 
         return $this->responseFactory->createResponse();
+    }
+
+    public function clarify(
+        ServerRequestInterface $request,
+        StateManager $stateManager,
+    ): ResponseInterface {
+        $body = json_decode($request->getBody()->getContents(), true);
+
+        if (!$state = $stateManager->get(ArrayHelper::getValueByPath($body, 'general.payment_id'))) {
+            throw new LogicException('State must be exists');
+        }
+
+        $initialRequest = $state->getInitialRequest();
+
+        $this->completeAction($state, new ArrayCollection($body));
+
+        $stateManager->save($state);
+
+        return $this->responseFactory
+            ->createResponse([
+                "status" => "success",
+                "request_id" => $state->getRequestId(),
+                "project_id" => $initialRequest->get('general.project_id'),
+                "payment_id" => $initialRequest->get('general.payment_id')
+            ]);
+    }
+
+    private function completeAction(State $state, ArrayCollection $bodyCollection)
+    {
+        $currentCallback = $this->callbackRepository->findCurrentOne($state);
+        $callbackCollection = new ArrayCollection($currentCallback->getBody());
+        $actionProcessor = $this->actionProcessorFactory->createProcessor($callbackCollection);
+
+        if (!$actionProcessor) {
+            throw new LogicException('Action processor must be exists');
+        }
+
+        $actionKey = $actionProcessor->getActionSigner()->buildActionKey($bodyCollection);
+
+        if (!$state->isActionCompleted($actionKey)) {
+            $state->completeAction($actionKey);
+            $state->next();
+        }
     }
 }

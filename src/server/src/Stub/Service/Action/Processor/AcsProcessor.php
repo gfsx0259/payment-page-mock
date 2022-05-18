@@ -2,10 +2,11 @@
 
 namespace App\Stub\Service\Action\Processor;
 
-use App\Stub\Collection\ArrayCollection;
-use App\Stub\Service\ProcessorInterface;
+use App\Stub\Service\Action\ActionAbstractProcessor;
+use App\Stub\Service\Action\ActionSignerInterface;
+use App\Stub\Service\Action\Signer\AcsSigner;
 use App\Stub\Session\State;
-use Yiisoft\Router\UrlGeneratorInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Implements redirect logic by processing passed callback:
@@ -15,32 +16,14 @@ use Yiisoft\Router\UrlGeneratorInterface;
  *
  * Uses merchant data (acs.md) for action matching.
  */
-class AcsProcessor implements ProcessorInterface
+class AcsProcessor extends ActionAbstractProcessor
 {
     public function __construct(
-        private UrlGeneratorInterface $urlGenerator,
-        private string $host,
+        private ContainerInterface $container,
     ) {}
 
-    public function process(ArrayCollection $callback, State $state): void
+    public function getActionSigner(): ActionSignerInterface
     {
-        $merchantData = $callback->get('acs.md');
-
-        if ($state->isActionCompleted($merchantData)) {
-            $state->next();
-            return;
-        }
-
-        $callback->replace(
-            '{{ACS_URL}}',
-            $this->generateAcsUrl()
-        );
-
-        $state->registerAction($merchantData);
-    }
-
-    private function generateAcsUrl(): string
-    {
-        return $this->host . $this->urlGenerator->generate('actions/renderAcs');
+        return $this->container->get(AcsSigner::class);
     }
 }
