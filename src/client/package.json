@@ -17,7 +17,7 @@
     "core-js": "^3.8.3",
     "serve": "^13.0.2",
     "vue": "^3.2.13",
-    "vue-json-editor": "^1.4.3",
+    "vue-json-editor": "github:gfsx0259/vue-json-editor",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },

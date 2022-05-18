@@ -1,4 +1,14 @@
 version: '3.4'
+
+x-environments: &environments
+    MYSQL_ROOT_PASSWORD: "root"
+    MYSQL_DATABASE: "app"
+    MYSQL_USER: "user"
+    MYSQL_PASSWORD: "password"
+    API_URL: "http://localhost:8082"
+    NODE_ENV: "develop"
+    PHP_IDE_CONFIG: "serverName=docker"
+
 services:
     client:
         build:
@@ -7,8 +17,7 @@ services:
         ports:
             - "8083:8080"
         user: "node"
-        environment:
-            - NODE_ENV=develop
+        environment: *environments
         volumes:
             - ./src/client:/home/node/app:rw
         command: "npm run serve"
@@ -29,8 +38,7 @@ services:
             args:
                 UID: 1000
                 GID: 1000
-        environment:
-            PHP_IDE_CONFIG: "serverName=docker"
+        environment: *environments
         extra_hosts:
             - "host.docker.internal:host-gateway"
         volumes:
@@ -41,15 +49,9 @@ services:
         image: mysql:latest
         ports:
             - "3306:3306"
+        environment: *environments
         volumes:
             - ./build/dump:/docker-entrypoint-initdb.d
             - dbdata:/var/lib/mysql
-        environment:
-            MYSQL_ROOT_PASSWORD: "root"
-            MYSQL_DATABASE: "app"
-            MYSQL_USER: "user"
-            MYSQL_PASSWORD: "password"
-        expose:
-            - "3306"
 volumes:
     dbdata:
