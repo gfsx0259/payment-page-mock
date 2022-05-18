@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Stub\Service\Action\Signer\Clarification\Parser;
+namespace App\Stub\Service\Action\Clarification\Parser;
 
-use App\Stub\Service\Action\Signer\Clarification\ParamsParser;
+use App\Stub\Service\Action\Clarification\ParamsParser;
 use stdClass;
 use Yiisoft\Arrays\ArrayHelper;
 

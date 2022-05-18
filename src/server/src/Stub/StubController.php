@@ -7,7 +7,7 @@ namespace App\Stub;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Repository\CallbackRepository;
 use App\Stub\Repository\RouteRepository;
-use App\Stub\Service\Action\ActionProcessorFactory;
+use App\Stub\Service\Action\ActionFactory;
 use App\Stub\Service\OverrideProcessor;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
@@ -25,7 +25,7 @@ final class StubController
         private DataResponseFactoryInterface $responseFactory,
         private RouteRepository $routeRepository,
         private CallbackRepository $callbackRepository,
-        private ActionProcessorFactory $actionProcessorFactory,
+        private ActionFactory $actionFactory,
         private OverrideProcessor $overrideProcessor,
         private StateManager $stateManager,
     ) {}
@@ -114,9 +114,9 @@ final class StubController
 
         $this->overrideProcessor->process($callbackCollection, $state);
 
-        if ($actionProcessor = $this->actionProcessorFactory->createProcessor($callbackCollection)) {
-            $actionProcessor->process($callbackCollection, $state);
-        } else {
+        $action = $this->actionFactory->make($callbackCollection, $state);
+
+        if (!$action || $action->isCompleted()) {
             $state->next();
         }
 

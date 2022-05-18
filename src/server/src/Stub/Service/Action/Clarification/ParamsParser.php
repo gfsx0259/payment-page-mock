@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Stub\Service\Action\Signer\Clarification;
+namespace App\Stub\Service\Action\Clarification;
 
 interface ParamsParser
 {

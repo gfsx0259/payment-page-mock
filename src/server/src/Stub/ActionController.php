@@ -7,7 +7,7 @@ namespace App\Stub;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Form\AcsRequestForm;
 use App\Stub\Repository\CallbackRepository;
-use App\Stub\Service\Action\ActionProcessorFactory;
+use App\Stub\Service\Action\ActionFactory;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 use LogicException;
@@ -22,29 +22,31 @@ use Yiisoft\Yii\View\ViewRenderer;
 final class ActionController
 {
     private ViewRenderer $viewRenderer;
+
     private DataResponseFactoryInterface $responseFactory;
+
     private CallbackRepository $callbackRepository;
-    private ActionProcessorFactory $actionProcessorFactory;
+
+    private ActionFactory $actionFactory;
 
     public function __construct(
         ViewRenderer $viewRenderer,
         DataResponseFactoryInterface $responseFactory,
         CallbackRepository $callbackRepository,
-        ActionProcessorFactory $actionProcessorFactory,
+        ActionFactory $actionFactory,
     ) {
         $this->viewRenderer = $viewRenderer
             ->withControllerName('stub/action')
             ->withLayout(null);
         $this->responseFactory = $responseFactory;
         $this->callbackRepository = $callbackRepository;
-        $this->actionProcessorFactory = $actionProcessorFactory;
+        $this->actionFactory = $actionFactory;
     }
 
     public function renderAcs(
         ServerRequestInterface $request,
         ValidatorInterface $validator
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $requestBody = $request->getParsedBody();
         $form = new AcsRequestForm();
 
@@ -59,8 +61,7 @@ final class ActionController
     public function completeAcs(
         ServerRequestInterface $request,
         StateManager $stateManager,
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $body = json_decode($request->getBody()->getContents(), true);
 
         if (!$state = $stateManager->get(ArrayHelper::getValueByPath($body, 'general.payment_id'))) {
@@ -92,10 +93,10 @@ final class ActionController
 
         return $this->responseFactory
             ->createResponse([
-                "status" => "success",
-                "request_id" => $state->getRequestId(),
-                "project_id" => $initialRequest->get('general.project_id'),
-                "payment_id" => $initialRequest->get('general.payment_id')
+                'status' => 'success',
+                'request_id' => $state->getRequestId(),
+                'project_id' => $initialRequest->get('general.project_id'),
+                'payment_id' => $initialRequest->get('general.payment_id')
             ]);
     }
 
@@ -103,17 +104,12 @@ final class ActionController
     {
         $currentCallback = $this->callbackRepository->findCurrentOne($state);
         $callbackCollection = new ArrayCollection($currentCallback->getBody());
-        $actionProcessor = $this->actionProcessorFactory->createProcessor($callbackCollection);
+        $action = $this->actionFactory->make($callbackCollection, $state);
 
-        if (!$actionProcessor) {
-            throw new LogicException('Action processor must be exists');
+        if (!$action) {
+            throw new LogicException('Action must be exists');
         }
 
-        $actionKey = $actionProcessor->getActionSigner()->buildActionKey($bodyCollection);
-
-        if (!$state->isActionCompleted($actionKey)) {
-            $state->completeAction($actionKey);
-            $state->next();
-        }
+        $action->complete($bodyCollection);
     }
 }
