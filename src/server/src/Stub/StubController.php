@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Stub;
 
 use App\Stub\Collection\ArrayCollection;
-use App\Stub\Repository\CallbackRepository;
 use App\Stub\Repository\RouteRepository;
-use App\Stub\Service\Action\ActionFactory;
+use App\Stub\Service\ActionFactory;
+use App\Stub\Service\CallbackResolver;
 use App\Stub\Service\OverrideProcessor;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
@@ -24,7 +24,7 @@ final class StubController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private RouteRepository $routeRepository,
-        private CallbackRepository $callbackRepository,
+        private CallbackResolver $callbackResolver,
         private ActionFactory $actionFactory,
         private OverrideProcessor $overrideProcessor,
         private StateManager $stateManager,
@@ -105,11 +105,10 @@ final class StubController
     /**
      * @param State $state
      * @return ResponseInterface
-     * @throws InvalidArgumentException
      */
     private function responseByState(State $state): ResponseInterface
     {
-        $currentCallback = $this->callbackRepository->findCurrentOne($state);
+        $currentCallback = $this->callbackResolver->findCurrentByState($state);
         $callbackCollection = new ArrayCollection($currentCallback->getBody());
 
         $this->overrideProcessor->process($callbackCollection, $state);

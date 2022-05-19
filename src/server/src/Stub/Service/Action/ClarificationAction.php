@@ -7,17 +7,13 @@ use App\Stub\Service\Action\Clarification\ParamsParser;
 use App\Stub\Service\Action\Clarification\Parser\LegacyParamsParser;
 use App\Stub\Service\Action\Clarification\Parser\SchemaParamsParser;
 use App\Stub\Service\Action\Clarification\Parser\SentParamsParser;
+use App\Stub\Service\ActionException;
 
 class ClarificationAction extends AbstractAction
 {
-    /**
-     * @param ArrayCollection|null $data
-     * @return string
-     * @throws \Exception
-     */
-    public function getActionKey(?ArrayCollection $data = null): string
+    public function getActionKey(?ArrayCollection $completeRequest = null): string
     {
-        $strategies = $this->getParseParamsStrategies($data);
+        $strategies = $this->getParseParamsStrategies($completeRequest);
 
         foreach ($strategies as $parser) {
             $names = $parser->getNames();
@@ -25,24 +21,22 @@ class ClarificationAction extends AbstractAction
             if (!empty($names)) {
                 sort($names);
 
-                $key = md5(implode(',', $names));
-
-                return $key;
+                return md5(implode(',', $names));
             }
         }
 
-        throw new \Exception('Cant parse clarification fields');
+        throw new ActionException('Can not parse clarification fields');
     }
 
     /**
-     * @param ArrayCollection|null $data
+     * @param ArrayCollection|null $completeRequest
      * @return ParamsParser[]
      */
-    private function getParseParamsStrategies(?ArrayCollection $data = null)
+    private function getParseParamsStrategies(?ArrayCollection $completeRequest = null): array
     {
         $strategies = [];
 
-        if (is_null($data)) {
+        if (is_null($completeRequest)) {
             $clarificationFields = $this->callback->get('clarification_fields');
 
             if (is_array($clarificationFields)) {
@@ -50,7 +44,7 @@ class ClarificationAction extends AbstractAction
                 $strategies[] = new LegacyParamsParser($clarificationFields);
             }
         } else {
-            $clarificationFields = $data->get('additional_data');
+            $clarificationFields = $completeRequest->get('additional_data');
 
             if (is_array($clarificationFields)) {
                 $strategies[] = new SentParamsParser($clarificationFields);

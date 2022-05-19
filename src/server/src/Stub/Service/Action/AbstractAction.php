@@ -3,6 +3,7 @@
 namespace App\Stub\Service\Action;
 
 use App\Stub\Collection\ArrayCollection;
+use App\Stub\Service\ActionException;
 use App\Stub\Session\State;
 
 abstract class AbstractAction
@@ -17,35 +18,32 @@ abstract class AbstractAction
         protected State $state
     ) {
         if (!$this->isCompleted()) {
-            $actionKey = $this->getActionKey();
-
-            $this->state->registerAction($actionKey);
+            $this->state->registerAction($this->getActionKey());
         }
     }
 
     /**
-     * @param ArrayCollection|null $data
+     * @param ArrayCollection|null $completeRequest
      * @return string
+     * @throws ActionException
      */
-    abstract public function getActionKey(?ArrayCollection $data = null): string;
+    abstract public function getActionKey(?ArrayCollection $completeRequest = null): string;
 
     /**
      * @return bool
      */
     public function isCompleted(): bool
     {
-        $actionKey = $this->getActionKey();
-
-        return $this->state->isActionCompleted($actionKey);
+        return $this->state->isActionCompleted($this->getActionKey());
     }
 
     /**
-     * @param ArrayCollection $data
+     * @param ArrayCollection $completeRequest
      * @return void
      */
-    public function complete(ArrayCollection $data): void
+    public function complete(ArrayCollection $completeRequest): void
     {
-        $actionKey = $this->getActionKey($data);
+        $actionKey = $this->getActionKey($completeRequest);
 
         if (!$this->state->isActionCompleted($actionKey)) {
             $this->state->completeAction($actionKey);

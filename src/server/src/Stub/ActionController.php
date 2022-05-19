@@ -6,8 +6,8 @@ namespace App\Stub;
 
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Form\AcsRequestForm;
-use App\Stub\Repository\CallbackRepository;
-use App\Stub\Service\Action\ActionFactory;
+use App\Stub\Service\ActionFactory;
+use App\Stub\Service\CallbackResolver;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 use LogicException;
@@ -21,26 +21,15 @@ use Yiisoft\Yii\View\ViewRenderer;
 
 final class ActionController
 {
-    private ViewRenderer $viewRenderer;
-
-    private DataResponseFactoryInterface $responseFactory;
-
-    private CallbackRepository $callbackRepository;
-
-    private ActionFactory $actionFactory;
-
     public function __construct(
-        ViewRenderer $viewRenderer,
-        DataResponseFactoryInterface $responseFactory,
-        CallbackRepository $callbackRepository,
-        ActionFactory $actionFactory,
+        private ViewRenderer $viewRenderer,
+        private DataResponseFactoryInterface $responseFactory,
+        private CallbackResolver $callbackResolver,
+        private ActionFactory $actionFactory,
     ) {
         $this->viewRenderer = $viewRenderer
             ->withControllerName('stub/action')
             ->withLayout(null);
-        $this->responseFactory = $responseFactory;
-        $this->callbackRepository = $callbackRepository;
-        $this->actionFactory = $actionFactory;
     }
 
     public function renderAcs(
@@ -75,7 +64,10 @@ final class ActionController
         return $this->responseFactory->createResponse();
     }
 
-    public function clarify(
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function completeClarification(
         ServerRequestInterface $request,
         StateManager $stateManager,
     ): ResponseInterface {
@@ -85,8 +77,6 @@ final class ActionController
             throw new LogicException('State must be exists');
         }
 
-        $initialRequest = $state->getInitialRequest();
-
         $this->completeAction($state, new ArrayCollection($body));
 
         $stateManager->save($state);
@@ -95,14 +85,14 @@ final class ActionController
             ->createResponse([
                 'status' => 'success',
                 'request_id' => $state->getRequestId(),
-                'project_id' => $initialRequest->get('general.project_id'),
-                'payment_id' => $initialRequest->get('general.payment_id')
+                'project_id' => $state->getInitialRequest()->get('general.project_id'),
+                'payment_id' => $state->getInitialRequest()->get('general.payment_id')
             ]);
     }
 
-    private function completeAction(State $state, ArrayCollection $bodyCollection)
+    private function completeAction(State $state, ArrayCollection $bodyCollection): void
     {
-        $currentCallback = $this->callbackRepository->findCurrentOne($state);
+        $currentCallback = $this->callbackResolver->findCurrentByState($state);
         $callbackCollection = new ArrayCollection($currentCallback->getBody());
         $action = $this->actionFactory->make($callbackCollection, $state);
 

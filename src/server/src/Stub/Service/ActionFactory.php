@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Stub\Service\Action;
+namespace App\Stub\Service;
 
 use App\Stub\Collection\ArrayCollection;
+use App\Stub\Service\Action\AbstractAction;
+use App\Stub\Service\Action\AcsAction;
+use App\Stub\Service\Action\ClarificationAction;
 use App\Stub\Session\State;
 
 class ActionFactory
