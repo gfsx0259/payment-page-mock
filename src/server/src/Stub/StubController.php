@@ -6,8 +6,8 @@ namespace App\Stub;
 
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Repository\RouteRepository;
-use App\Stub\Repository\StubRepository;
-use App\Stub\Service\Action\ActionProcessorFactory;
+use App\Stub\Service\ActionFactory;
+use App\Stub\Service\CallbackResolver;
 use App\Stub\Service\OverrideProcessor;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
@@ -24,8 +24,8 @@ final class StubController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private RouteRepository $routeRepository,
-        private StubRepository $stubRepository,
-        private ActionProcessorFactory $actionProcessorFactory,
+        private CallbackResolver $callbackResolver,
+        private ActionFactory $actionFactory,
         private OverrideProcessor $overrideProcessor,
         private StateManager $stateManager,
     ) {}
@@ -105,27 +105,17 @@ final class StubController
     /**
      * @param State $state
      * @return ResponseInterface
-     * @throws InvalidArgumentException
      */
     private function responseByState(State $state): ResponseInterface
     {
-        $stubs = $this->stubRepository->findDefaultByRoute($state->getRouteId());
-
-        $callbacks = current($stubs)->getCallbacks();
-
-        $cursor = min($state->getCursor(), $callbacks->count()) - 1;
-
-        if ($cursor < 0) {
-            $cursor = 0;
-        }
-
-        $callbackCollection = new ArrayCollection($callbacks->get($cursor)->getBody());
+        $currentCallback = $this->callbackResolver->findCurrentByState($state);
+        $callbackCollection = new ArrayCollection($currentCallback->getBody());
 
         $this->overrideProcessor->process($callbackCollection, $state);
 
-        if ($actionProcessor = $this->actionProcessorFactory->createProcessor($callbackCollection)) {
-            $actionProcessor->process($callbackCollection, $state);
-        } else {
+        $action = $this->actionFactory->make($callbackCollection, $state);
+
+        if (!$action || $action->isCompleted()) {
             $state->next();
         }
 

@@ -141,6 +141,8 @@ return [
                 ->action([StubController::class, 'sale']),
             Route::post('/payment/card/3ds_result')
                 ->action([ActionController::class, 'completeAcs']),
+            Route::post('/payment/clarification')
+                ->action([ActionController::class, 'completeClarification']),
         ),
 
     Group::create('/actions')
