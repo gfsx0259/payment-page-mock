@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
 final class RouteController
@@ -19,7 +20,9 @@ final class RouteController
         private DataResponseFactoryInterface $responseFactory,
         private RouteRepository $routeRepository,
         private ImageUploader $imageUploader,
-    ) {}
+    ) {
+        $this->imageUploader->setUploadPath('route/');
+    }
 
     public function index(): ResponseInterface
     {
@@ -47,7 +50,7 @@ final class RouteController
         $route = new Route(
             $data->title,
             $data->route,
-            $this->imageUploader->handle($data->logo)
+            $this->imageUploader->handle($data->logo, StringHelper::baseName($data->route))
         );
         $entityWriter->write([$route]);
 
