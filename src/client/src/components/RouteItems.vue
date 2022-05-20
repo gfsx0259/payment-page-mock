@@ -5,7 +5,7 @@
                 <CCardImage
                     v-if="mock.logo"
                     orientation="top"
-                    :src="'http://localhost:8082/uploads/route/' + mock.logo"
+                    :src="process.env.VUE_APP_API_URL + '/uploads/route/' + mock.logo"
                 />
                 <CCardBody>
                     <CCardTitle>{{ mock.route }}</CCardTitle>

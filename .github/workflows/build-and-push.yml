@@ -32,8 +32,8 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_LOGIN }}/payment-page-mock-api:${{ steps.get_version.outputs.VERSION }}
           build-args: |
-            UID=1000
-            GID=1000
+            UID=0
+            GID=0
 
       - name: Build and push UI image
         uses: docker/build-push-action@v3
