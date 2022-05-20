@@ -1,12 +1,13 @@
 import { createApp } from 'vue'
 import { CIcon } from '@coreui/icons-vue';
 import { cilFlagAlt } from '@coreui/icons'
+import * as Components from '@coreui/vue';
+import { SnackbarPlugin } from 'snackbar-vue';
 
 import App from './App'
 import Router from "@/router/router";
 import Store from "@/store";
-
-import * as Components from '@coreui/vue';
+import SnackbarConfig from '@/config/snackbar';
 
 const app = createApp(App);
 
@@ -50,10 +51,6 @@ const UIDirectives = [
     Components.vcplaceholder,
 ];
 
-app.provide('icons', {
-    cilFlagAlt,
-})
-
 UIDirectives.forEach((directive) => {
     app.directive(directive.name, directive);
 })
@@ -62,6 +59,12 @@ UIComponents.forEach((component) => {
     app.component(component.name, component);
 })
 
+app.provide('icons', {
+    cilFlagAlt,
+});
+app.use(SnackbarPlugin, SnackbarConfig);
+
 app.use(Store);
 app.use(Router);
+
 app.mount('#app');

@@ -35,7 +35,7 @@ export const callbackStore = {
             commit('setCallbacks', response.data.data);
             commit('setIsLoading', false);
         },
-        async update({state}) {
+        async update({state, commit}) {
             const callbackData = {
                 id: state.form.id,
                 stubId: state.form.stubId,
@@ -43,6 +43,8 @@ export const callbackStore = {
             };
 
             await HttpClient.post('stub/callback', callbackData);
+
+            commit('setMessage', { text: 'Saved successfully' }, { root: true })
         },
     },
     namespaced: true,

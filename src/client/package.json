@@ -16,6 +16,7 @@
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
     "serve": "^13.0.2",
+    "snackbar-vue": "^1.0.3",
     "vue": "^3.2.13",
     "vue-json-editor": "github:gfsx0259/vue-json-editor",
     "vue-router": "^4.0.3",
