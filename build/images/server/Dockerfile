@@ -24,7 +24,7 @@ ENV GID=${GID}
 RUN usermod -u $UID www-data \
  && groupmod -g $GID www-data
 
-RUN mkdir -p /var/www/.composer /var/www/vendor /var/www/config \
+RUN mkdir -p /var/www/.composer /var/www/vendor /var/www/config /var/www/public \
  && chown -R $UID /var/www;
 
 USER $UID
