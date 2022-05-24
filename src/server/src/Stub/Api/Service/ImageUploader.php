@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Stub\Api\Service;
 
 use Exception;
+use Yiisoft\Files\FileHelper;
 
 class ImageUploader
 {
@@ -69,6 +70,8 @@ class ImageUploader
         string $fileExt
     ): string
     {
+        FileHelper::ensureDirectory($this->baseUploadPath);
+
         $fullFileName = sprintf(
             $this->fileNamePattern,
             $fileName,

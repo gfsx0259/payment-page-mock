@@ -17,16 +17,20 @@ services:
         environment: *environments
     nginx:
         image: konstantinpopov/payment-page-mock-nginx:main
-        volumes:
-            - static:/var/www/public
+        volumes: &sharedStatic
+            - type: bind
+              source: ./assets
+              target: /var/www/public/assets
+            - type: bind
+              source: ./uploads
+              target: /var/www/public/uploads
         ports:
             - target: 80
               published: 8082
     api:
         image: konstantinpopov/payment-page-mock-api:main
         environment: *environments
-        volumes:
-            - static:/var/www/public
+        volumes: *sharedStatic
     db:
         image: mysql:latest
         ports:
