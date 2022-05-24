@@ -5,7 +5,7 @@
                 <CCardImage
                     v-if="mock.logo"
                     orientation="top"
-                    :src="process.env.VUE_APP_API_URL + '/uploads/route/' + mock.logo"
+                    :src="this.getImagePath(mock.logo)"
                 />
                 <CCardBody>
                     <CCardTitle>{{ mock.route }}</CCardTitle>
@@ -20,14 +20,21 @@
 </template>
 
 <script>
+import { API_URL } from "@/constants";
+
 export default {
   name: "RouteItems",
     props: {
       mocks: {
         type: Array,
         required: true,
-    }
+      },
   },
+  methods: {
+    getImagePath(fileName) {
+      return API_URL + '/uploads/route/' + fileName;
+    },
+  }
 }
 </script>
 
