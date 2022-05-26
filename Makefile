@@ -8,8 +8,8 @@ prepare:
 
 pull:
 	sudo docker image pull konstantinpopov/payment-page-mock-api:main
-    sudo docker image pull konstantinpopov/payment-page-mock-nginx:main
-    sudo docker image pull konstantinpopov/payment-page-mock-client:main
+	sudo docker image pull konstantinpopov/payment-page-mock-nginx:main
+	sudo docker image pull konstantinpopov/payment-page-mock-client:main
 
 deploy:
 	sudo docker stack deploy -c docker-compose.prod.yml dummy

@@ -9,7 +9,7 @@
     <div class="d-flex justify-content-start mb-4">
         <CButton color="light" @click="showForm">Add route</CButton>
     </div>
-    <RouteItems :mocks="routes" v-if="!isLoading"/>
+    <RouteItems :routes="searchedRoutes" v-if="!isLoading"/>
     <RoutePlaceholder v-if="isLoading"/>
 </template>
 
@@ -51,7 +51,11 @@ export default {
         ...mapState({
             routes: state => state.route.routes,
             isLoading: state => state.route.isLoading,
+            searchQuery: state => state.route.searchQuery,
         }),
+        searchedRoutes() {
+          return this.routes.filter(route => route.route.includes(this.searchQuery));
+        }
     }
 }
 </script>
@@ -61,11 +65,11 @@ export default {
     align-items: center;
 }
 .card img {
-    height: 140px;
+    height: 110px;
     max-width: 12rem;
 }
 .card-body {
     width:100%;
-    padding: 2rem 2rem;
+    padding: 1rem 2rem;
 }
 </style>

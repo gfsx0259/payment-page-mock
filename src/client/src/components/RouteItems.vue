@@ -1,15 +1,15 @@
 <template>
     <CRow :lg="{ cols: 4 }" :md="{ cols: 4 }">
-        <CCol xs v-for="mock in mocks">
-            <CCard style="width: 19rem" class="mb-4">
+        <CCol xs v-for="route in routes">
+            <CCard style="width: 18rem" class="mb-4">
                 <CCardImage
-                    v-if="mock.logo"
+                    v-if="route.logo"
                     orientation="top"
-                    :src="this.getImagePath(mock.logo)"
+                    :src="this.getImagePath(route.logo)"
                 />
                 <CCardBody>
-                    <CCardTitle>{{ mock.route }}</CCardTitle>
-                    <router-link :to="'/route/' + mock.id">
+                    <CCardTitle class="mb-3">{{ route.route }}</CCardTitle>
+                    <router-link :to="'/route/' + route.id">
                         <CButton color="dark">Stubs</CButton>
                     </router-link>
                 </CCardBody>
@@ -25,7 +25,7 @@ import { API_URL } from "@/constants";
 export default {
   name: "RouteItems",
     props: {
-      mocks: {
+      routes: {
         type: Array,
         required: true,
       },
@@ -46,7 +46,7 @@ export default {
     border-radius: 5px 0 5px 0;
 }
 .card-img-top {
-    max-height: 140px;
+    max-height: 110px;
     margin-top: 5px;
     background-repeat: no-repeat;
     background-position: center;

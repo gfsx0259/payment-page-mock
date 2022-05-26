@@ -9,6 +9,7 @@ export const routeStore = {
         },
         routes: [],
         isLoading: false,
+        searchQuery: '',
     }),
     mutations: {
         setFormRoute(state, route) {
@@ -25,6 +26,9 @@ export const routeStore = {
         },
         setIsLoading(state, isLoading) {
             state.isLoading = isLoading;
+        },
+        setSearchQuery(state, searchQuery) {
+            state.searchQuery = searchQuery;
         },
     },
     actions: {

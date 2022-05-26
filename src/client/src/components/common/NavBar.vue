@@ -1,21 +1,40 @@
 <template>
     <CNavbar color="dark" color-scheme="dark">
         <CContainer>
-            <CNavbarNav class="flex-md-row">
-                <CNavItem v-for="item in getItems">
-                    <CNavLink
-                        @click="go(item)"
-                        :disabled="item.current"
-                    >
-                        {{ item.name }}
-                    </CNavLink>
-                </CNavItem>
+            <CNavbarNav class="d-flex flex-md-row flex-grow-1">
+                <CCol xs="8" class="d-flex">
+                  <CNavItem v-for="item in getItems">
+                      <CNavLink
+                          @click="go(item)"
+                          :disabled="item.current"
+                      >
+                          {{ item.name }}
+                      </CNavLink>
+                  </CNavItem>
+                </CCol>
+                <CCol xs="4" v-if="this.$route.name === 'routes'">
+                  <CForm class="d-flex">
+                    <CFormInput
+                        type="search"
+                        v-bind:value="searchQuery"
+                        @input="changeSearchQuery"
+                        class="me-2"
+                        placeholder="Search"
+                    />
+                    <CButton type="submit" color="light" variant="outline">Search</CButton>
+                  </CForm>
+                </CCol>
             </CNavbarNav>
         </CContainer>
     </CNavbar>
 </template>
 
 <script>
+import {
+  mapState,
+  mapMutations,
+} from "vuex";
+
 export default {
     name: "NavBar",
     data() {
@@ -40,6 +59,9 @@ export default {
         }
     },
     computed: {
+        ...mapState({
+          searchQuery: state => state.route.searchQuery,
+        }),
         getItems() {
             if (!this.$route.name) {
                 return this.items;
@@ -58,6 +80,12 @@ export default {
         }
     },
     methods: {
+        ...mapMutations({
+          setSearchQuery: 'route/setSearchQuery',
+        }),
+        changeSearchQuery($event) {
+          this.setSearchQuery($event.target.value);
+        },
         go(targetItem) {
             if (!targetItem.index) {
                 this.$router.push({name: targetItem.name});
