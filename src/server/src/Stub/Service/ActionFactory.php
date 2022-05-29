@@ -5,17 +5,34 @@ namespace App\Stub\Service;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Service\Action\AcsAction;
+use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
 use App\Stub\Session\State;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Log\LoggerInterface;
+use ReflectionException;
+use Yiisoft\Injector\Injector;
 
 class ActionFactory
 {
+    public function __construct(
+        private Injector $injector,
+        private LoggerInterface $logger
+    ) {}
+
     public function make(ArrayCollection $callback, State $state): ?AbstractAction
     {
-        if ($callback->get('acs')) {
-            return new AcsAction($callback, $state);
-        } elseif ($callback->get('clarification_fields')) {
-            return new ClarificationAction($callback, $state);
+        try {
+            if ($callback->get('acs')) {
+                return new AcsAction($callback, $state);
+            } elseif ($callback->get('return_url.url')) {
+                return $this->injector->make(ApsAction::class, [$callback, $state]);
+            } elseif ($callback->get('clarification_fields')) {
+                return new ClarificationAction($callback, $state);
+            }
+        } catch (ReflectionException|ContainerExceptionInterface $exception) {
+            $this->logger->error($exception->getMessage());
+            return null;
         }
 
         return null;
