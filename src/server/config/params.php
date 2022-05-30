@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Middleware\LocaleMiddleware;
 use App\ViewInjection\CommonViewInjection;
 use App\ViewInjection\LayoutViewInjection;
 use App\ViewInjection\LinkTagsViewInjection;
@@ -34,7 +33,6 @@ return [
         SessionMiddleware::class,
         CookieMiddleware::class,
         CookieLoginMiddleware::class,
-        LocaleMiddleware::class,
         Router::class,
     ],
 

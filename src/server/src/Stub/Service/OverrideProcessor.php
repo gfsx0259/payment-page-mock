@@ -4,6 +4,7 @@ namespace App\Stub\Service;
 
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Session\State;
+use HttpSoft\Message\Uri;
 use Yiisoft\Router\UrlGeneratorInterface;
 
 /**
@@ -15,6 +16,7 @@ class OverrideProcessor implements ProcessorInterface
         'TERM_URL' => 'acs_return_url.return_url',
         'REQUEST_ID' => 'request_id',
         'ACS_URL' => 'acs_url',
+        'APS_URL' => 'aps_url',
     ];
 
     public function __construct(
@@ -26,8 +28,8 @@ class OverrideProcessor implements ProcessorInterface
     {
         $source = $state->getInitialRequest();
 
-        $source->set('request_id', $state->getRequestId());
         $source->set('acs_url', $this->generateAcsUrl());
+        $source->set('aps_url', $this->generateApsUrl($state));
 
         foreach (self::SCHEMA as $placeholder => $sourcePath) {
             if ($value = $source->get($sourcePath)) {
@@ -39,5 +41,12 @@ class OverrideProcessor implements ProcessorInterface
     private function generateAcsUrl(): string
     {
         return $this->host . $this->urlGenerator->generate('actions/renderAcs');
+    }
+
+    private function generateApsUrl(State $state): string
+    {
+        return new Uri($this->host . $this->urlGenerator->generate('actions/renderAps', [
+            'uniqueKey' => $state->getRequestId(),
+        ]));
     }
 }

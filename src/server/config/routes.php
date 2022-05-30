@@ -151,6 +151,12 @@ return [
             Route::post('/renderAcs')
                 ->name('actions/renderAcs')
                 ->action([ActionController::class, 'renderAcs']),
+            Route::methods([Method::GET, Method::POST], '/renderAps/{uniqueKey}')
+                ->name('actions/renderAps')
+                ->action([ActionController::class, 'renderAps']),
+            Route::post('/completeAps')
+                ->name('actions/completeAps')
+                ->action([ActionController::class, 'completeAps']),
         ),
 
     // Blog routes

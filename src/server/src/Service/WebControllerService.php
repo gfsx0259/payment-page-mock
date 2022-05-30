@@ -21,6 +21,13 @@ final class WebControllerService
         $this->urlGenerator = $urlGenerator;
     }
 
+    public function getRedirectResponseByUrl(string $url): ResponseInterface
+    {
+        return $this->responseFactory
+            ->createResponse(Status::FOUND)
+            ->withHeader(Header::LOCATION, $url);
+    }
+
     public function getRedirectResponse(string $url): ResponseInterface
     {
         return $this->responseFactory
