@@ -79,7 +79,7 @@ export const stubStore = {
                     ({response}) => {
                         const data = response.data;
 
-                        alert(`Request failed: ${data.error.message}`);
+                        commit('setMessage', { text: `Request failed: ${data.error.message}` }, { root: true })
                         dispatch('fetch');
                     }
                 )

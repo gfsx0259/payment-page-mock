@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Stub\Api;
 
+use App\Service\WebControllerService;
 use App\Stub\Api\Service\ImageUploader;
 use App\Stub\Entity\Route;
 use App\Stub\Repository\RouteRepository;
@@ -59,13 +60,17 @@ final class RouteController
             ->createResponse(['success' => true]);
     }
 
-    public function delete(CurrentRoute $route, EntityWriter $entityWriter): ResponseInterface
+    public function delete(
+        CurrentRoute $route,
+        EntityWriter $entityWriter,
+        WebControllerService $controllerService
+    ): ResponseInterface
     {
         $routeId = (int)$route->getArgument('routeId');
         $route = $this->routeRepository->findByPK($routeId);
 
         if (!$route) {
-            return $this->responseFactory->createResponse(null, 404);
+            return $controllerService->getNotFoundResponse();
         }
 
         $entityWriter->delete([$route]);
