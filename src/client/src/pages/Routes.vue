@@ -9,7 +9,7 @@
     <div class="d-flex justify-content-start mb-4">
         <CButton color="light" @click="showForm">Add route</CButton>
     </div>
-    <RouteItems :routes="searchedRoutes" v-if="!isLoading"/>
+    <RouteItems :routes="searchedRoutes" @remove="remove($event)" v-if="!isLoading"/>
     <RoutePlaceholder v-if="isLoading"/>
 </template>
 
@@ -39,6 +39,7 @@ export default {
         ...mapActions({
             fetch: 'route/fetchRoutes',
             create: 'route/createRoute',
+            remove: 'route/remove',
         }),
         showForm() {
             this.visible = true;

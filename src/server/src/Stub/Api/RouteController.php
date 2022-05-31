@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
+use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
@@ -56,5 +57,19 @@ final class RouteController
 
         return $this->responseFactory
             ->createResponse(['success' => true]);
+    }
+
+    public function delete(CurrentRoute $route, EntityWriter $entityWriter): ResponseInterface
+    {
+        $routeId = (int)$route->getArgument('routeId');
+        $route = $this->routeRepository->findByPK($routeId);
+
+        if (!$route) {
+            return $this->responseFactory->createResponse(null, 404);
+        }
+
+        $entityWriter->delete([$route]);
+
+        return $this->responseFactory->createResponse($route);
     }
 }

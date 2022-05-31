@@ -32,6 +32,12 @@ export const stubStore = {
         setIsLoading(state, isLoading) {
             state.isLoading = isLoading;
         },
+        remove(state, id) {
+            const stub = state.stubs.find(stub => stub.id === id);
+            const index = state.stubs.indexOf(stub);
+
+            state.stubs.splice(index, 1);
+        },
     },
     actions: {
         async fetch({state, commit}) {
@@ -63,6 +69,21 @@ export const stubStore = {
             if (response.status === 200) {
                 dispatch('fetch')
             }
+        },
+        async remove({state, commit, dispatch}, id) {
+            commit('remove', id);
+
+            HttpClient
+                .delete(`stub/${id}`)
+                .catch(
+                    ({response}) => {
+                        const data = response.data;
+
+                        alert(`Request failed: ${data.error.message}`);
+                        dispatch('fetch');
+                    }
+                )
+            ;
         }
     },
     namespaced: true,

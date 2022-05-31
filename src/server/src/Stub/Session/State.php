@@ -85,4 +85,9 @@ class State
     {
         return $this->actions[$key] ?? false === true;
     }
+
+    public function isActionRegistered(string $key): bool
+    {
+        return isset($this->actions[$key]);
+    }
 }

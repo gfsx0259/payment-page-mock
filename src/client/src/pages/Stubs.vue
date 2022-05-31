@@ -17,6 +17,7 @@
       <StubItems
           :stubs="stubs"
           @setDefault="changeDefault"
+          @remove="remove($event)"
       />
     </CRow>
 </template>
@@ -55,6 +56,7 @@ export default {
             fetch: 'stub/fetch',
             create: 'stub/create',
             saveDefault: 'stub/saveDefault',
+            remove: 'stub/remove',
         }),
         showForm() {
             this.visible = true;

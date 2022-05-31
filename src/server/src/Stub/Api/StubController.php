@@ -17,9 +17,10 @@ use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 final class StubController
 {
     public function __construct(
-        private DataResponseFactoryInterface $responseFactory,
-        private StubRepository $stubRepository,
-    ) {}
+    private DataResponseFactoryInterface $responseFactory,
+    private StubRepository $stubRepository,
+    ) {
+    }
 
     public function index(
         CurrentRoute $route
@@ -62,6 +63,24 @@ final class StubController
 
         return $this->responseFactory
             ->createResponse(['success' => $data]);
+    }
+
+    public function delete(CurrentRoute $route, EntityWriter $entityWriter): ResponseInterface
+    {
+        $stubId = (int)$route->getArgument('stubId');
+
+        /** @var Stub $stub */
+        $stub = $this->stubRepository->findByPK($stubId);
+
+        if (!$stub) {
+            return $this->responseFactory->createResponse('Stub not found', 404);
+        } elseif ($stub->getDefault()) {
+            return $this->responseFactory->createResponse("You can't remove default stub", 400);
+        }
+
+        $entityWriter->delete([$stub]);
+
+        return $this->responseFactory->createResponse($stub);
     }
 
     /**
