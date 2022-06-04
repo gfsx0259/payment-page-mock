@@ -6,7 +6,6 @@ namespace App\Stub;
 
 use App\Service\WebControllerService;
 use App\Stub\Collection\ArrayCollection;
-use App\Stub\Form\AcsRequestForm;
 use App\Stub\Service\ActionFactory;
 use App\Stub\Service\CallbackResolver;
 use App\Stub\Service\OverrideProcessor;
@@ -18,37 +17,15 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
-use Yiisoft\Router\CurrentRoute;
-use Yiisoft\Router\UrlGeneratorInterface;
-use Yiisoft\Validator\ValidatorInterface;
-use Yiisoft\Yii\View\ViewRenderer;
 
 final class ActionController
 {
     public function __construct(
-        private ViewRenderer $viewRenderer,
         private DataResponseFactoryInterface $responseFactory,
         private CallbackResolver $callbackResolver,
         private ActionFactory $actionFactory,
         private OverrideProcessor $overrideProcessor,
-        private UrlGeneratorInterface $urlGenerator,
-    ) {
-        $this->viewRenderer = $viewRenderer
-            ->withControllerName('stub/action')
-            ->withLayout(null);
-    }
-
-    public function renderAcs(
-        ServerRequestInterface $request,
-        ValidatorInterface $validator
-    ): ResponseInterface {
-        $requestBody = $request->getParsedBody();
-        $form = new AcsRequestForm();
-
-        $form->load((array)$requestBody) && $validator->validate($form);
-
-        return $this->viewRenderer->render('acsPage', ['form' => $form]);
-    }
+    ) {}
 
     /**
      * Accept complete request (3ds result) from Payment Page and move cursor
@@ -70,15 +47,6 @@ final class ActionController
         $stateManager->save($state);
 
         return $this->responseFactory->createResponse();
-    }
-
-    public function renderAps(
-        CurrentRoute $currentRoute,
-    ): ResponseInterface {
-        return $this->viewRenderer->render('apsPage', [
-            'completeUrl' => $this->urlGenerator->generate('actions/completeAps'),
-            'uniqueKey' => $currentRoute->getArgument('uniqueKey'),
-        ]);
     }
 
     /**

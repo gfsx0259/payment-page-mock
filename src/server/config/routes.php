@@ -19,6 +19,7 @@ use App\Stub\ActionController;
 use App\Stub\Api\CallbackController;
 use App\Stub\Api\RouteController;
 use App\Stub\Api\StubController as ApiStubController;
+use App\Stub\DummyPageController;
 use App\Stub\StubController;
 use App\User\Controller\ApiUserController;
 use App\User\Controller\UserController;
@@ -106,6 +107,9 @@ return [
                     Route::methods([Method::OPTIONS, Method::POST], '/route')
                         ->name('api/route/create')
                         ->action([RouteController::class, 'create']),
+                    Route::methods([Method::OPTIONS, Method::DELETE], '/route/{routeId}')
+                        ->name('api/route/delete')
+                        ->action([RouteController::class, 'delete']),
 
                     Route::get('/stub/{routeId}')
                         ->name('api/stub/index')
@@ -113,6 +117,9 @@ return [
                     Route::methods([Method::OPTIONS, Method::POST], '/stub')
                         ->name('api/stub/create')
                         ->action([ApiStubController::class, 'create']),
+                    Route::methods([Method::OPTIONS, Method::DELETE], '/stub/{stubId}')
+                        ->name('api/stub/delete')
+                        ->action([ApiStubController::class, 'delete']),
                     Route::methods([Method::OPTIONS, Method::POST], '/stub/setDefault')
                         ->name('api/stub/setDefault')
                         ->action([ApiStubController::class, 'setDefault']),
@@ -150,10 +157,10 @@ return [
         ->routes(
             Route::post('/renderAcs')
                 ->name('actions/renderAcs')
-                ->action([ActionController::class, 'renderAcs']),
+                ->action([DummyPageController::class, 'renderAcs']),
             Route::methods([Method::GET, Method::POST], '/renderAps/{uniqueKey}')
                 ->name('actions/renderAps')
-                ->action([ActionController::class, 'renderAps']),
+                ->action([DummyPageController::class, 'renderAps']),
             Route::post('/completeAps')
                 ->name('actions/completeAps')
                 ->action([ActionController::class, 'completeAps']),

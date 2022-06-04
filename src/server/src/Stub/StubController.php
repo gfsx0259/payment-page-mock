@@ -117,6 +117,8 @@ final class StubController
 
         if (!$action || $action->isCompleted()) {
             $state->next();
+        } else {
+            $action->register();
         }
 
         $this->stateManager->save($state);

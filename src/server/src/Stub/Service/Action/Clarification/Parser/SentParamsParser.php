@@ -40,6 +40,8 @@ class SentParamsParser implements ParamsParser
     public function getNames(): array
     {
         if (empty($this->names)) {
+            $this->names = [];
+
             $this->parse();
         }
 

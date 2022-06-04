@@ -30,6 +30,12 @@ export const routeStore = {
         setSearchQuery(state, searchQuery) {
             state.searchQuery = searchQuery;
         },
+        remove(state, id) {
+            const route = state.routes.find(route => route.id === id);
+            const index = state.routes.indexOf(route);
+
+            state.routes.splice(index, 1);
+        },
     },
     actions: {
         async fetchRoutes({commit}) {
@@ -47,6 +53,18 @@ export const routeStore = {
             if (response.status === 200) {
                 dispatch('fetchRoutes')
             }
+        },
+        async remove({state, dispatch, commit}, id) {
+            commit('remove', id);
+
+            HttpClient
+                .delete(`route/${id}`)
+                .catch(
+                    () => {
+                        dispatch('fetchRoutes');
+                    }
+                )
+            ;
         }
     },
     namespaced: true,

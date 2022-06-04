@@ -8,19 +8,10 @@ use App\Stub\Session\State;
 
 abstract class AbstractAction
 {
-    /**
-     * @param ArrayCollection $callback
-     * @param State $state
-     * @return void
-     */
     public function __construct(
         protected ArrayCollection $callback,
         protected State $state
-    ) {
-        if (!$this->isCompleted()) {
-            $this->state->registerAction($this->getActionKey());
-        }
-    }
+    ) {}
 
     /**
      * @param ArrayCollection|null $completeRequest
@@ -29,18 +20,22 @@ abstract class AbstractAction
      */
     abstract public function getActionKey(?ArrayCollection $completeRequest = null): string;
 
-    /**
-     * @return bool
-     */
+    public function register(): bool
+    {
+        if (!$this->isCompleted()) {
+            $this->state->registerAction($this->getActionKey());
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function isCompleted(): bool
     {
         return $this->state->isActionCompleted($this->getActionKey());
     }
 
-    /**
-     * @param ArrayCollection $completeRequest
-     * @return void
-     */
     public function complete(ArrayCollection $completeRequest): void
     {
         $actionKey = $this->getActionKey($completeRequest);

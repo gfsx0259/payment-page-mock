@@ -11,6 +11,7 @@
                 Description
             </CTableHeaderCell>
             <CTableHeaderCell/>
+            <CTableHeaderCell/>
         </CTableHead>
         <CTableBody>
             <CTableRow v-for="stub in this.stubs">
@@ -27,6 +28,14 @@
                     <router-link :to="'/stub/' + stub.id">
                         <CButton color="dark">Callbacks</CButton>
                     </router-link>
+                </CTableDataCell>
+                <CTableDataCell class="text-center">
+                    <CIcon
+                        icon="cilTrash"
+                        size="xl"
+                        class="delete-btn m-1"
+                        @click="remove(stub.id)"
+                    />
                 </CTableDataCell>
             </CTableRow>
         </CTableBody>
@@ -45,6 +54,11 @@ export default {
     methods: {
         setDefault(id) {
             this.$emit('setDefault', id);
+        },
+        remove(id) {
+            if (confirm('Are you sure?')) {
+                this.$emit('remove', id);
+            }
         }
     }
 }
@@ -53,5 +67,8 @@ export default {
 <style scoped>
 .active .icon {
     color: darkred;
+}
+.delete-btn {
+  cursor: pointer;
 }
 </style>
