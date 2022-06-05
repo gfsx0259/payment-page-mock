@@ -9,10 +9,10 @@
                   @click="remove(route.id)"
                 />
                 <CCardImage
-                    v-if="route.logo"
-                    orientation="top"
-                    class="mt-2"
-                    :src="this.getImagePath(route.logo)"
+                  v-if="route.logo"
+                  orientation="top"
+                  class="mt-2"
+                  :src="this.getImagePath(route.logo)"
                 />
                 <CCardBody>
                     <CCardTitle class="mb-3">{{ route.route }}</CCardTitle>
@@ -20,7 +20,7 @@
                         <CButton color="dark">Stubs</CButton>
                     </router-link>
                 </CCardBody>
-                <CBadge color="danger">card</CBadge>
+                <RouteType :type="route.type"/>
             </CCard>
         </CCol>
     </CRow>
@@ -28,14 +28,16 @@
 
 <script>
 import { API_URL } from "@/constants";
+import RouteType from "@/components/RouteType";
 
 export default {
   name: "RouteItems",
-    props: {
-      routes: {
-        type: Array,
-        required: true,
-      },
+  components: {RouteType},
+  props: {
+    routes: {
+      type: Array,
+      required: true,
+    },
   },
   methods: {
     getImagePath(fileName) {
@@ -51,12 +53,6 @@ export default {
 </script>
 
 <style scoped>
-.badge {
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-radius: 5px 0 5px 0;
-}
 .card:hover .delete-btn {
   display: block;
 }

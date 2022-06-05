@@ -23,16 +23,21 @@ class Route
     #[Column(type: 'string(191)')]
     private string $logo = '';
 
+    #[Column(type: 'integer')]
+    private int $type;
+
     /**
      * @param string $route
      * @param string $title
      * @param string $logo
+     * @param int $type
      */
-    public function __construct(string $route, string $title, string $logo)
+    public function __construct(string $route, string $title, string $logo, int $type)
     {
         $this->route = $route;
         $this->title = $title;
         $this->logo = $logo;
+        $this->type = $type;
     }
 
     /**
@@ -65,5 +70,13 @@ class Route
     public function getLogo(): string
     {
         return $this->logo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
     }
 }

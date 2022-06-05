@@ -13,7 +13,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
 use Yiisoft\Router\CurrentRoute;
-use Yiisoft\Strings\StringHelper;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
 final class RouteController
@@ -35,6 +34,7 @@ final class RouteController
                 'route' => $stub->getRoute(),
                 'title' => $stub->getTitle(),
                 'logo' => $stub->getLogo(),
+                'type' => $stub->getType(),
             ];
         }
 
@@ -50,9 +50,10 @@ final class RouteController
         $data = json_decode($request->getBody()->getContents());
 
         $route = new Route(
-            $data->title,
             $data->route,
-            $this->imageUploader->handle($data->logo, StringHelper::baseName($data->route))
+            $data->title,
+            $this->imageUploader->handle($data->logo, $this->getLogoFilename($data->route)),
+            (int)$data->type
         );
         $entityWriter->write([$route]);
 
@@ -76,5 +77,22 @@ final class RouteController
         $entityWriter->delete([$route]);
 
         return $this->responseFactory->createResponse($route);
+    }
+
+    /**
+     * Make logo filename from route path
+     *
+     * @param string $route
+     * @return string
+     */
+    private function getLogoFilename(string $route): string
+    {
+        $routeParts = explode('/', $route);
+
+        if ($routeParts > 1) {
+            array_pop($routeParts);
+        }
+
+        return implode('-', $routeParts);
     }
 }

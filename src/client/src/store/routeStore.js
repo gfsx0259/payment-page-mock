@@ -6,6 +6,7 @@ export const routeStore = {
             route: '',
             title: '',
             logo: '',
+            type: null,
         },
         routes: [],
         isLoading: false,
@@ -20,6 +21,9 @@ export const routeStore = {
         },
         setFormLogo(state, logo) {
             state.routeForm.logo = logo;
+        },
+        setFormType(state, type) {
+            state.routeForm.type = type;
         },
         setRoutes(state, routes) {
             state.routes = routes;

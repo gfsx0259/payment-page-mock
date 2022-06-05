@@ -41,6 +41,7 @@ const UIComponents = [
     Components.CFormInput,
     Components.CFormText,
     Components.CFormTextarea,
+    Components.CFormSelect,
     Components.CSpinner,
     Components.CPlaceholder,
     Components.CBadge,
