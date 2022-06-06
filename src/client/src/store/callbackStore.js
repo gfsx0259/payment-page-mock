@@ -4,8 +4,6 @@ export const callbackStore = {
     state: () => ({
         form: {
             stubId: null,
-            id: null,
-            body: {},
         },
         callbacks: [],
         isLoading: false,
@@ -14,17 +12,20 @@ export const callbackStore = {
         setFormStubId(state, stubId) {
             state.form.stubId = stubId;
         },
-        setFormId(state, id) {
-            state.form.id = id;
-        },
-        setFormBody(state, body) {
-            state.form.body = body;
-        },
         setCallbacks(state, callbacks) {
             state.callbacks = callbacks;
         },
         setIsLoading(state, isLoading) {
             state.isLoading = isLoading;
+        },
+        add(state) {
+            state.callbacks.push({id: null})
+        },
+        remove(state, id) {
+            const callback = state.callbacks.find(callback => callback.id === id);
+            const index = state.callbacks.indexOf(callback);
+
+            state.callbacks.splice(index, 1);
         },
     },
     actions: {
@@ -35,17 +36,38 @@ export const callbackStore = {
             commit('setCallbacks', response.data.data);
             commit('setIsLoading', false);
         },
-        async update({state, commit}) {
+        async update({state, commit, dispatch}, {id, body}) {
             const callbackData = {
-                id: state.form.id,
                 stubId: state.form.stubId,
-                callback: state.form.body || {}
+                id: id,
+                callback: body || {}
             };
 
             await HttpClient.post('stub/callback', callbackData);
 
+            dispatch('fetch');
             commit('setMessage', { text: 'Saved successfully' }, { root: true })
         },
+        async remove({state, commit, dispatch}, id) {
+            commit('remove', id);
+
+            if (id === null) {
+                commit('setMessage', { text: `Remove unsaved callback` }, { root: true })
+                return;
+            }
+
+            HttpClient
+                .delete(`callback/${id}`)
+                .catch(
+                    ({response}) => {
+                        const data = response.data;
+
+                        commit('setMessage', { text: `Request failed: ${data.error.message}` }, { root: true })
+                        dispatch('fetch');
+                    }
+                )
+            ;
+        }
     },
     namespaced: true,
 }

@@ -3,9 +3,11 @@
     <CSpinner class="m-sm-auto" color="dark" v-if="isLoading"/>
   </CRow>
    <CallbackItems
-       :callbacks="callbacks"
-       @update="updateCallback"
-       v-if="!isLoading"
+     :callbacks="callbacks"
+     @add="add"
+     @update="update"
+     @remove="remove"
+     v-if="!isLoading"
    />
 </template>
 
@@ -18,34 +20,29 @@ import {
 } from "vuex";
 
 export default {
-    components: {
-        CallbackItems,
-    },
-    async mounted() {
-        this.setStub(this.$route.params.id);
-        this.fetch();
-    },
-    methods: {
-        ...mapMutations({
-          setStub: 'callback/setFormStubId',
-          setBody: 'callback/setFormBody',
-          setId: 'callback/setFormId',
-        }),
-        ...mapActions({
-          fetch: 'callback/fetch',
-          update: 'callback/update',
-        }),
-        updateCallback(id, body) {
-          this.setId(id);
-          this.setBody(body);
-          this.update();
-        }
-    },
-    computed: {
-      ...mapState({
-        callbacks: state => state.callback.callbacks,
-        isLoading: state => state.callback.isLoading,
-      }),
-    }
+  components: {
+    CallbackItems,
+  },
+  async mounted() {
+    this.setStub(this.$route.params.id);
+    await this.fetch();
+  },
+  methods: {
+    ...mapMutations({
+      add: 'callback/add',
+      setStub: 'callback/setFormStubId',
+    }),
+    ...mapActions({
+      fetch: 'callback/fetch',
+      update: 'callback/update',
+      remove: 'callback/remove',
+    }),
+  },
+  computed: {
+    ...mapState({
+      callbacks: state => state.callback.callbacks,
+      isLoading: state => state.callback.isLoading,
+    }),
+  }
 }
 </script>

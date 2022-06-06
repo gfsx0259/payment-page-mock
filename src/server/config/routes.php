@@ -130,6 +130,9 @@ return [
                     Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
                         ->name('api/stub/callback')
                         ->action([CallbackController::class, 'callback']),
+                    Route::methods([Method::OPTIONS, Method::DELETE], '/callback/{callbackId}')
+                        ->name('api/callback/delete')
+                        ->action([CallbackController::class, 'delete']),
                 ),
         ),
 

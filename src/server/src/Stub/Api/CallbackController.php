@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Stub\Api;
 
+use App\Service\WebControllerService;
 use App\Stub\Entity\Callback;
 use App\Stub\Repository\CallbackRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
+use Yiisoft\Http\Status;
 use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
@@ -56,5 +58,24 @@ final class CallbackController
 
         return $this->responseFactory
             ->createResponse($data);
+    }
+
+    public function delete(
+        CurrentRoute $route,
+        EntityWriter $entityWriter,
+        WebControllerService $controllerService
+    ): ResponseInterface
+    {
+        $callbackId = (int)$route->getArgument('callbackId');
+
+        if (!$callback = $this->callbackRepository->findByPK($callbackId)) {
+            return $controllerService->getNotFoundResponse();
+        }
+        $entityWriter->delete([$callback]);
+
+        return $this->responseFactory->createResponse(
+            null,
+            Status::NO_CONTENT
+        );
     }
 }
