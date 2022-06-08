@@ -3,6 +3,7 @@ import HttpClient from "@/network/client";
 export const stubStore = {
     state: () => ({
         stubForm: {
+            id: null,
             routeId: null,
             title: '',
             description: '',
@@ -11,6 +12,9 @@ export const stubStore = {
         isLoading: false,
     }),
     mutations: {
+        setFormId(state, id) {
+            state.stubForm.id = id;
+        },
         setFormTitle(state, title) {
             state.stubForm.title = title;
         },
@@ -19,6 +23,18 @@ export const stubStore = {
         },
         setFormRouteId(state, routeId) {
             state.stubForm.routeId = routeId;
+        },
+        loadFormByStub(state, stubId) {
+            const stub = state.stubs.find(stub => stub.id === stubId);
+
+            state.stubForm.id = stub.id;
+            state.stubForm.title = stub.title;
+            state.stubForm.description = stub.description;
+        },
+        cleanForm(state) {
+            state.stubForm.id = null;
+            state.stubForm.title = '';
+            state.stubForm.description = '';
         },
         setStubs(state, stubs) {
             state.stubs = stubs;
@@ -47,8 +63,24 @@ export const stubStore = {
             commit('setStubs', response.data.data);
             commit('setIsLoading', false);
         },
+        async save({state, dispatch}) {
+            if (state.stubForm.id === null) {
+                dispatch('create');
+            } else {
+                dispatch('update');
+            }
+        },
         async create({state, dispatch}) {
             const response = await HttpClient.post(
+                'stub',
+                state.stubForm
+            );
+            if (response.status === 200) {
+                dispatch('fetch')
+            }
+        },
+        async update({state, dispatch}) {
+            const response = await HttpClient.put(
                 'stub',
                 state.stubForm
             );

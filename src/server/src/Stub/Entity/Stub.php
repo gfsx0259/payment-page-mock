@@ -92,4 +92,22 @@ class Stub
     {
         $this->default = $default;
     }
+
+    /**
+     * @param string $title
+     * @return void
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @param string $description
+     * @return void
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
 }

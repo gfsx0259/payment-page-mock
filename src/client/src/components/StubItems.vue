@@ -12,6 +12,7 @@
             </CTableHeaderCell>
             <CTableHeaderCell/>
             <CTableHeaderCell/>
+            <CTableHeaderCell/>
         </CTableHead>
         <CTableBody>
             <CTableRow v-for="stub in this.stubs">
@@ -31,9 +32,17 @@
                 </CTableDataCell>
                 <CTableDataCell class="text-center">
                     <CIcon
+                        icon="cilPencil"
+                        size="xl"
+                        class="cursor-pointer m-1"
+                        @click="edit(stub.id)"
+                    />
+                </CTableDataCell>
+                <CTableDataCell class="text-center">
+                    <CIcon
                         icon="cilTrash"
                         size="xl"
-                        class="delete-btn m-1"
+                        class="cursor-pointer m-1"
                         @click="remove(stub.id)"
                     />
                 </CTableDataCell>
@@ -59,7 +68,10 @@ export default {
             if (confirm('Are you sure?')) {
                 this.$emit('remove', id);
             }
-        }
+        },
+        edit(id) {
+            this.$emit('edit', id);
+        },
     }
 }
 </script>
@@ -68,7 +80,7 @@ export default {
 .active .icon {
     color: darkred;
 }
-.delete-btn {
+.cursor-pointer {
   cursor: pointer;
 }
 </style>

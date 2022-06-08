@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Stub\Api;
 
+use App\Service\WebControllerService;
 use App\Stub\Entity\Callback;
 use App\Stub\Entity\Stub;
 use App\Stub\Repository\StubRepository;
@@ -20,7 +21,9 @@ final class StubController extends EntityController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private StubRepository $stubRepository,
-    ) {}
+        private WebControllerService $controllerService,
+    ) {
+    }
 
     protected function getRepository(): Repository
     {
@@ -29,8 +32,7 @@ final class StubController extends EntityController
 
     public function index(
         CurrentRoute $route
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $routeId = (int)$route->getArgument('routeId');
 
         $stubs = [];
@@ -64,6 +66,30 @@ final class StubController extends EntityController
             $data->title,
             $data->description
         );
+        $entityWriter->write([$stub]);
+
+        return $this->responseFactory
+            ->createResponse(['success' => $data]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function update(
+        ServerRequestInterface $request,
+        EntityWriter $entityWriter,
+        WebControllerService $controllerService
+    ): ResponseInterface {
+        $data = json_decode($request->getBody()->getContents());
+        $stub = $this->stubRepository->findByPK($data->id);
+
+        if (!$stub) {
+            return $controllerService->getNotFoundResponse();
+        }
+
+        $stub->setTitle($data->title);
+        $stub->setDescription($data->description);
+
         $entityWriter->write([$stub]);
 
         return $this->responseFactory
