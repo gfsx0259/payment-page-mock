@@ -40,4 +40,10 @@ final class WebControllerService
         return $this->responseFactory
             ->createResponse(Status::NOT_FOUND);
     }
+
+    public function getNoContentResponse(): ResponseInterface
+    {
+        return $this->responseFactory
+            ->createResponse(Status::NO_CONTENT);
+    }
 }
