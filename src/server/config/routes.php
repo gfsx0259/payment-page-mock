@@ -107,8 +107,7 @@ return [
                     Route::methods([Method::OPTIONS, Method::POST], '/route')
                         ->name('api/route/create')
                         ->action([RouteController::class, 'create']),
-                    Route::methods([Method::OPTIONS, Method::DELETE], '/route/{routeId}')
-                        ->name('api/route/delete')
+                    Route::methods([Method::OPTIONS, Method::DELETE], '/route/{id}')
                         ->action([RouteController::class, 'delete']),
 
                     Route::get('/stub/{routeId}')
@@ -117,21 +116,17 @@ return [
                     Route::methods([Method::OPTIONS, Method::POST], '/stub')
                         ->name('api/stub/create')
                         ->action([ApiStubController::class, 'create']),
-                    Route::methods([Method::OPTIONS, Method::DELETE], '/stub/{stubId}')
-                        ->name('api/stub/delete')
+                    Route::methods([Method::OPTIONS, Method::DELETE], '/stub/{id}')
                         ->action([ApiStubController::class, 'delete']),
                     Route::methods([Method::OPTIONS, Method::POST], '/stub/setDefault')
                         ->name('api/stub/setDefault')
                         ->action([ApiStubController::class, 'setDefault']),
 
                     Route::get('/callback/{stubId}')
-                        ->name('api/callback/index')
                         ->action([CallbackController::class, 'index']),
                     Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
-                        ->name('api/stub/callback')
-                        ->action([CallbackController::class, 'callback']),
-                    Route::methods([Method::OPTIONS, Method::DELETE], '/callback/{callbackId}')
-                        ->name('api/callback/delete')
+                        ->action([CallbackController::class, 'update']),
+                    Route::methods([Method::OPTIONS, Method::DELETE], '/callback/{id}')
                         ->action([CallbackController::class, 'delete']),
                 ),
         ),

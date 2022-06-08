@@ -4,24 +4,28 @@ declare(strict_types=1);
 
 namespace App\Stub\Api;
 
-use App\Service\WebControllerService;
 use App\Stub\Entity\Callback;
 use App\Stub\Entity\Stub;
 use App\Stub\Repository\StubRepository;
+use Cycle\ORM\Select\Repository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
-use Yiisoft\Http\Status;
 use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
 
-final class StubController
+final class StubController extends EntityController
 {
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private StubRepository $stubRepository,
     ) {}
+
+    protected function getRepository(): Repository
+    {
+        return $this->stubRepository;
+    }
 
     public function index(
         CurrentRoute $route
@@ -64,30 +68,6 @@ final class StubController
 
         return $this->responseFactory
             ->createResponse(['success' => $data]);
-    }
-
-    public function delete(
-        CurrentRoute $route,
-        EntityWriter $entityWriter,
-        WebControllerService $controllerService
-    ): ResponseInterface
-    {
-        $stubId = (int)$route->getArgument('stubId');
-
-        /** @var Stub $stub */
-        $stub = $this->stubRepository->findByPK($stubId);
-
-        if (!$stub) {
-            return $controllerService->getNotFoundResponse();
-        } elseif ($stub->getDefault()) {
-            return $this->responseFactory->createResponse(
-                'You can not remove default stub', Status::METHOD_NOT_ALLOWED
-            );
-        }
-
-        $entityWriter->delete([$stub]);
-
-        return $this->responseFactory->createResponse($stub);
     }
 
     /**
