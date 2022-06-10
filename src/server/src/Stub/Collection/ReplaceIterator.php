@@ -11,10 +11,10 @@ class ReplaceIterator
      *
      * @param ArrayCollection $haystack
      * @param string $needle
-     * @param string $value
+     * @param string|callable $value
      * @return ArrayCollection
      */
-    public function replace(ArrayCollection $haystack, string $needle, string $value): ArrayCollection
+    public function replace(ArrayCollection $haystack, string $needle, string | callable $value): ArrayCollection
     {
         $iterator = $haystack->getIterator();
 
@@ -22,7 +22,13 @@ class ReplaceIterator
             $current = $iterator->current();
 
             if ($current === $needle) {
-                $haystack->offsetSet($iterator->key(), $value);
+                $key = $iterator->key();
+
+                if (is_callable($value)) {
+                    $haystack->offsetSet($key, $value($haystack, $key));
+                } else {
+                    $haystack->offsetSet($key, $value);
+                }
 
                 return $haystack;
             }

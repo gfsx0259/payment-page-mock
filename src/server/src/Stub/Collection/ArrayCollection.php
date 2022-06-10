@@ -13,7 +13,8 @@ class ArrayCollection
 
     public function __construct(
         public array $data
-    ) {}
+    ) {
+    }
 
     public function get(string $key): mixed
     {
@@ -25,7 +26,7 @@ class ArrayCollection
         ArrayHelper::setValueByPath($this->data, $key, $value);
     }
 
-    public function replace(string $needle, string $value): static
+    public function replace(string $needle, string | callable $value): static
     {
         return (new ReplaceIterator())->replace($this, $needle, $value);
     }
