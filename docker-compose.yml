@@ -41,6 +41,7 @@ services:
         environment: *environments
         extra_hosts:
             - "host.docker.internal:host-gateway"
+            - "pp.terminal.test:192.168.20.20"
         volumes:
             - ./src/server:/var/www:rw
         links:

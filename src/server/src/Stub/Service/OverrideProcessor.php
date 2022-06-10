@@ -28,6 +28,7 @@ class OverrideProcessor implements ProcessorInterface
     {
         $source = $state->getInitialRequest();
 
+        $source->set('request_id', $state->getRequestId());
         $source->set('acs_url', $this->generateAcsUrl());
         $source->set('aps_url', $this->generateApsUrl($state));
 

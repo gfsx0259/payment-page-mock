@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Stub;
 
-use App\Stub\Collection\ArrayCollection;
 use App\Stub\Repository\RouteRepository;
-use App\Stub\Service\ActionFactory;
 use App\Stub\Service\CallbackResolver;
-use App\Stub\Service\OverrideProcessor;
+use App\Stub\Service\PaymentService;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 use Psr\Http\Message\ResponseInterface;
@@ -25,9 +23,8 @@ final class StubController
         private DataResponseFactoryInterface $responseFactory,
         private RouteRepository $routeRepository,
         private CallbackResolver $callbackResolver,
-        private ActionFactory $actionFactory,
-        private OverrideProcessor $overrideProcessor,
         private StateManager $stateManager,
+        private PaymentService $requestService,
     ) {}
 
     /**
@@ -83,7 +80,8 @@ final class StubController
             $initialRequest
         );
 
-       $this->stateManager->save($state);
+        $this->requestService->register($state);
+        $this->stateManager->save($state);
 
         $responseData = [
             'status' => 'success',
@@ -96,32 +94,13 @@ final class StubController
             ->createResponse($responseData);
     }
 
-    public function checkSignature(): ResponseInterface
-    {
-        return $this->responseFactory
-            ->createResponse();
-    }
-
     /**
      * @param State $state
      * @return ResponseInterface
      */
     private function responseByState(State $state): ResponseInterface
     {
-        $currentCallback = $this->callbackResolver->findCurrentByState($state);
-        $callbackCollection = new ArrayCollection($currentCallback->getBody());
-
-        $this->overrideProcessor->process($callbackCollection, $state);
-
-        $action = $this->actionFactory->make($callbackCollection, $state);
-
-        if (!$action || $action->isCompleted()) {
-            $state->next();
-        } else {
-            $action->register();
-        }
-
-        $this->stateManager->save($state);
+        $callbackCollection = $this->callbackResolver->resolve($state);
 
         return $this->responseFactory
             ->createResponse($callbackCollection->data);

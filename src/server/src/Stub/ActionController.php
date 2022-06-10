@@ -8,7 +8,6 @@ use App\Service\WebControllerService;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\ActionFactory;
 use App\Stub\Service\CallbackResolver;
-use App\Stub\Service\OverrideProcessor;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 use LogicException;
@@ -24,7 +23,6 @@ final class ActionController
         private DataResponseFactoryInterface $responseFactory,
         private CallbackResolver $callbackResolver,
         private ActionFactory $actionFactory,
-        private OverrideProcessor $overrideProcessor,
     ) {}
 
     /**
@@ -103,11 +101,8 @@ final class ActionController
 
     private function completeAction(State $state, ArrayCollection $bodyCollection): void
     {
-        $currentCallback = $this->callbackResolver->findCurrentByState($state);
-        $callbackCollection = new ArrayCollection($currentCallback->getBody());
-
-        $this->overrideProcessor->process($callbackCollection, $state);
-        $action = $this->actionFactory->make($callbackCollection, $state);
+        $currentCallback = $this->callbackResolver->resolve($state);
+        $action = $this->actionFactory->make($currentCallback, $state);
 
         if (!$action) {
             throw new LogicException('Action must be exists');
