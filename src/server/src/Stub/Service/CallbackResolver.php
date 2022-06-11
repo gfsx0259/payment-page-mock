@@ -45,13 +45,13 @@ class CallbackResolver
 
         $callbacks = $stub->getCallbacks();
 
-        $cursor = min($state->getCursor(), $callbacks->count()) - 1;
+        $callback = $callbacks->get($state->getCursor());
 
-        if ($cursor < 0) {
-            $cursor = 0;
+        if (!$callback) {
+            return $callbacks->last();
         }
 
-        return $callbacks->get($cursor);
+        return $callback;
     }
 
     private function prepareCallbackAndManageState(Callback $callback, State $state): ArrayCollection
