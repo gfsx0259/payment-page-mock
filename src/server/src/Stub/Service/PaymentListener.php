@@ -50,7 +50,7 @@ class PaymentListener
         $state = $this->stateManager->get($request->getRequestId());
         $callback = $this->callbackResolver->resolve($state);
 
-        if (!$callbackStatus = ArrayHelper::getValue($callback->getBody(), 'payment.status')) {
+        if (!$callbackStatus = ArrayHelper::getValueByPath($callback->getBody(), 'payment.status')) {
             $this->logger->warning('Can not parse payment status from callback', $callback->getBody());
             return;
         }
