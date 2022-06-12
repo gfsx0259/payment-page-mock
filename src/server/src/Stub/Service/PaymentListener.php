@@ -8,6 +8,7 @@ use App\Stub\Session\StateManager;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Safe\Exceptions\StringsException;
+use Yiisoft\Arrays\ArrayHelper;
 use function Safe\sprintf;
 
 class PaymentListener
@@ -18,6 +19,7 @@ class PaymentListener
         private RequestRepository $requestRepository,
         private PaymentService $requestService,
         private CallbackResolver $callbackResolver,
+        private CallbackProcessor $callbackProcessor,
         private CallbackSender $callbackSender
     ) {}
 
@@ -36,26 +38,28 @@ class PaymentListener
         $this->logger->info(sprintf('Found %s requests, process it', count($requests)));
 
         foreach ($requests as $request) {
-            $this->checkForStatusChanges($request);
+            $this->compareStatus($request);
         }
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    private function checkForStatusChanges(Request $request): void
+    private function compareStatus(Request $request): void
     {
         $state = $this->stateManager->get($request->getRequestId());
         $callback = $this->callbackResolver->resolve($state);
 
-        if (!$callbackStatus = $callback->get('payment.status')) {
-            $this->logger->warning('Can not parse payment status from callback', $callback->data);
+        if (!$callbackStatus = ArrayHelper::getValue($callback->getBody(), 'payment.status')) {
+            $this->logger->warning('Can not parse payment status from callback', $callback->getBody());
             return;
         }
 
         if ($callbackStatus !== $request->getStatus()) {
             $this->requestService->updateStatus($request, $callbackStatus);
-            $this->callbackSender->send($callback);
+            $this->callbackSender->send(
+                $this->callbackProcessor->process($state, $callback)
+            );
         }
     }
 }

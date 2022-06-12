@@ -8,6 +8,7 @@ use App\Stub\Service\CallbackSender;
 use App\Stub\Service\OverrideProcessor;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Router\UrlGeneratorInterface;
 
 return [
@@ -16,14 +17,21 @@ return [
         $params['host'],
     ),
     CallbackSender::class => function(LoggerInterface $logger) {
+        $url = ArrayHelper::getValue($_ENV, 'CALLBACK_URL');
+        $secret = ArrayHelper::getValue($_ENV, 'CALLBACK_SECRET');
+
+        if (!($url && $secret)) {
+            throw new Exception('Can not initialize callback sender');
+        }
+
         $client = new Client([
-            'base_uri' => 'http://pp.terminal.test',
+            'base_uri' => $url,
             'headers' => ['Content-Type' => 'application/json'],
         ]);
         return new CallbackSender(
             $client,
             $logger,
-            $_ENV['INTERNAL_SECRET']
+            $secret
         );
     }
 ];

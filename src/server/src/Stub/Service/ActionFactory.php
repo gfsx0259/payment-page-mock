@@ -30,9 +30,8 @@ class ActionFactory
             } elseif ($callback->get('clarification_fields')) {
                 return new ClarificationAction($callback, $state);
             }
-        } catch (ReflectionException|ContainerExceptionInterface $exception) {
+        } catch (ReflectionException | ContainerExceptionInterface $exception) {
             $this->logger->error($exception->getMessage());
-            return null;
         }
 
         return null;

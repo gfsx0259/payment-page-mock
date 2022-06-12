@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Stub;
 
 use App\Stub\Repository\RouteRepository;
+use App\Stub\Service\CallbackProcessor;
 use App\Stub\Service\CallbackResolver;
 use App\Stub\Service\PaymentService;
 use App\Stub\Session\State;
@@ -22,6 +23,7 @@ final class StubController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private RouteRepository $routeRepository,
+        private CallbackProcessor $callbackProcessor,
         private CallbackResolver $callbackResolver,
         private StateManager $stateManager,
         private PaymentService $requestService,
@@ -100,7 +102,8 @@ final class StubController
      */
     private function responseByState(State $state): ResponseInterface
     {
-        $callbackCollection = $this->callbackResolver->resolve($state);
+        $callback = $this->callbackResolver->resolve($state);
+        $callbackCollection = $this->callbackProcessor->process($state, $callback);
 
         return $this->responseFactory
             ->createResponse($callbackCollection->data);

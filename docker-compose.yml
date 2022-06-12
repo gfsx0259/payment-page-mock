@@ -5,8 +5,9 @@ x-environments: &environments
     MYSQL_DATABASE: "app"
     MYSQL_USER: "user"
     MYSQL_PASSWORD: "password"
-    API_URL: "http://localhost:8082"
     NODE_ENV: "develop"
+    API_URL: "http://localhost:8082"
+    CALLBACK_URL: "http://pp.terminal.test"
     PHP_IDE_CONFIG: "serverName=docker"
 
 services:

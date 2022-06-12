@@ -8,6 +8,7 @@ use itechpsp\SignatureHandler;
 use Psr\Log\LoggerInterface;
 use Throwable;
 use Yiisoft\Arrays\ArrayHelper;
+use function Safe\json_encode;
 
 class CallbackSender
 {
@@ -33,7 +34,7 @@ class CallbackSender
 
         try {
             $this->httpClient->post('/callbacks', [
-                'body' => \Safe\json_encode($callbackCollection->data),
+                'body' => json_encode($callbackCollection->data),
             ]);
             $this->logger->info('Send callback successfully');
         } catch (Throwable $exception) {
