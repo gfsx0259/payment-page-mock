@@ -4,6 +4,9 @@ namespace App\Stub\Service;
 
 use App\Stub\Entity\Request;
 use App\Stub\Repository\RequestRepository;
+use App\Stub\Service\Callback\CallbackProcessor;
+use App\Stub\Service\Callback\CallbackResolver;
+use App\Stub\Service\Callback\CallbackSender;
 use App\Stub\Session\StateManager;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\InvalidArgumentException;

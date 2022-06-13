@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Stub\Service;
+namespace App\Stub\Service\Callback;
 
 use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Entity\Callback;
+use App\Stub\Service\ActionFactory;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 

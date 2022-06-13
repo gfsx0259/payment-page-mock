@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Stub\Service;
+namespace App\Stub\Service\Callback;
 
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Session\State;

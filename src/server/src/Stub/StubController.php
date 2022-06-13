@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Stub;
 
 use App\Stub\Repository\RouteRepository;
-use App\Stub\Service\CallbackProcessor;
-use App\Stub\Service\CallbackResolver;
+use App\Stub\Service\Callback\CallbackProcessor;
+use App\Stub\Service\Callback\CallbackResolver;
 use App\Stub\Service\PaymentService;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;

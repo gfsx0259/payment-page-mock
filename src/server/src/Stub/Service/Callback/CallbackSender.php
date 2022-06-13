@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Stub\Service;
+namespace App\Stub\Service\Callback;
 
 use App\Stub\Collection\ArrayCollection;
 use GuzzleHttp\ClientInterface;
 use itechpsp\SignatureHandler;
 use Psr\Log\LoggerInterface;
 use Throwable;
-use Yiisoft\Arrays\ArrayHelper;
-use function Safe\json_encode;
 
 class CallbackSender
 {
@@ -22,10 +20,7 @@ class CallbackSender
 
     public function send(ArrayCollection $callbackCollection): void
     {
-        ArrayHelper::removeByPath(
-            $callbackCollection->data,
-            self::SIGNATURE_PATH
-        );
+        $callbackCollection->remove(self::SIGNATURE_PATH);
 
         $callbackCollection->set(
             self::SIGNATURE_PATH,
@@ -33,8 +28,8 @@ class CallbackSender
         );
 
         try {
-            $this->httpClient->post('/callbacks', [
-                'body' => json_encode($callbackCollection->data),
+            $this->httpClient->post('callbacks', [
+                'json' => $callbackCollection->data,
             ]);
             $this->logger->info('Send callback successfully');
         } catch (Throwable $exception) {

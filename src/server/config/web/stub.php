@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 /** @var array $params */
 
-use App\Stub\Service\CallbackSender;
-use App\Stub\Service\OverrideProcessor;
+use App\Stub\Service\Callback\CallbackSender;
+use App\Stub\Service\Callback\OverrideProcessor;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Arrays\ArrayHelper;
@@ -25,8 +25,7 @@ return [
         }
 
         $client = new Client([
-            'base_uri' => $url,
-            'headers' => ['Content-Type' => 'application/json'],
+            'base_uri' => $url . '/',
         ]);
         return new CallbackSender(
             $client,

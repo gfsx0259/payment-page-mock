@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Stub\Service;
+namespace App\Stub\Service\Callback;
 
 use App\Stub\Entity\Callback;
 use App\Stub\Repository\StubRepository;
@@ -25,10 +25,8 @@ class CallbackResolver
 
         $callback = $callbacks->get($state->getCursor());
 
-        if (!$callback) {
-            return $callbacks->last();
-        }
+        return $callback
+            ?: $callbacks->last();
 
-        return $callback;
     }
 }
