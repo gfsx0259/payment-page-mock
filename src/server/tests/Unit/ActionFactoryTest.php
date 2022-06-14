@@ -7,7 +7,9 @@ namespace App\Tests\Unit;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Service\Action\AcsAction;
+use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
+use App\Stub\Service\Action\QrCodeAction;
 use App\Stub\Service\ActionFactory;
 use App\Stub\Session\State;
 use App\Tests\UnitTester;
@@ -23,7 +25,7 @@ final class ActionFactoryTest extends Unit
 
     public function _before(): void
     {
-        $this->actionFactory = $this->make(ActionFactory::class);
+        $this->actionFactory = $this->tester->makeByAppContainer(ActionFactory::class);
         $this->state = $this->tester->makeState();
     }
 
@@ -41,6 +43,22 @@ final class ActionFactoryTest extends Unit
         $action = $this->actionFactory->make($collection, $this->state);
 
         $this->assertAction(ClarificationAction::class, $action);
+    }
+
+    public function testApsActionMaking(): void
+    {
+        $collection = new ArrayCollection(['return_url' => ['url' => 'test']]);
+        $action = $this->actionFactory->make($collection, $this->state);
+
+        $this->assertAction(ApsAction::class, $action);
+    }
+
+    public function testQrCodeActionMaking(): void
+    {
+        $collection = new ArrayCollection(['display_data' => [['type' => 'qr_data']]]);
+        $action = $this->actionFactory->make($collection, $this->state);
+
+        $this->assertAction(QrCodeAction::class, $action);
     }
 
     public function testEmptyParamsHandling(): void
