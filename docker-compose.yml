@@ -47,6 +47,11 @@ services:
             - ./src/server:/var/www:rw
         links:
             - db
+    task:
+        build:
+            context: ./build/task
+        links:
+            - nginx
     db:
         image: mysql:latest
         ports:

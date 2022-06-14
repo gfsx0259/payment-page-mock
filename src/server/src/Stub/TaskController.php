@@ -7,25 +7,24 @@ namespace App\Stub;
 use App\Service\WebControllerService;
 use App\Stub\Service\PaymentListener;
 use Psr\Http\Message\ResponseInterface;
-use React\EventLoop\Loop;
+use Psr\SimpleCache\InvalidArgumentException;
+use Safe\Exceptions\StringsException;
 
 final class TaskController
 {
-    private const SEND_CALLBACK_PERIOD_SECONDS = 3;
-
     public function __construct(
-        private Loop $loop,
         private PaymentListener $paymentListener,
     ) {}
 
+    /**
+     * @throws StringsException
+     * @throws InvalidArgumentException
+     */
     public function scheduleCallbacks(
         WebControllerService $controllerService
     ): ResponseInterface
     {
-        $this->loop::get()->addPeriodicTimer(
-            self::SEND_CALLBACK_PERIOD_SECONDS,
-            [$this->paymentListener, 'listen']
-        );
+        $this->paymentListener->listen();
 
         return $controllerService->getEmptySuccessResponse();
     }
