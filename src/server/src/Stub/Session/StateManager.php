@@ -30,6 +30,31 @@ class StateManager
         }
     }
 
+    public function generateAccessKey(State $state, string $salt): string
+    {
+        $uniqueKey = md5($state->getRequestId() . $state->getCursor() . $salt);
+
+        $this->link($uniqueKey, $state);
+
+        return $uniqueKey;
+    }
+
+    public function link(string $key, State $state): bool
+    {
+        $requestId = $state->getRequestId();
+
+        try {
+            $this->cache->set(
+                $key,
+                $requestId
+            );
+        } catch (InvalidArgumentException) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function save(State $state): bool
     {
         $requestId = $state->getRequestId();

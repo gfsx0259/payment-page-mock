@@ -1,32 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Stub\Service\Action;
 
-use App\Stub\Collection\ArrayCollection;
-use App\Stub\Session\State;
-
-class QrCodeAction extends AbstractAction
+class QrCodeAction extends RedirectAction
 {
-    private int $displayDataIndex;
-
     public const DISPLAY_DATA_TYPE = 'qr_data';
 
-    public function __construct(ArrayCollection $callback, State $state, int $displayDataIndex)
+    protected function getRedirectUrl(): string
     {
-        $this->displayDataIndex = $displayDataIndex;
-
-        parent::__construct($callback, $state);
+        return $this->callback->get('display_data.0.data');
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getActionKey(?ArrayCollection $completeRequest = null): string
+    protected function getIdentityKeyName(): string
     {
-        if (!is_null($completeRequest)) {
-            return $completeRequest->get('data');
-        }
-
-        return $this->callback->get("display_data.$this->displayDataIndex.data");
+        return 'uniqueKey';
     }
 }

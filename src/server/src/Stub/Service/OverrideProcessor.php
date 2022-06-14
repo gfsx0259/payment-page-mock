@@ -4,6 +4,7 @@ namespace App\Stub\Service;
 
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Session\State;
+use App\Stub\Session\StateManager;
 use HttpSoft\Message\Uri;
 use Yiisoft\Router\UrlGeneratorInterface;
 
@@ -22,6 +23,7 @@ class OverrideProcessor implements ProcessorInterface
 
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
+        private StateManager $stateManager,
         private string $host,
     ) {
     }
@@ -32,7 +34,7 @@ class OverrideProcessor implements ProcessorInterface
 
         $source->set('acs_url', $this->generateAcsUrl());
         $source->set('aps_url', $this->generateApsUrl($state));
-        $source->set('qr_accept_link', $this->getQrAcceptUrlGenerator($state));
+        $source->set('qr_accept_link', $this->generateQrAcceptUrl($state));
 
         foreach (self::SCHEMA as $placeholder => $sourcePath) {
             if ($value = $source->get($sourcePath)) {
@@ -49,23 +51,14 @@ class OverrideProcessor implements ProcessorInterface
     private function generateApsUrl(State $state): string
     {
         return new Uri($this->host . $this->urlGenerator->generate('actions/renderAps', [
-            'uniqueKey' => $state->getRequestId(),
+            'uniqueKey' => $this->stateManager->generateAccessKey($state, 'aps'),
         ]));
     }
 
-    private function getQrAcceptUrlGenerator(State $state): callable
+    private function generateQrAcceptUrl(State $state): string
     {
-        $that = $this;
-        $count = 0;
-
-        return function () use ($that, $state, $count) {
-            $count++;
-
-            $uri = new Uri($that->host . $that->urlGenerator->generate('actions/renderAps', [
-                'uniqueKey' => md5($state->getRequestId() . $count),
-            ]));
-
-            return (string) $uri;
-        };
+        return new Uri($this->host . $this->urlGenerator->generate('actions/renderConfirmationViaQrCode', [
+            'uniqueKey' => $this->stateManager->generateAccessKey($state, 'qr_accept'),
+        ]));
     }
 }

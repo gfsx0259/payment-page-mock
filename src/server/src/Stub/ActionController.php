@@ -25,7 +25,8 @@ final class ActionController
         private CallbackResolver $callbackResolver,
         private ActionFactory $actionFactory,
         private OverrideProcessor $overrideProcessor,
-    ) {}
+    ) {
+    }
 
     /**
      * Accept complete request (3ds result) from Payment Page and move cursor
@@ -58,8 +59,30 @@ final class ActionController
         ServerRequestInterface $request,
         WebControllerService $webControllerService,
         StateManager $stateManager,
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
+        $body = $request->getParsedBody();
+
+        if (!$state = $stateManager->get(ArrayHelper::getValue($body, 'uniqueKey'))) {
+            throw new LogicException('State must be exists');
+        }
+
+        $this->completeAction($state, new ArrayCollection($body));
+
+        $stateManager->save($state);
+
+        return $webControllerService->getRedirectResponseByUrl(
+            $state->getInitialRequest()->get('return_url.success')
+        );
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function completeConfirmationViaQrCode(
+        ServerRequestInterface $request,
+        WebControllerService $webControllerService,
+        StateManager $stateManager,
+    ): ResponseInterface {
         $body = $request->getParsedBody();
 
         if (!$state = $stateManager->get(ArrayHelper::getValue($body, 'uniqueKey'))) {

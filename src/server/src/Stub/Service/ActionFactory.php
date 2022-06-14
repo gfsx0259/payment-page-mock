@@ -5,10 +5,8 @@ namespace App\Stub\Service;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Service\Action\AcsAction;
-use App\Stub\Service\Action\ActionInterface;
 use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
-use App\Stub\Service\Action\CompositeAction;
 use App\Stub\Service\Action\QrCodeAction;
 use App\Stub\Session\State;
 use Psr\Container\ContainerExceptionInterface;
@@ -24,7 +22,7 @@ class ActionFactory
     ) {
     }
 
-    public function make(ArrayCollection $callback, State $state): ?ActionInterface
+    public function make(ArrayCollection $callback, State $state): ?AbstractAction
     {
         try {
             if ($callback->get('acs')) {
@@ -33,8 +31,8 @@ class ActionFactory
                 return $this->injector->make(ApsAction::class, [$callback, $state]);
             } elseif ($callback->get('clarification_fields')) {
                 return new ClarificationAction($callback, $state);
-            } elseif (is_array($callback->get('display_data'))) {
-                return $this->makeDisplayDataAction($callback, $state);
+            } elseif ($callback->get('display_data.0.type') === QrCodeAction::DISPLAY_DATA_TYPE) {
+                return $this->injector->make(QrCodeAction::class, [$callback, $state]);
             }
         } catch (ReflectionException | ContainerExceptionInterface $exception) {
             $this->logger->error($exception->getMessage());
@@ -42,21 +40,5 @@ class ActionFactory
         }
 
         return null;
-    }
-
-    private function makeDisplayDataAction(ArrayCollection $callback, State $state): ActionInterface
-    {
-        $displayData = $callback->get('display_data');
-        $actions = [];
-
-        foreach ($displayData as $i => $data) {
-            $dataCollection = new ArrayCollection($data);
-
-            if ($dataCollection->get('type') === QrCodeAction::DISPLAY_DATA_TYPE) {
-                $actions[] = new QrCodeAction($callback, $state, (int) $i);
-            }
-        }
-
-        return new CompositeAction($actions);
     }
 }

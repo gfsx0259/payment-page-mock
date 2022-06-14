@@ -6,7 +6,7 @@ use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\ActionException;
 use App\Stub\Session\State;
 
-abstract class AbstractAction implements ActionInterface
+abstract class AbstractAction
 {
     public function __construct(
         protected ArrayCollection $callback,
