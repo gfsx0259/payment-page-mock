@@ -25,8 +25,8 @@ final class QrCodeActionTest extends Unit
     public function testGettingActionKey(): void
     {
         $state = $this->tester->makeState();
-        $actionWithRedirectUrl = $this->makeAction($state);
         $expectingActionKey = self::IDENTITY_KEY;
+        $actionWithRedirectUrl = $this->makeAction($state, $expectingActionKey);
 
         $this->tester->checkGettingActionKey($actionWithRedirectUrl, $expectingActionKey, self::COMPLETE_REQUEST);
     }
@@ -34,7 +34,7 @@ final class QrCodeActionTest extends Unit
     public function testNoRedirectUrlHandling(): void
     {
         $state = $this->tester->makeState();
-        $action = $this->makeAction($state, ['display_data' => [['data' => 'test']]]);
+        $action = $this->makeAction($state, null, ['display_data' => [['data' => 'test']]]);
 
         $this->assertNotEquals(
             $action->getActionKey(),
@@ -45,8 +45,8 @@ final class QrCodeActionTest extends Unit
     public function testRegistering(): void
     {
         $state = $this->tester->makeState();
-        $action = $this->makeAction($state);
         $expectingKey = self::IDENTITY_KEY;
+        $action = $this->makeAction($state, $expectingKey);
 
         $this->tester->checkRegistering($action, $state, $expectingKey, self::COMPLETE_REQUEST);
     }
@@ -54,16 +54,28 @@ final class QrCodeActionTest extends Unit
     public function testCompleting(): void
     {
         $state = $this->tester->makeState();
-        $action = $this->makeAction($state);
         $expectingKey = self::IDENTITY_KEY;
+        $action = $this->makeAction($state, $expectingKey);
 
         $this->tester->checkCompleting($action, $state, $expectingKey, self::COMPLETE_REQUEST);
     }
 
-    private function makeAction(State $state, array $callback = self::CALLBACK): QrCodeAction
-    {
+    private function makeAction(
+        State $state,
+        ?string $expectingKey = null,
+        array $callback = self::CALLBACK
+    ): QrCodeAction {
+        $that = $this;
         $collection = new ArrayCollection($callback);
+        $urlHelper = $this->make(UrlHelper::class, [
+            'getArgumentValue' => function ($url, $key) use ($collection, $expectingKey, $that) {
+                $that->assertEquals($url, $collection->get('display_data.0.data'));
+                $that->assertEquals($key, 'uniqueKey');
 
-        return new QrCodeAction($collection, $state, $this->tester->makeByAppContainer(UrlHelper::class));
+                return $expectingKey;
+            }
+        ]);
+
+        return new QrCodeAction($collection, $state, $urlHelper);
     }
 }

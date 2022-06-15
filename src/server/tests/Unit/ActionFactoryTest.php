@@ -11,9 +11,12 @@ use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
 use App\Stub\Service\Action\QrCodeAction;
 use App\Stub\Service\ActionFactory;
+use App\Stub\Service\UrlHelper;
 use App\Stub\Session\State;
 use App\Tests\UnitTester;
 use Codeception\Test\Unit;
+use Psr\Container\ContainerInterface;
+use Yiisoft\Injector\Injector;
 
 final class ActionFactoryTest extends Unit
 {
@@ -25,7 +28,7 @@ final class ActionFactoryTest extends Unit
 
     public function _before(): void
     {
-        $this->actionFactory = $this->tester->makeByAppContainer(ActionFactory::class);
+        $this->actionFactory = $this->makeActionFactory();
         $this->state = $this->tester->makeState();
     }
 
@@ -73,5 +76,26 @@ final class ActionFactoryTest extends Unit
     {
         $this->assertInstanceOf($classExpected, $instance);
         $this->assertInstanceOf(AbstractAction::class, $instance);
+    }
+
+    private function makeActionFactory(): ActionFactory
+    {
+        $stubs = [UrlHelper::class => $this->make(UrlHelper::class)];
+
+        return $this->make(ActionFactory::class, ['injector' => $this->makeInjector($stubs)]);
+    }
+
+    private function makeInjector(array $instances = []): Injector
+    {
+        $container = $this->makeEmpty(
+            ContainerInterface::class,
+            [
+                'get' => function (string $className) use ($instances) {
+                    return $instances[$className];
+                }
+            ]
+        );
+
+        return new Injector($container);
     }
 }
