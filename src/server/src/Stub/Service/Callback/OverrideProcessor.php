@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Stub\Service;
+namespace App\Stub\Service\Callback;
 
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Session\State;
@@ -28,6 +28,7 @@ class OverrideProcessor implements ProcessorInterface
     {
         $source = $state->getInitialRequest();
 
+        $source->set('request_id', $state->getRequestId());
         $source->set('acs_url', $this->generateAcsUrl());
         $source->set('aps_url', $this->generateApsUrl($state));
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Stub\Service;
+namespace App\Stub\Service\Callback;
 
 use App\Stub\Entity\Callback;
 use App\Stub\Repository\StubRepository;
@@ -14,21 +14,19 @@ use App\Stub\Session\State;
 class CallbackResolver
 {
     public function __construct(
-        private StubRepository $stubRepository
+        private StubRepository $stubRepository,
     ) {}
 
-    public function findCurrentByState(State $state): Callback
+    public function resolve(State $state): Callback
     {
         $stub = $this->stubRepository->findDefaultByRoute($state->getRouteId());
 
         $callbacks = $stub->getCallbacks();
 
-        $cursor = min($state->getCursor(), $callbacks->count()) - 1;
+        $callback = $callbacks->get($state->getCursor());
 
-        if ($cursor < 0) {
-            $cursor = 0;
-        }
+        return $callback
+            ?: $callbacks->last();
 
-        return $callbacks->get($cursor);
     }
 }

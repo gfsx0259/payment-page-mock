@@ -7,8 +7,8 @@ namespace App\Stub;
 use App\Service\WebControllerService;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\ActionFactory;
-use App\Stub\Service\CallbackResolver;
-use App\Stub\Service\OverrideProcessor;
+use App\Stub\Service\Callback\CallbackProcessor;
+use App\Stub\Service\Callback\CallbackResolver;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 use LogicException;
@@ -23,8 +23,8 @@ final class ActionController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private CallbackResolver $callbackResolver,
+        private CallbackProcessor $callbackProcessor,
         private ActionFactory $actionFactory,
-        private OverrideProcessor $overrideProcessor,
     ) {}
 
     /**
@@ -103,11 +103,11 @@ final class ActionController
 
     private function completeAction(State $state, ArrayCollection $bodyCollection): void
     {
-        $currentCallback = $this->callbackResolver->findCurrentByState($state);
-        $callbackCollection = new ArrayCollection($currentCallback->getBody());
-
-        $this->overrideProcessor->process($callbackCollection, $state);
-        $action = $this->actionFactory->make($callbackCollection, $state);
+        $callback = $this->callbackResolver->resolve($state);
+        $action = $this->actionFactory->make(
+            $this->callbackProcessor->process($state, $callback),
+            $state
+        );
 
         if (!$action) {
             throw new LogicException('Action must be exists');

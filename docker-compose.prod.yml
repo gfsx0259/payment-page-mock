@@ -5,8 +5,8 @@ x-environments: &environments
     MYSQL_PASSWORD: "password"
     MYSQL_DATABASE: "app"
     MYSQL_USER: "user"
-    API_URL: "http://staging01.dev.ru1:8082"
     NODE_ENV: "production"
+    API_URL: "http://staging01.dev.ru1:8082"
 
 services:
     client:

@@ -7,12 +7,9 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class StateManager
 {
-    private CacheInterface $cache;
-
-    public function __construct(CacheInterface $cache)
-    {
-        $this->cache = $cache;
-    }
+    public function __construct(
+        private CacheInterface $cache
+    ) {}
 
     /**
      * @throws InvalidArgumentException
