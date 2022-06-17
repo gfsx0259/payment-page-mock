@@ -16,7 +16,7 @@ return [
         $urlGenerator,
         $params['host'],
     ),
-    CallbackSender::class => function(LoggerInterface $logger) {
+    CallbackSender::class => function (LoggerInterface $logger) {
         $url = ArrayHelper::getValue($_ENV, 'CALLBACK_URL');
         $secret = ArrayHelper::getValue($_ENV, 'CALLBACK_SECRET');
 

@@ -9,6 +9,9 @@ x-environments: &environments
     API_URL: "http://localhost:8082"
     CALLBACK_URL: "http://pp.terminal.test"
     PHP_IDE_CONFIG: "serverName=docker"
+    RABBITMQ_HOST: "rabbit"
+    RABBITMQ_DEFAULT_USER: "local"
+    RABBITMQ_DEFAULT_PASS: "local"
 
 services:
     client:
@@ -26,10 +29,6 @@ services:
         build:
             context: ./src/server
             dockerfile: ../../build/images/nginx/Dockerfile
-        labels:
-            ofelia.enabled: "true"
-            ofelia.job-exec.datecron.schedule: "@every 3s"
-            ofelia.job-exec.datecron.command: "curl -X POST http://localhost/task/scheduleCallbacks"
         ports:
             - "8082:80"
         volumes:
@@ -44,6 +43,11 @@ services:
                 UID: 1000
                 GID: 1000
         environment: *environments
+        # queues need be listened after rabbit up
+        # fix it if you know how
+        command: sh -c "sleep 10 && php yii queue/listen-all && php-fpm"
+        depends_on:
+            - rabbit
         extra_hosts:
             - "host.docker.internal:host-gateway"
             - "pp.terminal.test:192.168.20.20"
@@ -51,13 +55,12 @@ services:
             - ./src/server:/var/www:rw
         links:
             - db
-    ofelia:
-        image: mcuadros/ofelia:latest
-        depends_on:
-            - nginx
-        command: daemon --docker
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
+    rabbit:
+        image: rabbitmq:latest
+        environment: *environments
+        ports:
+            - 5672:5672
+            - 15672:15672
     db:
         image: mysql:latest
         ports:

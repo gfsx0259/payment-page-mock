@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Service\Queue\QueueInterface;
+use App\Stub\Job\SendCallbackJob;
 use App\ViewInjection\CommonViewInjection;
 use App\ViewInjection\LayoutViewInjection;
 use App\ViewInjection\LinkTagsViewInjection;
@@ -137,6 +139,8 @@ return [
             'fixture/add' => App\Command\Fixture\AddCommand::class,
             'router/list' => App\Command\Router\ListCommand::class,
             'translator/translate' => App\Command\Translation\TranslateCommand::class,
+            'queue/listen' => App\Command\Queue\ListenCommand::class,
+            'queue/listen-all' => App\Command\Queue\ListenAllCommand::class,
         ],
     ],
 
@@ -224,4 +228,7 @@ return [
             '@src/User/Controller',
         ],
     ],
+    'app/queue' => [
+        ['name' => 'callbacks', 'jobs' => [SendCallbackJob::class]],
+    ]
 ];

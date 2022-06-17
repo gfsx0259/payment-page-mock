@@ -7,7 +7,6 @@ namespace App\Stub;
 use App\Stub\Repository\RouteRepository;
 use App\Stub\Service\Callback\CallbackProcessor;
 use App\Stub\Service\Callback\CallbackResolver;
-use App\Stub\Service\PaymentService;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 use Psr\Http\Message\ResponseInterface;
@@ -26,8 +25,8 @@ final class StubController
         private CallbackProcessor $callbackProcessor,
         private CallbackResolver $callbackResolver,
         private StateManager $stateManager,
-        private PaymentService $requestService,
-    ) {}
+    ) {
+    }
 
     /**
      * @param ServerRequestInterface $request
@@ -66,8 +65,7 @@ final class StubController
     public function sale(
         ServerRequestInterface $request,
         CurrentRoute $currentRoute
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         if (!$route = $this->routeRepository->findByPath($currentRoute->getArgument('route'))) {
             $this->responseFactory
                 ->createResponse()
@@ -82,7 +80,6 @@ final class StubController
             $initialRequest
         );
 
-        $this->requestService->register($state);
         $this->stateManager->save($state);
 
         $responseData = [

@@ -27,6 +27,10 @@ storage_load:
 	$(eval CONTAINER_ID=$(shell sudo docker ps -q -f name="db"))
 	sudo docker exec -i $(CONTAINER_ID) mysql -uuser -ppassword app < ./app.sql
 
+listen_queues:
+	$(eval CONTAINER_ID=$(shell sudo docker ps -q -f name="api"))
+	sudo docker exec -i $(CONTAINER_ID) php yii queue/listen-all
+
 
 status:
 	sudo docker stack services dummy

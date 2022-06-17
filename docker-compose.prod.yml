@@ -7,6 +7,9 @@ x-environments: &environments
     MYSQL_USER: "user"
     NODE_ENV: "production"
     API_URL: "http://staging01.dev.ru1:8082"
+    RABBITMQ_HOST: "rabbit"
+    RABBITMQ_DEFAULT_USER: "local"
+    RABBITMQ_DEFAULT_PASS: "local"
 
 services:
     client:
@@ -17,10 +20,6 @@ services:
         environment: *environments
     nginx:
         image: konstantinpopov/payment-page-mock-nginx:main
-        labels:
-            ofelia.enabled: "true"
-            ofelia.job-exec.datecron.schedule: "@every 3s"
-            ofelia.job-exec.datecron.command: "curl -X POST http://localhost/task/scheduleCallbacks"
         volumes: &sharedStatic
             - type: bind
               source: ./assets
@@ -35,13 +34,12 @@ services:
         image: konstantinpopov/payment-page-mock-api:main
         environment: *environments
         volumes: *sharedStatic
-    ofelia:
-        image: mcuadros/ofelia:latest
-        depends_on:
-            - nginx
-        command: daemon --docker
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
+    rabbit:
+        image: rabbitmq:latest
+        environment: *environments
+        ports:
+            - 5672:5672
+            - 15672:15672
     db:
         image: mysql:latest
         ports:

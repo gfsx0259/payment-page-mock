@@ -21,7 +21,6 @@ use App\Stub\Api\RouteController;
 use App\Stub\Api\StubController as ApiStubController;
 use App\Stub\DummyPageController;
 use App\Stub\StubController;
-use App\Stub\TaskController;
 use App\User\Controller\ApiUserController;
 use App\User\Controller\UserController;
 use Psr\Http\Message\ServerRequestInterface;
@@ -71,13 +70,6 @@ return [
             Route::get('/{login}')
                 ->action([UserController::class, 'profile'])
                 ->name('user/profile')
-        ),
-
-    Group::create('/task')
-        ->disableMiddleware(CsrfMiddleware::class)
-        ->routes(
-            Route::post('/scheduleCallbacks')
-                ->action([TaskController::class, 'scheduleCallbacks'])
         ),
 
     // API group.
