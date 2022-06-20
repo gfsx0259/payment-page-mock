@@ -7,12 +7,18 @@ use Bunny\Client;
 use Bunny\Message;
 use Exception;
 use Yiisoft\Injector\Injector;
+use Psr\Log\LoggerInterface;
 
+/**
+ * This queue uses rabbitmq as remote server
+ */
 class Queue implements QueueInterface
 {
     private Client $client;
 
     private Injector $injector;
+
+    private LoggerInterface $logger;
 
     private array $config;
 
@@ -22,21 +28,28 @@ class Queue implements QueueInterface
 
     private const JOB_DATA = 'data';
 
-    public function __construct(Injector $injector, array $credentials, array $config)
+    public function __construct(Injector $injector, LoggerInterface $logger, array $credentials, array $config)
     {
         $this->injector = $injector;
+        $this->logger = $logger;
         $this->credentials = $credentials;
         $this->config = $config;
         $this->client = $this->makeClient();
     }
 
+    /**
+     * @inheritDoc
+     *
+     * Injects all needed parameters to constructor of job from global DI container
+     */
     public function subscribe(string $queueName, ?callable $callback = null): void
     {
         $chanel = $this->makeChanel($queueName);
         $injector = $this->injector;
+        $logger = $this->logger;
 
         $chanel->run(
-            function (Message $message, Channel $channel, Client $bunny) use ($injector, $callback) {
+            function (Message $message, Channel $channel, Client $bunny) use ($injector, $callback, $logger) {
                 $content = json_decode($message->content, true);
                 $jobClassName = $content[self::JOB_CLASS_NAME];
                 $jobData = $content[self::JOB_DATA];
@@ -52,6 +65,8 @@ class Queue implements QueueInterface
                     $job->run();
                 } catch (Exception $exception) {
                     $success = false;
+
+                    $logger->error($exception->getMessage());
                 }
 
                 if ($success) {
@@ -68,7 +83,10 @@ class Queue implements QueueInterface
         );
     }
 
-    public function send(string $jobClass, array $params = []): void
+    /**
+     * @inheritDoc
+     */
+    public function push(string $jobClass, array $params = []): void
     {
         $job = $this->makeJob($jobClass, $params);
         $delay = $job->getDelay();
@@ -95,7 +113,7 @@ class Queue implements QueueInterface
             }
         }
 
-        throw new Exception('Unknown job. Please define it in config/params.php');
+        throw new QueueException("Unknown job ($jobClass). Please define it in config/params.php");
     }
 
     private function makeJob(string $jobClass, array $params): JobInterface
@@ -103,7 +121,7 @@ class Queue implements QueueInterface
         $job = $this->injector->make($jobClass);
 
         if (!($job instanceof JobInterface)) {
-            throw new Exception('Job class must implement JobInterface');
+            throw new QueueException("Job class `$jobClass` must implement JobInterface");
         }
 
         foreach ($params as $key => $value) {

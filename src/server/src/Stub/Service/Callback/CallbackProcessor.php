@@ -21,7 +21,9 @@ class CallbackProcessor
         private OverrideProcessor $overrideProcessor,
         private ActionFactory $actionFactory,
         private StateManager $stateManager,
-    ) {}
+        private CallbackResolver $callbackResolver,
+    ) {
+    }
 
     public function process(State $state, Callback $callback): ArrayCollection
     {
@@ -32,7 +34,7 @@ class CallbackProcessor
         if ($action = $this->actionFactory->make($collection, $state)) {
             $this->applyAction($action, $state);
         } else {
-            $state->next();
+            $this->next($state);
         }
 
         $this->stateManager->save($state);
@@ -43,7 +45,14 @@ class CallbackProcessor
     private function applyAction(AbstractAction $action, State $state): void
     {
         $action->isCompleted()
-            ? $state->next()
+            ? $this->next($state)
             : $action->register();
+    }
+
+    private function next(State $state): void
+    {
+        if ($state->getCursor() < $this->callbackResolver->getCallbacksCount($state) - 1) {
+            $state->next();
+        }
     }
 }

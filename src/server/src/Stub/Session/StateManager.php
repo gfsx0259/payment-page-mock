@@ -4,7 +4,6 @@ namespace App\Stub\Session;
 
 use App\Service\Queue\QueueInterface;
 use App\Stub\Job\SendCallbackJob;
-use App\Stub\Service\Callback\CallbackResolver;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -12,7 +11,6 @@ class StateManager
 {
     public function __construct(
         private CacheInterface $cache,
-        private CallbackResolver $callbackResolver,
         private QueueInterface $queue
     ) {
     }
@@ -53,16 +51,14 @@ class StateManager
         }
 
         // it may be transferred to some observer
-        if ($this->callbackResolver->getCallbacksCount($state) > $state->getCursor()) {
-            if (!$oldState || $oldState->getCursor() !== $state->getCursor()) {
-                $this->queue->send(
-                    SendCallbackJob::class,
-                    [
-                        'requestId' => $requestId,
-                        'delay' => 3000
-                    ]
-                );
-            }
+        if (!$oldState || $oldState->getCursor() !== $state->getCursor()) {
+            $this->queue->push(
+                SendCallbackJob::class,
+                [
+                    'requestId' => $requestId,
+                    'delay' => 3000
+                ]
+            );
         }
 
         return true;
