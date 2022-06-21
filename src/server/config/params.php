@@ -140,7 +140,6 @@ return [
             'router/list' => App\Command\Router\ListCommand::class,
             'translator/translate' => App\Command\Translation\TranslateCommand::class,
             'queue/listen' => App\Command\Queue\ListenCommand::class,
-            'queue/listen-all' => App\Command\Queue\ListenAllCommand::class,
         ],
     ],
 
@@ -228,7 +227,4 @@ return [
             '@src/User/Controller',
         ],
     ],
-    'app/queue' => [
-        ['name' => 'callbacks', 'jobs' => [SendCallbackJob::class]],
-    ]
 ];

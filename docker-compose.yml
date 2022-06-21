@@ -8,10 +8,12 @@ x-environments: &environments
     NODE_ENV: "develop"
     API_URL: "http://localhost:8082"
     CALLBACK_URL: "http://pp.terminal.test"
+    CALLBACK_SECRET: "JYyVXAtQLQ"
     PHP_IDE_CONFIG: "serverName=docker"
     RABBITMQ_HOST: "rabbit"
     RABBITMQ_DEFAULT_USER: "local"
     RABBITMQ_DEFAULT_PASS: "local"
+    CALLBACKS_QUEUE_NAME: &callback-queue-name "callbacks-queue"
 
 services:
     client:
@@ -45,11 +47,27 @@ services:
         environment: *environments
         depends_on:
             - rabbit
-        extra_hosts:
+        extra_hosts: &extra-hosts
             - "host.docker.internal:host-gateway"
             - "pp.terminal.test:192.168.20.20"
-        volumes:
+        volumes: &server-app-volumes
             - ./src/server:/var/www:rw
+        links:
+            - db
+    callbacks_queue_consumer:
+        build:
+            context: ./src/server
+            dockerfile: ../../build/images/consumer/Dockerfile
+            args:
+                UID: 1000
+                GID: 1000
+                QUEUE_NAME: *callback-queue-name
+        restart: on-failure
+        environment: *environments
+        depends_on:
+            - rabbit
+        extra_hosts: *extra-hosts
+        volumes: *server-app-volumes
         links:
             - db
     rabbit:

@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.0-cli
 
 WORKDIR /var/www
 
@@ -18,8 +18,10 @@ COPY php.ini /usr/local/etc/php/conf.d/40-custom.ini
 
 ARG UID
 ARG GID
+ARG QUEUE_NAME
 ENV UID=${UID}
 ENV GID=${GID}
+ENV QUEUE_NAME=${QUEUE_NAME}
 
 RUN usermod -u $UID www-data \
  && groupmod -g $GID www-data
@@ -37,4 +39,4 @@ COPY --chown=$UID:$GID . ./
 
 RUN composer run-script post-install-cmd
 
-ENTRYPOINT ["php-fpm"]
+ENTRYPOINT php yii queue/listen $QUEUE_NAME
