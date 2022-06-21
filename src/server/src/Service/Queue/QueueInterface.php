@@ -24,4 +24,11 @@ interface QueueInterface
      * @return void
      */
     public function push(string $jobClass, array $params = []): void;
+
+    /**
+     * Checks connection to a broker
+     *
+     * @return bool
+     */
+    public function checkConnection(): bool;
 }

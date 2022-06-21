@@ -37,4 +37,4 @@ COPY --chown=$UID:$GID . ./
 
 RUN composer run-script post-install-cmd
 
-CMD ["php-fpm"]
+ENTRYPOINT ["./up.sh"]

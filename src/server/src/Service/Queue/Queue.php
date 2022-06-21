@@ -22,19 +22,16 @@ class Queue implements QueueInterface
 
     private array $config;
 
-    private array $credentials;
-
     private const JOB_CLASS_NAME = 'className';
 
     private const JOB_DATA = 'data';
 
-    public function __construct(Injector $injector, LoggerInterface $logger, array $credentials, array $config)
+    public function __construct(Client $client, Injector $injector, LoggerInterface $logger, array $config)
     {
         $this->injector = $injector;
         $this->logger = $logger;
-        $this->credentials = $credentials;
         $this->config = $config;
-        $this->client = $this->makeClient();
+        $this->client = $client;
     }
 
     /**
@@ -105,6 +102,22 @@ class Queue implements QueueInterface
         );
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function checkConnection(): bool
+    {
+        if (!$this->client->isConnected()) {
+            try {
+                $this->client->connect();
+            } catch (Exception $exception) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private function getQueueName(string $jobClass): string
     {
         foreach ($this->config as $queueConfig) {
@@ -157,19 +170,14 @@ class Queue implements QueueInterface
 
     private function makeChanel(string $queueName): Channel
     {
+        if (!$this->client->isConnected()) {
+            $this->client->connect();
+        }
+
         $chanel = $this->client->channel();
 
         $chanel->queueDeclare($queueName);
 
         return $chanel;
-    }
-
-    private function makeClient(): Client
-    {
-        $client = new Client($this->credentials);
-
-        $client->connect();
-
-        return $client;
     }
 }

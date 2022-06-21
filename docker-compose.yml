@@ -43,9 +43,6 @@ services:
                 UID: 1000
                 GID: 1000
         environment: *environments
-        # queues need be listened after rabbit up
-        # fix it if you know how
-        command: sh -c "sleep 10 && php yii queue/listen-all && php-fpm"
         depends_on:
             - rabbit
         extra_hosts:
