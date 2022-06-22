@@ -51,7 +51,7 @@ export default {
     },
     methods: {
         ...mapMutations({
-            setRoute: 'stub/setFormRouteId',
+            setRoute: 'stub/setRelationId',
             setDefault: 'stub/setDefault',
             loadFormData: 'stub/loadFormByStub',
             cleanFormData: 'stub/cleanForm',
@@ -84,7 +84,7 @@ export default {
     },
     computed: {
         ...mapState({
-            stubs: state => state.stub.stubs,
+            stubs: state => state.stub.entities,
             isLoading: state => state.stub.isLoading,
         }),
     }

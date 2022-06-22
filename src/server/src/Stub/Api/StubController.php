@@ -21,7 +21,6 @@ final class StubController extends EntityController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private StubRepository $stubRepository,
-        private WebControllerService $controllerService,
     ) {
     }
 
@@ -62,7 +61,7 @@ final class StubController extends EntityController
     {
         $data = json_decode($request->getBody()->getContents());
         $stub = new Stub(
-            (int)$data->routeId,
+            (int)$data->relationId,
             $data->title,
             $data->description
         );

@@ -12,7 +12,6 @@
             </CTableHeaderCell>
             <CTableHeaderCell/>
             <CTableHeaderCell/>
-            <CTableHeaderCell/>
         </CTableHead>
         <CTableBody>
             <CTableRow v-for="stub in this.stubs">
@@ -37,8 +36,6 @@
                         class="cursor-pointer m-1"
                         @click="edit(stub.id)"
                     />
-                </CTableDataCell>
-                <CTableDataCell class="text-center">
                     <CIcon
                         icon="cilTrash"
                         size="xl"
