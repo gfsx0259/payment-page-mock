@@ -116,7 +116,11 @@ return [
                     Route::methods([Method::OPTIONS, Method::POST], '/stub')
                         ->name('api/stub/create')
                         ->action([ApiStubController::class, 'create']),
+                    Route::methods([Method::PUT], '/stub')
+                        ->name('api/stub/update')
+                        ->action([ApiStubController::class, 'update']),
                     Route::methods([Method::OPTIONS, Method::DELETE], '/stub/{id}')
+                        ->name('api/stub/delete')
                         ->action([ApiStubController::class, 'delete']),
                     Route::methods([Method::OPTIONS, Method::POST], '/stub/setDefault')
                         ->name('api/stub/setDefault')

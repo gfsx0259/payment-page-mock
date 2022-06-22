@@ -3,21 +3,22 @@
       <CSpinner class="m-sm-auto" color="dark" v-if="isLoading"/>
     </CRow>
     <Modal
-        title="Create stub"
-        :saveCallback="create"
+        :title="title"
+        :saveCallback="save"
         v-model:visible="visible"
     >
         <StubForm :route-id="this.$route.params.id"/>
     </Modal>
     <CRow v-if="!isLoading">
       <div class="d-flex justify-content-start mb-4">
-        <CButton color="light" @click="showForm">Add stub</CButton>
+        <CButton color="light" @click="createFormShow">Add stub</CButton>
       </div>
 
       <StubItems
           :stubs="stubs"
           @setDefault="changeDefault"
           @remove="remove($event)"
+          @edit="editFormShow($event)"
       />
     </CRow>
 </template>
@@ -40,6 +41,7 @@ export default {
     },
     data () {
       return {
+          title: '',
           visible: false,
       }
     },
@@ -49,12 +51,14 @@ export default {
     },
     methods: {
         ...mapMutations({
-            setRoute: 'stub/setFormRouteId',
+            setRoute: 'stub/setRelationId',
             setDefault: 'stub/setDefault',
+            loadFormData: 'stub/loadFormByStub',
+            cleanFormData: 'stub/cleanForm',
         }),
         ...mapActions({
             fetch: 'stub/fetch',
-            create: 'stub/create',
+            save: 'stub/save',
             saveDefault: 'stub/saveDefault',
             remove: 'stub/remove',
         }),
@@ -65,10 +69,22 @@ export default {
             this.setDefault(id);
             this.saveDefault();
         },
+        editFormShow(id) {
+            this.title = 'Edit stub';
+
+            this.loadFormData(id);
+            this.showForm();
+        },
+        createFormShow() {
+            this.title = 'Create stub';
+
+            this.cleanFormData();
+            this.showForm();
+        },
     },
     computed: {
         ...mapState({
-            stubs: state => state.stub.stubs,
+            stubs: state => state.stub.entities,
             isLoading: state => state.stub.isLoading,
         }),
     }

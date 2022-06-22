@@ -9,7 +9,7 @@ export default {
   name: "RouteType",
   props: {
     type: {
-      type: String,
+      type: Number,
       required: true,
     }
   },

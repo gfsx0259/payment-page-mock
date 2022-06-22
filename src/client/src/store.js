@@ -1,7 +1,8 @@
 import { createStore } from 'vuex';
-import { stubStore } from "@/store/stubStore";
+import StubStore from "@/store/StubStore";
 import { routeStore } from "@/store/routeStore";
 import { callbackStore } from "@/store/callbackStore";
+import { MODULE_ROUTE, MODULE_STUB, MODULE_CALLBACK } from "@/constants";
 
 export default createStore({
     state: {
@@ -13,8 +14,8 @@ export default createStore({
       },
     },
     modules: {
-      stub: stubStore,
-      route: routeStore,
-      callback: callbackStore,
+      [MODULE_STUB]: (new StubStore()).getModule(),
+      [MODULE_ROUTE]: routeStore,
+      [MODULE_CALLBACK]: callbackStore,
     },
 });
