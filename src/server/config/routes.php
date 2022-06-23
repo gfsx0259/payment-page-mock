@@ -163,9 +163,15 @@ return [
             Route::methods([Method::GET, Method::POST], '/renderAps/{uniqueKey}')
                 ->name('actions/renderAps')
                 ->action([DummyPageController::class, 'renderAps']),
+            Route::methods([Method::GET], '/renderConfirmationQr/{uniqueKey}')
+                ->name('actions/renderConfirmationQr')
+                ->action([DummyPageController::class, 'renderConfirmationQr']),
             Route::post('/completeAps')
                 ->name('actions/completeAps')
                 ->action([ActionController::class, 'completeAps']),
+            Route::post('/completeConfirmationQr')
+                ->name('actions/completeConfirmationQr')
+                ->action([ActionController::class, 'completeConfirmationQr']),
         ),
 
     // Blog routes

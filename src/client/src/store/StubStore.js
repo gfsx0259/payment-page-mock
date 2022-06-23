@@ -50,7 +50,7 @@ export default class StubStore extends BaseStore {
     actions() {
         return {
             ...super.actions(),
-            async saveDefault({state, dispatch, commit}) {
+            saveDefault: async ({state, dispatch, commit}) => {
                 const defaultStub = state.entities.find(stub => stub.default);
 
                 try {

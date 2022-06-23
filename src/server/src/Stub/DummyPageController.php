@@ -43,4 +43,13 @@ final class DummyPageController
             'uniqueKey' => $currentRoute->getArgument('uniqueKey'),
         ]);
     }
+
+    public function renderConfirmationQr(
+        CurrentRoute $currentRoute,
+    ): ResponseInterface {
+        return $this->viewRenderer->render('confirmationQrPage', [
+            'completeUrl' => $this->urlGenerator->generate('actions/completeConfirmationQr'),
+            'uniqueKey' => $currentRoute->getArgument('uniqueKey'),
+        ]);
+    }
 }

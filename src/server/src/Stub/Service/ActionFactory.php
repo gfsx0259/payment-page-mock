@@ -7,6 +7,7 @@ use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Service\Action\AcsAction;
 use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
+use App\Stub\Service\Action\QrCodeAction;
 use App\Stub\Session\State;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
@@ -29,8 +30,10 @@ class ActionFactory
                 return $this->injector->make(ApsAction::class, [$callback, $state]);
             } elseif ($callback->get('clarification_fields')) {
                 return new ClarificationAction($callback, $state);
+            } elseif ($callback->get('display_data.0.type') === QrCodeAction::DISPLAY_DATA_TYPE_RAW) {
+                return $this->injector->make(QrCodeAction::class, [$callback, $state]);
             }
-        } catch (ReflectionException|ContainerExceptionInterface $exception) {
+        } catch (ReflectionException | ContainerExceptionInterface $exception) {
             $this->logger->error($exception->getMessage());
             return null;
         }
