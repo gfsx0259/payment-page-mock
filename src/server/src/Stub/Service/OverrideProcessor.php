@@ -25,13 +25,13 @@ class OverrideProcessor implements ProcessorInterface
         private UrlGeneratorInterface $urlGenerator,
         private StateManager $stateManager,
         private string $host,
-    ) {
-    }
+    ) {}
 
     public function process(ArrayCollection $callback, State $state): void
     {
         $source = $state->getInitialRequest();
 
+        $source->set('request_id', $state->getRequestId());
         $source->set('acs_url', $this->generateAcsUrl());
         $source->set('aps_url', $this->generateApsUrl($state));
         $source->set('qr_accept_link', $this->generateQrAcceptUrl($state));

@@ -38,13 +38,7 @@ final class ActionController
     ): ResponseInterface {
         $body = json_decode($request->getBody()->getContents(), true);
 
-        if (!$state = $stateManager->get(ArrayHelper::getValueByPath($body, 'general.payment_id'))) {
-            throw new LogicException('State must be exists');
-        }
-
-        $this->completeAction($state, new ArrayCollection($body));
-
-        $stateManager->save($state);
+        $this->completeAction($stateManager, $body, 'general.payment_id');
 
         return $this->responseFactory->createResponse();
     }
@@ -59,7 +53,7 @@ final class ActionController
         WebControllerService $webControllerService,
         StateManager $stateManager,
     ): ResponseInterface {
-        $state = $this->completeAction($request, $stateManager, 'uniqueKey');
+        $state = $this->completeAction($stateManager, $request->getParsedBody(), 'uniqueKey');
 
         return $webControllerService->getRedirectResponseByUrl(
             $state->getInitialRequest()->get('return_url.success')
@@ -69,12 +63,12 @@ final class ActionController
     /**
      * @throws InvalidArgumentException
      */
-    public function completeConfirmationViaQrCode(
+    public function completeConfirmationQr(
         ServerRequestInterface $request,
         WebControllerService $webControllerService,
         StateManager $stateManager,
     ): ResponseInterface {
-        $state = $this->completeAction($request, $stateManager, 'uniqueKey');
+        $state = $this->completeAction($stateManager, $request->getParsedBody(), 'uniqueKey');
 
         return $webControllerService->getRedirectResponseByUrl(
             $state->getInitialRequest()->get('return_url.success')
@@ -88,7 +82,8 @@ final class ActionController
         ServerRequestInterface $request,
         StateManager $stateManager,
     ): ResponseInterface {
-        $state = $this->completeAction($request, $stateManager, 'general.payment_id');
+        $body = json_decode($request->getBody()->getContents(), true);
+        $state = $this->completeAction($stateManager, $body, 'general.payment_id');
 
         return $this->responseFactory
             ->createResponse([
@@ -100,13 +95,11 @@ final class ActionController
     }
 
     private function completeAction(
-        ServerRequestInterface $request,
         StateManager $stateManager,
+        array $requestData,
         string $identityKeyName
     ): State {
-        $body = json_decode($request->getBody()->getContents(), true);
-
-        if (!$state = $stateManager->get(ArrayHelper::getValueByPath($body, $identityKeyName))) {
+        if (!$state = $stateManager->get(ArrayHelper::getValueByPath($requestData, $identityKeyName))) {
             throw new LogicException('State must be exists');
         }
 
@@ -120,7 +113,7 @@ final class ActionController
             throw new LogicException('Action must be exists');
         }
 
-        $action->complete($body);
+        $action->complete(new ArrayCollection($requestData));
         $stateManager->save($state);
 
         return $state;

@@ -32,7 +32,7 @@ class RouteMatcher
             return null;
         }
 
-        return ArrayHelper::getValue($matchingResult, $key);
+        return ArrayHelper::getValue($matchingResult->arguments(), $key);
     }
 
     private function match(string $url): MatchingResult

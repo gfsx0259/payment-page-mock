@@ -169,9 +169,9 @@ return [
             Route::post('/completeAps')
                 ->name('actions/completeAps')
                 ->action([ActionController::class, 'completeAps']),
-            Route::post('/completeConfirmationViaQrCode')
-                ->name('actions/completeConfirmationViaQrCode')
-                ->action([ActionController::class, 'completeConfirmationViaQrCode']),
+            Route::post('/completeConfirmationQr')
+                ->name('actions/completeConfirmationQr')
+                ->action([ActionController::class, 'completeConfirmationQr']),
         ),
 
     // Blog routes
