@@ -51,14 +51,14 @@ class OverrideProcessor implements ProcessorInterface
     private function generateApsUrl(State $state): string
     {
         return new Uri($this->host . $this->urlGenerator->generate('actions/renderAps', [
-            'uniqueKey' => $this->stateManager->generateAccessKey($state, 'aps'),
+            'uniqueKey' => $this->stateManager->generateAccessKey($state),
         ]));
     }
 
     private function generateQrAcceptUrl(State $state): string
     {
-        return new Uri($this->host . $this->urlGenerator->generate('actions/renderConfirmationViaQrCode', [
-            'uniqueKey' => $this->stateManager->generateAccessKey($state, 'qr_accept'),
+        return new Uri($this->host . $this->urlGenerator->generate('actions/renderConfirmationQr', [
+            'uniqueKey' => $this->stateManager->generateAccessKey($state),
         ]));
     }
 }

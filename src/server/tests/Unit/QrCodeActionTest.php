@@ -6,10 +6,12 @@ namespace App\Tests\Unit;
 
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\Action\QrCodeAction;
-use App\Stub\Service\UrlHelper;
+use App\Service\RouteMatcher;
+use App\Stub\Service\ActionException;
 use App\Stub\Session\State;
 use App\Tests\UnitTester;
 use Codeception\Test\Unit;
+use Exception;
 
 final class QrCodeActionTest extends Unit
 {
@@ -35,11 +37,15 @@ final class QrCodeActionTest extends Unit
     {
         $state = $this->tester->makeState();
         $action = $this->makeAction($state, null, ['display_data' => [['data' => 'test']]]);
+        $expectedException = null;
 
-        $this->assertNotEquals(
-            $action->getActionKey(),
-            $action->getActionKey()
-        );
+        try {
+            $action->getActionKey();
+        } catch (Exception $exception) {
+            $expectedException = $exception;
+        }
+
+        $this->assertInstanceOf(ActionException::class, $expectedException);
     }
 
     public function testRegistering(): void
@@ -67,8 +73,8 @@ final class QrCodeActionTest extends Unit
     ): QrCodeAction {
         $that = $this;
         $collection = new ArrayCollection($callback);
-        $urlHelper = $this->make(UrlHelper::class, [
-            'getArgumentValue' => function ($url, $key) use ($collection, $expectingKey, $that) {
+        $routeMatcher = $this->make(RouteMatcher::class, [
+            'parseArgument' => function ($url, $key) use ($collection, $expectingKey, $that) {
                 $that->assertEquals($url, $collection->get('display_data.0.data'));
                 $that->assertEquals($key, 'uniqueKey');
 
@@ -76,6 +82,6 @@ final class QrCodeActionTest extends Unit
             }
         ]);
 
-        return new QrCodeAction($collection, $state, $urlHelper);
+        return new QrCodeAction($collection, $state, $routeMatcher);
     }
 }

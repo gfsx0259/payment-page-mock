@@ -30,29 +30,13 @@ class StateManager
         }
     }
 
-    public function generateAccessKey(State $state, string $salt): string
+    public function generateAccessKey(State $state): string
     {
-        $uniqueKey = md5($state->getRequestId() . $state->getCursor() . $salt);
+        $uniqueKey = md5($state->getRequestId() . $state->getCursor());
 
         $this->link($uniqueKey, $state);
 
         return $uniqueKey;
-    }
-
-    public function link(string $key, State $state): bool
-    {
-        $requestId = $state->getRequestId();
-
-        try {
-            $this->cache->set(
-                $key,
-                $requestId
-            );
-        } catch (InvalidArgumentException) {
-            return false;
-        }
-
-        return true;
     }
 
     public function save(State $state): bool
@@ -67,6 +51,22 @@ class StateManager
             );
             $this->cache->set(
                 $paymentId,
+                $requestId
+            );
+        } catch (InvalidArgumentException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function link(string $key, State $state): bool
+    {
+        $requestId = $state->getRequestId();
+
+        try {
+            $this->cache->set(
+                $key,
                 $requestId
             );
         } catch (InvalidArgumentException) {

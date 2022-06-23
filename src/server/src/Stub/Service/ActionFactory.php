@@ -19,8 +19,7 @@ class ActionFactory
     public function __construct(
         private Injector $injector,
         private LoggerInterface $logger
-    ) {
-    }
+    ) {}
 
     public function make(ArrayCollection $callback, State $state): ?AbstractAction
     {
@@ -31,7 +30,7 @@ class ActionFactory
                 return $this->injector->make(ApsAction::class, [$callback, $state]);
             } elseif ($callback->get('clarification_fields')) {
                 return new ClarificationAction($callback, $state);
-            } elseif ($callback->get('display_data.0.type') === QrCodeAction::DISPLAY_DATA_TYPE) {
+            } elseif ($callback->get('display_data.0.type') === QrCodeAction::DISPLAY_DATA_TYPE_RAW) {
                 return $this->injector->make(QrCodeAction::class, [$callback, $state]);
             }
         } catch (ReflectionException | ContainerExceptionInterface $exception) {

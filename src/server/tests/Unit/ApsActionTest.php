@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit;
 
+use App\Service\RouteMatcher;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\Action\ApsAction;
-use App\Stub\Service\UrlHelper;
+use App\Stub\Service\ActionException;
 use App\Stub\Session\State;
 use App\Tests\UnitTester;
 use Codeception\Test\Unit;
+use Exception;
 
 final class ApsActionTest extends Unit
 {
@@ -31,11 +33,15 @@ final class ApsActionTest extends Unit
     {
         $state = $this->tester->makeState();
         $action = $this->makeAction($state, null, ['return_url' => ['url' => 'test']]);
+        $expectedException = null;
 
-        $this->assertNotEquals(
-            $action->getActionKey(),
-            $action->getActionKey()
-        );
+        try {
+            $action->getActionKey();
+        } catch (Exception $exception) {
+            $expectedException = $exception;
+        }
+
+        $this->assertInstanceOf(ActionException::class, $expectedException);
     }
 
     public function testRegistering(): void
@@ -60,8 +66,8 @@ final class ApsActionTest extends Unit
     {
         $that = $this;
         $collection = new ArrayCollection($callback);
-        $urlHelper = $this->make(UrlHelper::class, [
-            'getArgumentValue' => function ($url, $key) use ($collection, $expectingKey, $that) {
+        $routeMatcher = $this->make(RouteMatcher::class, [
+            'parseArgument' => function ($url, $key) use ($collection, $expectingKey, $that) {
                 $that->assertEquals($url, $collection->get('return_url.url'));
                 $that->assertEquals($key, 'uniqueKey');
 
@@ -69,6 +75,6 @@ final class ApsActionTest extends Unit
             }
         ]);
 
-        return new ApsAction($collection, $state, $urlHelper);
+        return new ApsAction($collection, $state, $routeMatcher);
     }
 }

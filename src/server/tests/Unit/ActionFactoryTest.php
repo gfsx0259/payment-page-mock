@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit;
 
+use App\Service\RouteMatcher;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Service\Action\AcsAction;
@@ -11,7 +12,6 @@ use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
 use App\Stub\Service\Action\QrCodeAction;
 use App\Stub\Service\ActionFactory;
-use App\Stub\Service\UrlHelper;
 use App\Stub\Session\State;
 use App\Tests\UnitTester;
 use Codeception\Test\Unit;
@@ -80,7 +80,7 @@ final class ActionFactoryTest extends Unit
 
     private function makeActionFactory(): ActionFactory
     {
-        $stubs = [UrlHelper::class => $this->make(UrlHelper::class)];
+        $stubs = [RouteMatcher::class => $this->make(RouteMatcher::class)];
 
         return $this->make(ActionFactory::class, ['injector' => $this->makeInjector($stubs)]);
     }

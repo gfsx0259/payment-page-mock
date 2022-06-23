@@ -9,13 +9,11 @@ namespace App\Stub\Service\Action;
  */
 class ApsAction extends RedirectAction
 {
+    /**
+     * @inheritDoc
+     */
     protected function getRedirectUrl(): string
     {
         return $this->callback->get('return_url.url');
-    }
-
-    protected function getIdentityKeyName(): string
-    {
-        return 'uniqueKey';
     }
 }
