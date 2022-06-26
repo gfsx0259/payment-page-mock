@@ -14,13 +14,11 @@ services:
         build:
             context: ./src/client
             dockerfile: ../../build/images/client/Dockerfile
-        ports:
-            - "8083:8080"
-        user: "node"
-        environment: *environments
+            target: development
         volumes:
             - ./src/client:/home/node/app:rw
-        command: "npm run serve"
+        ports:
+            - "8083:8080"
     nginx:
         build:
             context: ./src/server
@@ -28,7 +26,7 @@ services:
         ports:
             - "8082:80"
         volumes:
-            - ./src/server:/var/www
+            - ./src/server/public:/var/www/public
         links:
             - api
     api:
