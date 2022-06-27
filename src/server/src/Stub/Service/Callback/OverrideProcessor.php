@@ -27,7 +27,7 @@ class OverrideProcessor implements ProcessorInterface
         private string $host,
     ) {}
 
-    public function process(ArrayCollection &$callback, State $state): void
+    public function process(ArrayCollection $callback, State $state): ArrayCollection
     {
         $source = $state->getInitialRequest();
 
@@ -41,6 +41,8 @@ class OverrideProcessor implements ProcessorInterface
                 $callback->replace('{{' . $placeholder . '}}', $value);
             }
         }
+
+        return $callback;
     }
 
     private function generateAcsUrl(): string

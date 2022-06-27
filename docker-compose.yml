@@ -22,7 +22,7 @@ services:
             dockerfile: ../../build/images/client/Dockerfile
             target: development
         volumes:
-            - ./src/client:/home/node/app:rw
+            - ./src/client/src:/home/node/app/src:rw
         ports:
             - "8083:8080"
     nginx:
@@ -50,8 +50,6 @@ services:
             - "pp.terminal.test:192.168.20.20"
         volumes:
             - ./src/server:/var/www:rw
-            - npm:/var/www/node_modules:rw
-            - composer:/var/www/vendor:rw
         links:
             - db
     callbacks_queue_consumer:
@@ -73,5 +71,3 @@ services:
             - dbdata:/var/lib/mysql
 volumes:
     dbdata:
-    npm:
-    composer:

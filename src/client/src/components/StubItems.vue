@@ -50,7 +50,6 @@
 
 <script>
 export default {
-    name: "StubItems",
     props: {
         stubs: {
             type: Array,

@@ -1,12 +1,22 @@
 <template>
   <CButton color="dark" @click="onAdd">Add callback</CButton>
+  <CButton class="btn-hint ms-2" color="light" @click="isHintVisible = !isHintVisible">
+    <span class="pe-1">
+      <CIcon size="xl" icon="cilCompass"/>
+    </span>
+    <span>Show hint</span>
+  </CButton>
+  <CallbackHint
+      :visible="isHintVisible"
+      @hide="isHintVisible = false"
+  />
   <CRow>
     <CCol md="6" v-for="callback in callbacks">
-      <vue-json-editor
+      <VueJsonEditor
         v-bind:value="callback.body"
         @json-save="onUpdate(callback.id, $event)"
         @json-remove="onRemove(callback.id)"
-        :show-btns=true
+        show-btns
         mode="code"
       />
     </CCol>
@@ -14,17 +24,24 @@
 </template>
 
 <script>
-import vueJsonEditor from 'vue-json-editor'
+import VueJsonEditor from 'vue-json-editor'
+import CallbackHint from "@/components/CallbackHint";
 
 export default {
+  components: {
+    VueJsonEditor,
+    CallbackHint,
+  },
   props: {
     callbacks: {
       type: Array,
       required: true,
     }
   },
-  components: {
-    vueJsonEditor,
+  data: () => {
+    return {
+      isHintVisible: false,
+    }
   },
   methods: {
     onAdd() {
@@ -70,5 +87,15 @@ export default {
 }
 .jsoneditor-btns .json-remove-btn:hover {
   background-color: #e96d6d;
+}
+.btn-hint svg,.btn-hint span {
+  vertical-align: top;
+}
+.btn-hint svg {
+  transition: transform 0.5s;
+  -webkit-transition: -webkit-transform 1s;
+}
+.btn-hint:hover svg {
+  transform: rotate(-180deg);
 }
 </style>

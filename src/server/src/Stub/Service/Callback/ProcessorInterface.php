@@ -7,5 +7,5 @@ use App\Stub\Session\State;
 
 interface ProcessorInterface
 {
-    public function process(ArrayCollection &$callback, State $state): void;
+    public function process(ArrayCollection $callback, State $state): ArrayCollection;
 }
