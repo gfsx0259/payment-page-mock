@@ -16,16 +16,22 @@ http://localhost:8082
 
 Run tests:
 ```bash
-docker-compose exec php bash -c "composer test"
+make test
 ```
 
-Dump application tables:
-```shell
-docker-compose exec db bash -c "mysqldump --no-tablespaces -proot app route callback stub -r "/docker-entrypoint-initdb.d/app.sql""
+Extract example database and uploaded images:
+```bash
+make example
 ```
 
 ## Run for production
-Deploy the stack to the Docker swarm:  
+Fetch Docker Swarm definition and Makefile.
 ```bash
-curl -s https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main/docker-compose.prod.yml | docker stack deploy -c - mystack
+curl -s https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main/Makefile
+curl -s https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main/docker-compose.prod.yml
+```
+
+Deploy the stack to the Docker Swarm:
+```bash
+sudo docker stack deploy -c docker-compose.prod.yml dummy
 ```

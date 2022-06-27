@@ -50,8 +50,8 @@ services:
             - "pp.terminal.test:192.168.20.20"
         volumes:
             - ./src/server:/var/www:rw
-            - npm:/var/www/node_modules:rw
-            - composer:/var/www/vendor:rw
+            - npm:/var/www/node_modules/
+            - composer:/var/www/vendor/
         links:
             - db
     callbacks_queue_consumer:

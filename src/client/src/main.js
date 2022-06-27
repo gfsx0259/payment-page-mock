@@ -1,8 +1,13 @@
 import { createApp } from 'vue'
 import { CIcon } from '@coreui/icons-vue';
-import { cilFlagAlt, cilX, cilTrash, cilPencil } from '@coreui/icons'
+import { cilFlagAlt, cilX, cilTrash, cilPencil, cilCompass, cilCopy } from '@coreui/icons'
 import * as Components from '@coreui/vue';
 import { SnackbarPlugin } from 'snackbar-vue';
+
+import VueHighlightJS from 'vue3-highlightjs'
+import 'highlight.js/styles/solarized-light.css'
+
+import VueClipboard from 'vue3-clipboard'
 
 import App from './App'
 import Router from "@/router/router";
@@ -45,6 +50,10 @@ const UIComponents = [
     Components.CSpinner,
     Components.CPlaceholder,
     Components.CBadge,
+    Components.COffcanvas,
+    Components.COffcanvasHeader,
+    Components.COffcanvasBody,
+    Components.COffcanvasTitle,
     CIcon,
 ];
 
@@ -65,9 +74,16 @@ app.provide('icons', {
     cilX,
     cilTrash,
     cilPencil,
+    cilCompass,
+    cilCopy,
 });
 
 app.use(SnackbarPlugin, SnackbarConfig);
+app.use(VueHighlightJS);
+app.use(VueClipboard, {
+    autoSetContainer: true,
+    appendToBody: true,
+});
 
 app.use(Store);
 app.use(Router);

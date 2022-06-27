@@ -22,14 +22,12 @@ class CallbackProcessor
         private ActionFactory $actionFactory,
         private StateManager $stateManager,
         private CallbackResolver $callbackResolver,
-    ) {
-    }
+    ) {}
 
     public function process(State $state, Callback $callback): ArrayCollection
     {
         $collection = new ArrayCollection($callback->getBody());
-
-        $this->overrideProcessor->process($collection, $state);
+        $collection = $this->overrideProcessor->process($collection, $state);
 
         if ($action = $this->actionFactory->make($collection, $state)) {
             $this->applyAction($action, $state);

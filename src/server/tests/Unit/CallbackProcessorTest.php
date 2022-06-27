@@ -36,6 +36,7 @@ final class CallbackProcessorTest extends Unit
         $callbackProcessor = $this->makeCallbackProcess(
             function (ArrayCollection $collection, State $state) {
                 $collection->set('overriding', $state->getRequestId());
+                return $collection;
             },
             function (ArrayCollection $collection, State $state) use (&$overridingApplied) {
                 $overridingApplied = $collection->get('overriding') === $state->getRequestId();
@@ -88,6 +89,7 @@ final class CallbackProcessorTest extends Unit
         $callbackProcessor = $this->makeCallbackProcess(
             function (ArrayCollection $collection, State $state) {
                 $collection->set('overriding', $state->getRequestId());
+                return $collection;
             },
             function (ArrayCollection $collection, State $state) use (&$overridingApplied, $stubAction) {
                 $overridingApplied = $collection->get('overriding') === $state->getRequestId();
@@ -131,6 +133,7 @@ final class CallbackProcessorTest extends Unit
             $this->make(OverrideProcessor::class, [
                 'process' => function (ArrayCollection $collection, State $state) {
                     $collection->set('overriding', $state->getRequestId());
+                    return $collection;
                 }
             ]),
             $this->make(ActionFactory::class, [

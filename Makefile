@@ -1,4 +1,7 @@
 # Bash
+repositoryRaw := https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main
+uploadImagesDir := src/server/public/uploads/route
+
 install: prepare pull deploy
 
 prepare:
@@ -23,11 +26,23 @@ storage_clear:
 	sudo docker volume rm dummy_dbdata
 
 storage_load:
-	curl -s -O https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main/build/dump/app.sql
+	curl -s -O $(repositoryRaw)/build/dump/app.sql
 	$(eval CONTAINER_ID=$(shell sudo docker ps -q -f name="db"))
 	sudo docker exec -i $(CONTAINER_ID) mysql -uuser -ppassword app < ./app.sql
 
+storage_dump:
+	docker-compose exec db bash -c "mysqldump --no-tablespaces -proot app route callback stub -r "/docker-entrypoint-initdb.d/app.sql""
+
+image_load:
+	cd $(uploadImagesDir) && curl -O $(repositoryRaw)/build/example/card.svg
+	cd $(uploadImagesDir) && curl -O $(repositoryRaw)/build/example/gcash.svg
+	cd $(uploadImagesDir) && curl -O $(repositoryRaw)/build/example/kakaopay.svg
+	cd $(uploadImagesDir) && curl -O $(repositoryRaw)/build/example/pix.svg
 
 status:
 	sudo docker stack services dummy
 
+test:
+	docker-compose exec api bash -c "composer test"
+
+example: storage_load image_load
