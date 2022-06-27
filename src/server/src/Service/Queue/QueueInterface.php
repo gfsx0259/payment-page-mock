@@ -22,6 +22,7 @@ interface QueueInterface
      * @param string $jobClass
      * @param array $params
      * @return void
+     * @throws QueueException
      */
     public function push(string $jobClass, array $params = []): void;
 

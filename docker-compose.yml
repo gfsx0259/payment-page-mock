@@ -37,7 +37,7 @@ services:
             - ./src/server:/var/www
         links:
             - api
-    api:
+    api: &server_app
         build:
             context: ./src/server
             dockerfile: ../../build/images/server/Dockerfile
@@ -47,35 +47,22 @@ services:
         environment: *environments
         depends_on:
             - rabbit
-        extra_hosts: &extra-hosts
+        extra_hosts:
             - "host.docker.internal:host-gateway"
             - "pp.terminal.test:192.168.20.20"
-        volumes: &server-app-volumes
+        volumes:
             - ./src/server:/var/www:rw
         links:
             - db
     callbacks_queue_consumer:
-        build:
-            context: ./src/server
-            dockerfile: ../../build/images/consumer/Dockerfile
-            args:
-                UID: 1000
-                GID: 1000
-                QUEUE_NAME: *callback-queue-name
+        <<: *server_app
         restart: on-failure
-        environment: *environments
-        depends_on:
-            - rabbit
-        extra_hosts: *extra-hosts
-        volumes: *server-app-volumes
-        links:
-            - db
+        entrypoint: ["php", "yii", "queue/listen", *callback-queue-name]
     rabbit:
         image: rabbitmq:latest
         environment: *environments
         ports:
-            - 5672:5672
-            - 15672:15672
+            - "5672:5672"
     db:
         image: mysql:latest
         ports:

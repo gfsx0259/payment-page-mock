@@ -106,7 +106,7 @@ final class SendCallbackJobTest extends Unit
 
         $testData = ['requestId' => 'jf234Jh54j@#$5%', 'delay' => 123456];
 
-        $job->initFromString(json_encode($testData));
+        $job->unserialize(json_encode($testData));
 
         $this->assertEquals($job->requestId, $testData['requestId'], 'requestId has not been set');
         $this->assertEquals($job->delay, $testData['delay'], 'delay has not been set');

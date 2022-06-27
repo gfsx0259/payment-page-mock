@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Command\Queue;
 
+use App\Middleware\ConsoleOutputFormatter;
 use App\Service\Queue\JobInterface;
 use App\Service\Queue\QueueInterface;
-use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Yii\Console\ExitCode;
 
 final class ListenCommand extends Command
@@ -38,34 +37,28 @@ final class ListenCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $queueName = $input->getArgument('name');
-        $that = $this;
+
+        $output->setFormatter(new ConsoleOutputFormatter());
 
         if (!$this->queue->checkConnection()) {
-            $this->writeln($output, "Listening queue `$queueName` failed. Broker is not available. Try one more time");
+            $output->writeln("Listening queue `$queueName` failed. Broker is not available. Try one more time");
 
             return ExitCode::UNSPECIFIED_ERROR;
         }
 
-        $this->writeln($output, "Listening queue `$queueName`...");
+        $output->writeln("Listening queue `$queueName`...");
 
         $this->queue->subscribe(
             $queueName,
-            function (bool $handledSuccess, JobInterface $job) use ($that, $output) {
+            function (bool $handledSuccess, JobInterface $job) use ($output) {
                 $result = $handledSuccess ? 'success' : 'failure';
                 $className = $job::class;
                 $data = $job->serialize();
 
-                $that->writeln($output, "Job `$className` with data `$data` ended in $result");
+                $output->writeln("Job `$className` with data `$data` ended in $result");
             }
         );
 
         return ExitCode::OK;
-    }
-
-    private function writeLn(OutputInterface $output, string $text): void
-    {
-        $date = (new DateTime())->format('Y-m-d H:i:s');
-
-        $output->writeln("[$date] $text");
     }
 }

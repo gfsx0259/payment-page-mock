@@ -56,7 +56,7 @@ class StateManager
                 SendCallbackJob::class,
                 [
                     'requestId' => $requestId,
-                    'delay' => 3000
+                    'delay' => 1000
                 ]
             );
         }

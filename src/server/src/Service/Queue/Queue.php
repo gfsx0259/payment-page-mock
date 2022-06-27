@@ -42,19 +42,17 @@ class Queue implements QueueInterface
     public function subscribe(string $queueName, ?callable $callback = null): void
     {
         $chanel = $this->makeChanel($queueName);
-        $injector = $this->injector;
-        $logger = $this->logger;
 
         $chanel->run(
-            function (Message $message, Channel $channel, Client $bunny) use ($injector, $callback, $logger) {
+            function (Message $message, Channel $channel) use ($callback) {
                 $content = json_decode($message->content, true);
                 $jobClassName = $content[self::JOB_CLASS_NAME];
                 $jobData = $content[self::JOB_DATA];
 
                 /** @var JobInterface $job */
-                $job = $injector->make($jobClassName);
+                $job = $this->injector->make($jobClassName);
 
-                $job->initFromString($jobData);
+                $job->unserialize($jobData);
 
                 try {
                     $success = true;
@@ -63,7 +61,7 @@ class Queue implements QueueInterface
                 } catch (Exception $exception) {
                     $success = false;
 
-                    $logger->error($exception->getMessage());
+                    $this->logger->error($exception->getMessage());
                 }
 
                 if ($success) {
@@ -118,6 +116,11 @@ class Queue implements QueueInterface
         return true;
     }
 
+    /**
+     * @param string $jobClass
+     * @return string
+     * @throws QueueException
+     */
     private function getQueueName(string $jobClass): string
     {
         foreach ($this->config as $queueConfig) {
@@ -129,6 +132,11 @@ class Queue implements QueueInterface
         throw new QueueException("Unknown job ($jobClass). Please define it in config/params.php");
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \ReflectionException
+     * @throws QueueException
+     */
     private function makeJob(string $jobClass, array $params): JobInterface
     {
         $job = $this->injector->make($jobClass);

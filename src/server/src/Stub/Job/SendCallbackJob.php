@@ -17,9 +17,12 @@ class SendCallbackJob extends AbstractJob
         private CallbackSender $callbackSender,
         private CallbackResolver $callbackResolver,
         private CallbackProcessor $callbackProcessor
-    ) {
-    }
+    ) {}
 
+    /**
+     * @inheritDoc
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function run(): void
     {
         $state = $this->stateManager->get($this->requestId);

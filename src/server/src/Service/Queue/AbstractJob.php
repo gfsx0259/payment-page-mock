@@ -9,7 +9,7 @@ namespace App\Service\Queue;
  */
 abstract class AbstractJob implements JobInterface
 {
-    public $delay = 0;
+    public int $delay = 0;
 
     /**
      * @inheritDoc
@@ -30,7 +30,7 @@ abstract class AbstractJob implements JobInterface
     /**
      * @inheritDoc
      */
-    public function initFromString(string $data): void
+    public function unserialize(string $data): void
     {
         $dataParsed = json_decode($data, true);
 

@@ -2,11 +2,13 @@
 
 namespace App\Service\Queue;
 
+use Serializable;
+
 /**
  * Some encapsulated logic to run
  * Push it to a queue {@link QueueInterface} to run it asynchronously
  */
-interface JobInterface
+interface JobInterface extends Serializable
 {
     /**
      * Delay before run (milliseconds)
@@ -14,21 +16,6 @@ interface JobInterface
      * @return int
      */
     public function getDelay(): int;
-
-    /**
-     * Converts inside data to string
-     *
-     * @return string
-     */
-    public function serialize(): string;
-
-    /**
-     * Parse data from the string made by method {@link serialize()} to fill the object
-     *
-     * @param string $data
-     * @return void
-     */
-    public function initFromString(string $data): void;
 
     /**
      * Some specific logic
