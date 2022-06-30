@@ -35,7 +35,6 @@ class ActionFactory
             }
         } catch (ReflectionException | ContainerExceptionInterface $exception) {
             $this->logger->error($exception->getMessage());
-            return null;
         }
 
         return null;

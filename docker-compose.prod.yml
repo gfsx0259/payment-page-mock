@@ -5,8 +5,12 @@ x-environments: &environments
     MYSQL_PASSWORD: "password"
     MYSQL_DATABASE: "app"
     MYSQL_USER: "user"
-    API_URL: "http://staging01.dev.ru1:8082"
     NODE_ENV: "production"
+    API_URL: "http://staging01.dev.ru1:8082"
+    RABBITMQ_HOST: "rabbit"
+    RABBITMQ_DEFAULT_USER: "test"
+    RABBITMQ_DEFAULT_PASS: "#HJ@j$%!Hjd"
+    CALLBACKS_QUEUE_NAME: &callback-queue-name "callbacks-queue"
 
 services:
     client:
@@ -27,10 +31,19 @@ services:
         ports:
             - target: 80
               published: 8082
-    api:
+    api: &server_app
         image: konstantinpopov/payment-page-mock-api:main
         environment: *environments
         volumes: *sharedStatic
+    callbacks_queue_consumer:
+        <<: *server_app
+        restart: on-failure
+        entrypoint: ["php", "yii", "queue/listen", *callback-queue-name]
+    rabbit:
+        image: rabbitmq:latest
+        environment: *environments
+        ports:
+            - "5672:5672"
     db:
         image: mysql:latest
         ports:

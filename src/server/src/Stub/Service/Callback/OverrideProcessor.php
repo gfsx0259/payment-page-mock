@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Stub\Service;
+namespace App\Stub\Service\Callback;
 
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Session\State;
@@ -27,7 +27,7 @@ class OverrideProcessor implements ProcessorInterface
         private string $host,
     ) {}
 
-    public function process(ArrayCollection $callback, State $state): void
+    public function process(ArrayCollection &$callback, State $state): void
     {
         $source = $state->getInitialRequest();
 

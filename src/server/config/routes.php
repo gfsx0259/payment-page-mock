@@ -140,7 +140,9 @@ return [
         ->disableMiddleware(CsrfMiddleware::class)
         ->routes(
             Route::post('/info/check/signature')
-                ->action([StubController::class, 'checkSignature']),
+                ->action(function (DataResponseFactoryInterface $responseFactory) {
+                    return $responseFactory->createResponse();
+                }),
             Route::post('/payment/status')
                 ->action([StubController::class, 'status']),
             Route::post('/payment/status/request')

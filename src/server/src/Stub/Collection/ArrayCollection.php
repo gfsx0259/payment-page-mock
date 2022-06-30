@@ -26,6 +26,11 @@ class ArrayCollection
         ArrayHelper::setValueByPath($this->data, $key, $value);
     }
 
+    public function remove($key): void
+    {
+        ArrayHelper::removeByPath($this->data, $key);
+    }
+
     public function replace(string $needle, string $value): static
     {
         return (new ReplaceIterator())->replace($this, $needle, $value);

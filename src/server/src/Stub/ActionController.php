@@ -7,8 +7,8 @@ namespace App\Stub;
 use App\Service\WebControllerService;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\ActionFactory;
-use App\Stub\Service\CallbackResolver;
-use App\Stub\Service\OverrideProcessor;
+use App\Stub\Service\Callback\CallbackProcessor;
+use App\Stub\Service\Callback\CallbackResolver;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
 use LogicException;
@@ -21,11 +21,12 @@ use Yiisoft\DataResponse\DataResponseFactoryInterface;
 final class ActionController
 {
     public function __construct(
-        private DataResponseFactoryInterface $responseFactory,
-        private CallbackResolver $callbackResolver,
-        private ActionFactory $actionFactory,
-        private OverrideProcessor $overrideProcessor,
-    ) {}
+    private DataResponseFactoryInterface $responseFactory,
+    private CallbackResolver $callbackResolver,
+    private CallbackProcessor $callbackProcessor,
+    private ActionFactory $actionFactory,
+    ) {
+    }
 
     /**
      * Accept complete request (3ds result) from Payment Page and move cursor
@@ -103,17 +104,18 @@ final class ActionController
             throw new LogicException('State must be exists');
         }
 
-        $currentCallback = $this->callbackResolver->findCurrentByState($state);
-        $callbackCollection = new ArrayCollection($currentCallback->getBody());
-
-        $this->overrideProcessor->process($callbackCollection, $state);
-        $action = $this->actionFactory->make($callbackCollection, $state);
+        $callback = $this->callbackResolver->resolve($state);
+        $action = $this->actionFactory->make(
+            $this->callbackProcessor->process($state, $callback),
+            $state
+        );
 
         if (!$action) {
             throw new LogicException('Action must be exists');
         }
 
         $action->complete(new ArrayCollection($requestData));
+
         $stateManager->save($state);
 
         return $state;

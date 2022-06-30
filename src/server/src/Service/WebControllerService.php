@@ -46,4 +46,10 @@ final class WebControllerService
         return $this->responseFactory
             ->createResponse(Status::NO_CONTENT);
     }
+
+    public function getEmptySuccessResponse(): ResponseInterface
+    {
+        return $this->responseFactory
+            ->createResponse();
+    }
 }

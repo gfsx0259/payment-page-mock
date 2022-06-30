@@ -2,16 +2,17 @@
 
 namespace App\Stub\Session;
 
+use App\Service\Queue\QueueInterface;
+use App\Stub\Job\SendCallbackJob;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class StateManager
 {
-    private CacheInterface $cache;
-
-    public function __construct(CacheInterface $cache)
-    {
-        $this->cache = $cache;
+    public function __construct(
+        private CacheInterface $cache,
+        private QueueInterface $queue
+    ) {
     }
 
     /**
@@ -43,6 +44,7 @@ class StateManager
     {
         $requestId = $state->getRequestId();
         $paymentId = $state->getInitialRequest()->get('general.payment_id');
+        $oldState = $this->get($requestId);
 
         try {
             $this->cache->set(
@@ -55,6 +57,17 @@ class StateManager
             );
         } catch (InvalidArgumentException) {
             return false;
+        }
+
+        // it may be transferred to some observer
+        if (!$oldState || $oldState->getCursor() !== $state->getCursor()) {
+            $this->queue->push(
+                SendCallbackJob::class,
+                [
+                    'requestId' => $requestId,
+                    'delay' => 1000
+                ]
+            );
         }
 
         return true;

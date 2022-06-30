@@ -5,9 +5,15 @@ x-environments: &environments
     MYSQL_DATABASE: "app"
     MYSQL_USER: "user"
     MYSQL_PASSWORD: "password"
-    API_URL: "http://localhost:8082"
     NODE_ENV: "develop"
+    API_URL: "http://localhost:8082"
+    CALLBACK_URL: "http://pp.terminal.test"
+    CALLBACK_SECRET: "JYyVXAtQLQ"
     PHP_IDE_CONFIG: "serverName=docker"
+    RABBITMQ_HOST: "rabbit"
+    RABBITMQ_DEFAULT_USER: "local"
+    RABBITMQ_DEFAULT_PASS: "local"
+    CALLBACKS_QUEUE_NAME: &callback-queue-name "callbacks-queue"
 
 services:
     client:
@@ -29,7 +35,7 @@ services:
             - ./src/server/public:/var/www/public
         links:
             - api
-    api:
+    api: &server_app
         build:
             context: ./src/server
             dockerfile: ../../build/images/server/Dockerfile
@@ -37,12 +43,26 @@ services:
                 UID: 1000
                 GID: 1000
         environment: *environments
+        depends_on:
+            - rabbit
         extra_hosts:
             - "host.docker.internal:host-gateway"
+            - "pp.terminal.test:192.168.20.20"
         volumes:
             - ./src/server:/var/www:rw
+            - npm:/var/www/node_modules:rw
+            - composer:/var/www/vendor:rw
         links:
             - db
+    callbacks_queue_consumer:
+        <<: *server_app
+        restart: on-failure
+        entrypoint: ["php", "yii", "queue/listen", *callback-queue-name]
+    rabbit:
+        image: rabbitmq:latest
+        environment: *environments
+        ports:
+            - "5672:5672"
     db:
         image: mysql:latest
         ports:
@@ -53,3 +73,5 @@ services:
             - dbdata:/var/lib/mysql
 volumes:
     dbdata:
+    npm:
+    composer:
