@@ -35,11 +35,12 @@ jobs:
             UID=1000
             GID=1000
 
-      - name: Build and push UI image
+      - name: Build and push SPA image
         uses: docker/build-push-action@v3
         with:
           context: src/client
           file: build/images/client/Dockerfile
+          target: production
           push: true
           tags: ${{ secrets.DOCKER_HUB_LOGIN }}/payment-page-mock-client:${{ steps.get_version.outputs.VERSION }}
 

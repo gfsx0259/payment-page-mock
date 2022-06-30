@@ -28,7 +28,6 @@ import {
 } from 'vuex';
 
 export default {
-    name: "StubForm",
     methods: {
         ...mapMutations({
             setTitle: 'stub/setFormTitle',
@@ -40,8 +39,8 @@ export default {
     },
     computed: {
         ...mapState({
-            title: state => state.stub.stubForm.title,
-            description: state => state.stub.stubForm.description,
+            title: state => state.stub.form.title,
+            description: state => state.stub.form.description,
         }),
     }
 }

@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit;
 
+use App\Service\RouteMatcher;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Service\Action\AcsAction;
+use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
+use App\Stub\Service\Action\QrCodeAction;
 use App\Stub\Service\ActionFactory;
 use App\Stub\Session\State;
 use App\Tests\UnitTester;
 use Codeception\Test\Unit;
+use Psr\Container\ContainerInterface;
+use Yiisoft\Injector\Injector;
 
 final class ActionFactoryTest extends Unit
 {
@@ -23,7 +28,7 @@ final class ActionFactoryTest extends Unit
 
     public function _before(): void
     {
-        $this->actionFactory = $this->make(ActionFactory::class);
+        $this->actionFactory = $this->makeActionFactory();
         $this->state = $this->tester->makeState();
     }
 
@@ -43,6 +48,22 @@ final class ActionFactoryTest extends Unit
         $this->assertAction(ClarificationAction::class, $action);
     }
 
+    public function testApsActionMaking(): void
+    {
+        $collection = new ArrayCollection(['return_url' => ['url' => 'test']]);
+        $action = $this->actionFactory->make($collection, $this->state);
+
+        $this->assertAction(ApsAction::class, $action);
+    }
+
+    public function testQrCodeActionMaking(): void
+    {
+        $collection = new ArrayCollection(['display_data' => [['type' => 'qr_data']]]);
+        $action = $this->actionFactory->make($collection, $this->state);
+
+        $this->assertAction(QrCodeAction::class, $action);
+    }
+
     public function testEmptyParamsHandling(): void
     {
         $collection = new ArrayCollection([]);
@@ -55,5 +76,26 @@ final class ActionFactoryTest extends Unit
     {
         $this->assertInstanceOf($classExpected, $instance);
         $this->assertInstanceOf(AbstractAction::class, $instance);
+    }
+
+    private function makeActionFactory(): ActionFactory
+    {
+        $stubs = [RouteMatcher::class => $this->make(RouteMatcher::class)];
+
+        return $this->make(ActionFactory::class, ['injector' => $this->makeInjector($stubs)]);
+    }
+
+    private function makeInjector(array $instances = []): Injector
+    {
+        $container = $this->makeEmpty(
+            ContainerInterface::class,
+            [
+                'get' => function (string $className) use ($instances) {
+                    return $instances[$className];
+                }
+            ]
+        );
+
+        return new Injector($container);
     }
 }

@@ -116,7 +116,11 @@ return [
                     Route::methods([Method::OPTIONS, Method::POST], '/stub')
                         ->name('api/stub/create')
                         ->action([ApiStubController::class, 'create']),
+                    Route::methods([Method::PUT], '/stub')
+                        ->name('api/stub/update')
+                        ->action([ApiStubController::class, 'update']),
                     Route::methods([Method::OPTIONS, Method::DELETE], '/stub/{id}')
+                        ->name('api/stub/delete')
                         ->action([ApiStubController::class, 'delete']),
                     Route::methods([Method::OPTIONS, Method::POST], '/stub/setDefault')
                         ->name('api/stub/setDefault')
@@ -161,9 +165,15 @@ return [
             Route::methods([Method::GET, Method::POST], '/renderAps/{uniqueKey}')
                 ->name('actions/renderAps')
                 ->action([DummyPageController::class, 'renderAps']),
+            Route::methods([Method::GET], '/renderConfirmationQr/{uniqueKey}')
+                ->name('actions/renderConfirmationQr')
+                ->action([DummyPageController::class, 'renderConfirmationQr']),
             Route::post('/completeAps')
                 ->name('actions/completeAps')
                 ->action([ActionController::class, 'completeAps']),
+            Route::post('/completeConfirmationQr')
+                ->name('actions/completeConfirmationQr')
+                ->action([ActionController::class, 'completeConfirmationQr']),
         ),
 
     // Blog routes

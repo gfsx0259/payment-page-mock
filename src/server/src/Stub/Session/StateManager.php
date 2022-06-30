@@ -31,6 +31,15 @@ class StateManager
         }
     }
 
+    public function generateAccessKey(State $state): string
+    {
+        $uniqueKey = md5($state->getRequestId() . $state->getCursor());
+
+        $this->link($uniqueKey, $state);
+
+        return $uniqueKey;
+    }
+
     public function save(State $state): bool
     {
         $requestId = $state->getRequestId();
@@ -59,6 +68,22 @@ class StateManager
                     'delay' => 1000
                 ]
             );
+        }
+
+        return true;
+    }
+
+    private function link(string $key, State $state): bool
+    {
+        $requestId = $state->getRequestId();
+
+        try {
+            $this->cache->set(
+                $key,
+                $requestId
+            );
+        } catch (InvalidArgumentException) {
+            return false;
         }
 
         return true;

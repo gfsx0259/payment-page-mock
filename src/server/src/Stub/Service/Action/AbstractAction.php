@@ -14,6 +14,8 @@ abstract class AbstractAction
     ) {}
 
     /**
+     * Gets unique key for this action
+     *
      * @param ArrayCollection|null $completeRequest
      * @return string
      * @throws ActionException

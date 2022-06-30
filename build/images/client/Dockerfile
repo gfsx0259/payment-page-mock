@@ -1,13 +1,27 @@
-FROM node:slim
-
-WORKDIR /home/node/app
+FROM node:alpine as base
+WORKDIR /home/node/app/
 
 COPY package*.json ./
-RUN npm install
+EXPOSE 8080
 
+FROM base as builder
+
+RUN npm install --only=production
+RUN cp -R node_modules production_dependencies
+
+RUN npm install
 COPY . ./
 RUN npm run build
 
-EXPOSE 8080
+FROM base as production
+
+COPY --from=builder /home/node/app/production_dependencies ./node_modules
+COPY --from=builder /home/node/app/dist ./dist
 
 CMD npm run start
+
+FROM base as development
+
+COPY --from=builder /home/node/app/ ./
+
+CMD npm run serve

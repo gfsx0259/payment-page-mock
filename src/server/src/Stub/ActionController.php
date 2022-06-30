@@ -21,11 +21,12 @@ use Yiisoft\DataResponse\DataResponseFactoryInterface;
 final class ActionController
 {
     public function __construct(
-        private DataResponseFactoryInterface $responseFactory,
-        private CallbackResolver $callbackResolver,
-        private CallbackProcessor $callbackProcessor,
-        private ActionFactory $actionFactory,
-    ) {}
+    private DataResponseFactoryInterface $responseFactory,
+    private CallbackResolver $callbackResolver,
+    private CallbackProcessor $callbackProcessor,
+    private ActionFactory $actionFactory,
+    ) {
+    }
 
     /**
      * Accept complete request (3ds result) from Payment Page and move cursor
@@ -38,13 +39,7 @@ final class ActionController
     ): ResponseInterface {
         $body = json_decode($request->getBody()->getContents(), true);
 
-        if (!$state = $stateManager->get(ArrayHelper::getValueByPath($body, 'general.payment_id'))) {
-            throw new LogicException('State must be exists');
-        }
-
-        $this->completeAction($state, new ArrayCollection($body));
-
-        $stateManager->save($state);
+        $this->completeAction($stateManager, $body, 'general.payment_id');
 
         return $this->responseFactory->createResponse();
     }
@@ -58,17 +53,23 @@ final class ActionController
         ServerRequestInterface $request,
         WebControllerService $webControllerService,
         StateManager $stateManager,
-    ): ResponseInterface
-    {
-        $body = $request->getParsedBody();
+    ): ResponseInterface {
+        $state = $this->completeAction($stateManager, $request->getParsedBody(), 'uniqueKey');
 
-        if (!$state = $stateManager->get(ArrayHelper::getValue($body, 'uniqueKey'))) {
-            throw new LogicException('State must be exists');
-        }
+        return $webControllerService->getRedirectResponseByUrl(
+            $state->getInitialRequest()->get('return_url.success')
+        );
+    }
 
-        $this->completeAction($state, new ArrayCollection($body));
-
-        $stateManager->save($state);
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function completeConfirmationQr(
+        ServerRequestInterface $request,
+        WebControllerService $webControllerService,
+        StateManager $stateManager,
+    ): ResponseInterface {
+        $state = $this->completeAction($stateManager, $request->getParsedBody(), 'uniqueKey');
 
         return $webControllerService->getRedirectResponseByUrl(
             $state->getInitialRequest()->get('return_url.success')
@@ -83,14 +84,7 @@ final class ActionController
         StateManager $stateManager,
     ): ResponseInterface {
         $body = json_decode($request->getBody()->getContents(), true);
-
-        if (!$state = $stateManager->get(ArrayHelper::getValueByPath($body, 'general.payment_id'))) {
-            throw new LogicException('State must be exists');
-        }
-
-        $this->completeAction($state, new ArrayCollection($body));
-
-        $stateManager->save($state);
+        $state = $this->completeAction($stateManager, $body, 'general.payment_id');
 
         return $this->responseFactory
             ->createResponse([
@@ -101,8 +95,15 @@ final class ActionController
             ]);
     }
 
-    private function completeAction(State $state, ArrayCollection $bodyCollection): void
-    {
+    private function completeAction(
+        StateManager $stateManager,
+        array $requestData,
+        string $identityKeyName
+    ): State {
+        if (!$state = $stateManager->get(ArrayHelper::getValueByPath($requestData, $identityKeyName))) {
+            throw new LogicException('State must be exists');
+        }
+
         $callback = $this->callbackResolver->resolve($state);
         $action = $this->actionFactory->make(
             $this->callbackProcessor->process($state, $callback),
@@ -113,6 +114,10 @@ final class ActionController
             throw new LogicException('Action must be exists');
         }
 
-        $action->complete($bodyCollection);
+        $action->complete(new ArrayCollection($requestData));
+
+        $stateManager->save($state);
+
+        return $state;
     }
 }
