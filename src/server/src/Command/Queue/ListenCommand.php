@@ -15,14 +15,10 @@ use Yiisoft\Yii\Console\ExitCode;
 
 final class ListenCommand extends Command
 {
-    private QueueInterface $queue;
-
     protected static $defaultName = 'queue/listen';
 
-    public function __construct(QueueInterface $queue)
+    public function __construct(private QueueInterface $queue)
     {
-        $this->queue = $queue;
-
         parent::__construct();
     }
 

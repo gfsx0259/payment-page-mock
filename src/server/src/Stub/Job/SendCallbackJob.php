@@ -7,6 +7,7 @@ use App\Stub\Service\Callback\CallbackProcessor;
 use App\Stub\Service\Callback\CallbackResolver;
 use App\Stub\Service\Callback\CallbackSender;
 use App\Stub\Session\StateManager;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class SendCallbackJob extends AbstractJob
 {
@@ -21,7 +22,7 @@ class SendCallbackJob extends AbstractJob
 
     /**
      * @inheritDoc
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function run(): void
     {

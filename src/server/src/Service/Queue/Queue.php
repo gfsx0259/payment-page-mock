@@ -6,6 +6,8 @@ use Bunny\Channel;
 use Bunny\Client;
 use Bunny\Message;
 use Exception;
+use Psr\Container\ContainerExceptionInterface;
+use ReflectionException;
 use Yiisoft\Injector\Injector;
 use Psr\Log\LoggerInterface;
 
@@ -14,25 +16,16 @@ use Psr\Log\LoggerInterface;
  */
 class Queue implements QueueInterface
 {
-    private Client $client;
+    private const
+        JOB_CLASS_NAME = 'className',
+        JOB_DATA = 'data';
 
-    private Injector $injector;
-
-    private LoggerInterface $logger;
-
-    private array $config;
-
-    private const JOB_CLASS_NAME = 'className';
-
-    private const JOB_DATA = 'data';
-
-    public function __construct(Client $client, Injector $injector, LoggerInterface $logger, array $config)
-    {
-        $this->injector = $injector;
-        $this->logger = $logger;
-        $this->config = $config;
-        $this->client = $client;
-    }
+    public function __construct(
+        private Client $client,
+        private Injector $injector,
+        private LoggerInterface $logger,
+        private array $config
+    ) {}
 
     /**
      * @inheritDoc
@@ -108,7 +101,7 @@ class Queue implements QueueInterface
         if (!$this->client->isConnected()) {
             try {
                 $this->client->connect();
-            } catch (Exception $exception) {
+            } catch (Exception) {
                 return false;
             }
         }
@@ -133,8 +126,8 @@ class Queue implements QueueInterface
     }
 
     /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \ReflectionException
+     * @throws ContainerExceptionInterface
+     * @throws ReflectionException
      * @throws QueueException
      */
     private function makeJob(string $jobClass, array $params): JobInterface
@@ -176,6 +169,9 @@ class Queue implements QueueInterface
         return $delayedQueueName;
     }
 
+    /**
+     * @throws Exception
+     */
     private function makeChanel(string $queueName): Channel
     {
         if (!$this->client->isConnected()) {

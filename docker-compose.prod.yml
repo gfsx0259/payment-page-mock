@@ -43,7 +43,7 @@ services:
         image: rabbitmq:latest
         environment: *environments
         ports:
-            - 5672:5672
+            - "5672:5672"
     db:
         image: mysql:latest
         ports:
