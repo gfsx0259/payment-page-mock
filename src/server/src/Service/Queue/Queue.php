@@ -5,6 +5,7 @@ namespace App\Service\Queue;
 use Bunny\Channel;
 use Bunny\Client;
 use Bunny\Message;
+use Cycle\ORM\ORMInterface;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use ReflectionException;
@@ -24,6 +25,7 @@ class Queue implements QueueInterface
         private Client $client,
         private Injector $injector,
         private LoggerInterface $logger,
+        private ORMInterface $orm,
         private array $config
     ) {}
 
@@ -62,6 +64,7 @@ class Queue implements QueueInterface
                 } else {
                     $channel->nack($message);
                 }
+                $this->orm->getHeap()->clean();
 
                 if ($callback) {
                     $callback($success, $job);

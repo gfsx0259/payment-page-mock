@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Service\Queue\QueueInterface;
-use App\Stub\Job\SendCallbackJob;
 use App\ViewInjection\CommonViewInjection;
 use App\ViewInjection\LayoutViewInjection;
 use App\ViewInjection\LinkTagsViewInjection;
@@ -140,6 +138,7 @@ return [
             'router/list' => App\Command\Router\ListCommand::class,
             'translator/translate' => App\Command\Translation\TranslateCommand::class,
             'queue/listen' => App\Command\Queue\ListenCommand::class,
+            'queue/sendCallback' => App\Command\Queue\SendCallbackCommand::class,
         ],
     ],
 
