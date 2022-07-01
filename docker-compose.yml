@@ -14,6 +14,8 @@ x-environments: &environments
     RABBITMQ_DEFAULT_USER: "local"
     RABBITMQ_DEFAULT_PASS: "local"
     CALLBACKS_QUEUE_NAME: &callback-queue-name "callbacks-queue"
+    MEMCACHED_HOST: "memcached"
+    MEMCACHED_PORT: 11211
 
 services:
     client:
@@ -59,8 +61,8 @@ services:
     rabbit:
         image: rabbitmq:latest
         environment: *environments
-        ports:
-            - "5672:5672"
+    memcached:
+        image: memcached:latest
     db:
         image: mysql:latest
         ports:
