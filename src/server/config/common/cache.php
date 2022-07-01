@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace App\Provider;
 
 use Psr\SimpleCache\CacheInterface;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface as YiiCacheInterface;
-use Yiisoft\Cache\File\FileCache;
+use Yiisoft\Cache\Memcached\Memcached;
 
 return [
-    CacheInterface::class => FileCache::class,
-
+    CacheInterface::class => new Memcached('', [
+        [
+            'host' => ArrayHelper::getValue($_ENV, 'MEMCACHED_HOST'),
+            'port' => ArrayHelper::getValue($_ENV, 'MEMCACHED_PORT'),
+        ],
+    ]),
     YiiCacheInterface::class => Cache::class,
 ];
