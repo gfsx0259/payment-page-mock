@@ -38,7 +38,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
-INSERT INTO `route` VALUES (1,'card/sale','Card integration','card.svg',1),(2,'wallet/kakaopay/sale','QR code integration','kakaopay.svg',3),(22,'wallet/gcash/sale','Redirect integration','gcash.svg',2),(23,'pix/sale','','wallet-pix.svg',3);
+INSERT INTO `route` VALUES (1,'card/sale','Card integration','card.svg',1),(2,'wallet/kakaopay/sale','QR code integration','kakaopay.svg',3),(22,'wallet/gcash/sale','Redirect integration','gcash.svg',2),(23,'pix/sale','','pix.svg',3);
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
