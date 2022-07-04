@@ -13,15 +13,4 @@ use Cycle\ORM\Select;
  */
 final class CallbackRepository extends Select\Repository
 {
-    /**
-     * @param int $stubId
-     * @return Callback[]
-     */
-    public function findByStub(int $stubId): array
-    {
-        return $this->select()
-            ->where(['stub_id' => $stubId])
-            ->orderBy('order')
-            ->fetchAll();
-    }
 }

@@ -25,8 +25,7 @@ final class StubController
         private CallbackProcessor $callbackProcessor,
         private CallbackResolver $callbackResolver,
         private StateManager $stateManager,
-    ) {
-    }
+    ) {}
 
     /**
      * @param ServerRequestInterface $request

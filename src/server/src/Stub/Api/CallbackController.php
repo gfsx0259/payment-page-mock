@@ -7,6 +7,7 @@ namespace App\Stub\Api;
 use App\Service\WebControllerService;
 use App\Stub\Entity\Callback;
 use App\Stub\Repository\CallbackRepository;
+use App\Stub\Repository\StubRepository;
 use Cycle\ORM\Select\Repository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,6 +24,7 @@ final class CallbackController extends EntityController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private CallbackRepository $callbackRepository,
+        private StubRepository $stubRepository,
     ) {}
 
     protected function getRepository(): Repository
@@ -34,18 +36,10 @@ final class CallbackController extends EntityController
         CurrentRoute $route
     ): ResponseInterface
     {
-        $stubId = (int)$route->getArgument('stubId');
-
-        $callbacks = [];
-        foreach ($this->callbackRepository->findByStub($stubId) as $callback) {
-            $callbacks[] = [
-                'id' => $callback->getId(),
-                'body' => $callback->getBody(),
-            ];
-        }
+        $stub = $this->stubRepository->findByPK((int)$route->getArgument('stubId'));
 
         return $this->responseFactory
-            ->createResponse($callbacks);
+            ->createResponse($stub->getCallbacks()->map(fn ($callback) => $callback->toArray()));
     }
 
     /**
@@ -81,9 +75,8 @@ final class CallbackController extends EntityController
     {
         $orderMap = array_flip(json_decode($request->getBody()->getContents()));
 
-        $callbacks = $this->callbackRepository->findByStub(
-            (int)$route->getArgument('stubId')
-        );
+        $stub = $this->stubRepository->findByPK((int)$route->getArgument('stubId'));
+        $callbacks = $stub->getCallbacks();
 
         foreach ($callbacks as $callback) {
             $callback->setOrder($orderMap[$callback->getId()]);
