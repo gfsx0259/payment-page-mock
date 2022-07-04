@@ -7,6 +7,7 @@
      @add="add"
      @update="update"
      @remove="remove"
+     @changeOrder="changeOrder"
      v-if="!isLoading"
    />
 </template>
@@ -36,6 +37,7 @@ export default {
       fetch: 'callback/fetch',
       update: 'callback/update',
       remove: 'callback/remove',
+      changeOrder: 'callback/changeOrder',
     }),
   },
   computed: {

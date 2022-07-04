@@ -1,20 +1,36 @@
 <template>
   <CButton color="dark" @click="onAdd">Add callback</CButton>
-  <CRow>
-    <CCol md="6" v-for="callback in callbacks">
-      <vue-json-editor
-        v-bind:value="callback.body"
-        @json-save="onUpdate(callback.id, $event)"
-        @json-remove="onRemove(callback.id)"
-        :show-btns=true
-        mode="code"
-      />
-    </CCol>
-  </CRow>
+    <draggable
+        :list="callbacks"
+        item-key="id"
+        animation="400"
+        @end="onChangeOrder"
+        tag="CRow"
+    >
+      <template #item="{element}">
+        <CCol md="6" class="position-relative">
+          <vue-json-editor
+              v-bind:value="element.body"
+              @json-save="onUpdate(element.id, $event)"
+              @json-remove="onRemove(element.id)"
+              show-btns
+              mode="code"
+          />
+          <CIcon
+              v-if="element.id"
+              class="icon-move"
+              icon="cilCursorMove"
+              size="xl"
+          />
+        </CCol>
+      </template>
+    </draggable>
 </template>
 
 <script>
+import _ from 'lodash'
 import vueJsonEditor from 'vue-json-editor'
+import draggable from 'vuedraggable';
 
 export default {
   props: {
@@ -25,6 +41,7 @@ export default {
   },
   components: {
     vueJsonEditor,
+    draggable,
   },
   methods: {
     onAdd() {
@@ -37,6 +54,9 @@ export default {
       if (confirm('Are you sure?')) {
         this.$emit('remove', id);
       }
+    },
+    onChangeOrder() {
+      this.$emit('changeOrder', _.map(this.callbacks, 'id'));
     }
   },
 }
@@ -70,5 +90,11 @@ export default {
 }
 .jsoneditor-btns .json-remove-btn:hover {
   background-color: #e96d6d;
+}
+.icon-move {
+  position: absolute;
+  cursor: pointer;
+  bottom: 6px;
+  right: 224px;
 }
 </style>

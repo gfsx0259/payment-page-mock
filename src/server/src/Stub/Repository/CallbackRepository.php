@@ -19,6 +19,9 @@ final class CallbackRepository extends Select\Repository
      */
     public function findByStub(int $stubId): array
     {
-        return $this->select()->where(['stub_id' => $stubId])->fetchAll();
+        return $this->select()
+            ->where(['stub_id' => $stubId])
+            ->orderBy('order')
+            ->fetchAll();
     }
 }
