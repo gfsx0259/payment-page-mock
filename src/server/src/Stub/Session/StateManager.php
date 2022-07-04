@@ -12,8 +12,7 @@ class StateManager
     public function __construct(
         private CacheInterface $cache,
         private QueueInterface $queue
-    ) {
-    }
+    ) {}
 
     /**
      * @throws InvalidArgumentException
@@ -31,6 +30,9 @@ class StateManager
         }
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function generateAccessKey(State $state): string
     {
         $uniqueKey = md5($state->getRequestId() . $state->getCursor());
@@ -73,19 +75,15 @@ class StateManager
         return true;
     }
 
-    private function link(string $key, State $state): bool
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function link(string $key, State $state): void
     {
         $requestId = $state->getRequestId();
-
-        try {
-            $this->cache->set(
-                $key,
-                $requestId
-            );
-        } catch (InvalidArgumentException) {
-            return false;
-        }
-
-        return true;
+        $this->cache->set(
+            $key,
+            $requestId
+        );
     }
 }
