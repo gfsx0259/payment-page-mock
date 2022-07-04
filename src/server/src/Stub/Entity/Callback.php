@@ -17,6 +17,9 @@ class Callback
     #[Column(type: 'integer')]
     private int $stub_id;
 
+    #[Column(type: 'integer')]
+    private int $order;
+
     #[Column(type: 'json')]
     private string $body;
 
@@ -46,5 +49,13 @@ class Callback
     public function setBody(array $body): void
     {
         $this->body = json_encode($body);
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setOrder(int $order): void
+    {
+        $this->order = $order;
     }
 }
