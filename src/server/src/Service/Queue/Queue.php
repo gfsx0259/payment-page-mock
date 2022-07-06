@@ -2,9 +2,6 @@
 
 namespace App\Service\Queue;
 
-use Bunny\Channel;
-use Bunny\Client;
-use Bunny\Message;
 use Cycle\ORM\ORMInterface;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -22,11 +19,11 @@ class Queue implements QueueInterface
         JOB_DATA = 'data';
 
     public function __construct(
-        private Client $client,
+        private BrokerInterface $broker,
         private Injector $injector,
         private LoggerInterface $logger,
         private ORMInterface $orm,
-        private array $config
+        private array $mapping
     ) {}
 
     /**
@@ -36,11 +33,10 @@ class Queue implements QueueInterface
      */
     public function subscribe(string $queueName, ?callable $callback = null): void
     {
-        $chanel = $this->makeChanel($queueName);
-
-        $chanel->run(
-            function (Message $message, Channel $channel) use ($callback) {
-                $content = json_decode($message->content, true);
+        $this->broker->listen(
+            $queueName,
+            function (string $message) use ($callback): bool {
+                $content = json_decode($message, true);
                 $jobClassName = $content[self::JOB_CLASS_NAME];
                 $jobData = $content[self::JOB_DATA];
 
@@ -59,18 +55,14 @@ class Queue implements QueueInterface
                     $this->logger->error($exception->getMessage());
                 }
 
-                if ($success) {
-                    $channel->ack($message);
-                } else {
-                    $channel->nack($message);
-                }
-                $this->orm->getHeap()->clean();
-
                 if ($callback) {
                     $callback($success, $job);
                 }
-            },
-            $queueName
+
+                $this->orm->getHeap()->clean();
+
+                return $success;
+            }
         );
     }
 
@@ -80,36 +72,18 @@ class Queue implements QueueInterface
     public function push(string $jobClass, array $params = []): void
     {
         $job = $this->makeJob($jobClass, $params);
-        $delay = $job->getDelay();
-        $queueName = $this->getQueueName($jobClass);
-        $chanel = $this->makeChanel($queueName);
-        $destinationQueueName = $delay ? $this->declareDelayedQueue($chanel, $queueName, $delay) : $queueName;
+        $message = json_encode([
+            self::JOB_CLASS_NAME => $job::class,
+            self::JOB_DATA => $job->serialize()
+        ]);
 
-        $chanel->publish(
-            json_encode([
-                self::JOB_CLASS_NAME => $job::class,
-                self::JOB_DATA => $job->serialize()
-            ]),
-            [],
-            '',
-            $destinationQueueName
+        $this->broker->send(
+            $this->getQueueName($jobClass),
+            $message,
+            [
+                'delay' => $job->getDelay()
+            ]
         );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function checkConnection(): bool
-    {
-        if (!$this->client->isConnected()) {
-            try {
-                $this->client->connect();
-            } catch (Exception) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -119,13 +93,13 @@ class Queue implements QueueInterface
      */
     private function getQueueName(string $jobClass): string
     {
-        foreach ($this->config as $queueConfig) {
-            if (in_array($jobClass, $queueConfig['jobs'])) {
-                return $queueConfig['name'];
+        foreach ($this->mapping as $route) {
+            if (in_array($jobClass, $route['jobs'])) {
+                return $route['queue_name'];
             }
         }
 
-        throw new QueueException("Unknown job ($jobClass). Please define it in config/params.php");
+        throw new QueueException("Unknown job ($jobClass). Please define it in config/common/queue.php");
     }
 
     /**
@@ -148,43 +122,11 @@ class Queue implements QueueInterface
         return $job;
     }
 
-    private function declareDelayedQueue(Channel $channel, string $queueName, int $delay): string
-    {
-        $delayedQueueName = "$queueName-$delay";
-
-        $channel->queueDeclare(
-            $delayedQueueName,
-            false,
-            false,
-            false,
-            true,
-            false,
-            [
-                # set the dead-letter exchange to the default queue
-                'x-dead-letter-exchange' => '',
-                # when the message expires, set change the routing key into the destination queue name
-                'x-dead-letter-routing-key' => $queueName,
-                # the time in milliseconds to keep the message in the queue
-                'x-message-ttl' => $delay
-            ]
-        );
-
-        return $delayedQueueName;
-    }
-
     /**
-     * @throws Exception
+     * @inheritDoc
      */
-    private function makeChanel(string $queueName): Channel
+    public function checkConnection(): bool
     {
-        if (!$this->client->isConnected()) {
-            $this->client->connect();
-        }
-
-        $chanel = $this->client->channel();
-
-        $chanel->queueDeclare($queueName);
-
-        return $chanel;
+        return $this->broker->checkConnection();
     }
 }
