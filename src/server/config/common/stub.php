@@ -5,6 +5,8 @@ declare(strict_types=1);
 /** @var array $params */
 
 use App\Stub\Service\Callback\CallbackSender;
+use App\Stub\Service\Callback\CallbackSenderInterface;
+use App\Stub\Service\Callback\CallbackSenderMock;
 use App\Stub\Service\Callback\OverrideProcessor;
 use App\Stub\Session\StateManager;
 use GuzzleHttp\Client;
@@ -21,7 +23,11 @@ return [
         $stateManager,
         $params['host'],
     ),
-    CallbackSender::class => function (LoggerInterface $logger) {
+    CallbackSenderInterface::class => function (LoggerInterface $logger) {
+        if (ArrayHelper::getValue($_ENV, 'DISABLE_SENDING_CALLBACKS')) {
+            return new CallbackSenderMock($logger);
+        }
+
         $url = ArrayHelper::getValue($_ENV, 'CALLBACK_URL');
         $secret = ArrayHelper::getValue($_ENV, 'CALLBACK_SECRET');
 
@@ -32,6 +38,7 @@ return [
         $client = new Client([
             'base_uri' => $url . '/',
         ]);
+
         return new CallbackSender(
             $client,
             $logger,

@@ -5,7 +5,7 @@ namespace App\Stub\Job;
 use App\Service\Queue\AbstractJob;
 use App\Stub\Service\Callback\CallbackProcessor;
 use App\Stub\Service\Callback\CallbackResolver;
-use App\Stub\Service\Callback\CallbackSender;
+use App\Stub\Service\Callback\CallbackSenderInterface;
 use App\Stub\Session\StateManager;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -15,7 +15,7 @@ class SendCallbackJob extends AbstractJob
 
     public function __construct(
         private StateManager $stateManager,
-        private CallbackSender $callbackSender,
+        private CallbackSenderInterface $callbackSender,
         private CallbackResolver $callbackResolver,
         private CallbackProcessor $callbackProcessor
     ) {}

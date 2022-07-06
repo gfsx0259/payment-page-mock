@@ -8,7 +8,7 @@ use itechpsp\SignatureHandler;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class CallbackSender
+class CallbackSender implements CallbackSenderInterface
 {
     private const SIGNATURE_PATH = 'general.signature';
 
