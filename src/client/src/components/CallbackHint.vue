@@ -15,6 +15,18 @@
         />
       </COffcanvasHeader>
       <COffcanvasBody>
+        <h5>General</h5>
+        <p>To emulate some flow you might need auto generated values or producing some action at third-party service. In these purposes we added template variables and dummy pages. Set of template variables is fixed and fully described below.</p>
+        <h5>Example of using template variables in a callback:</h5>
+        <p>Let's imagine that there is a flow in which we need to have some unique value accessed by `some_id` key. We have the template variable called `SOME_ID`, for example. Using of this one will look like:</p>
+        <pre v-highlightjs><code class="javascript">{
+  ...
+  "some_id": "&#123;&#123;SOME_ID&#125;&#125;",
+  ...
+}</code></pre>
+        <p>When some service will request this callback, the value accessed by `some_id` key will be automatically replaced on real value by rules of the template variable `SOME_ID`.</p>
+        <h5>More details about every template variable and flow they can be used in:</h5>
+        <p class="fs-5">Common</p>
         <CTable hover bordered>
           <CTableBody>
             <CTableRow>
@@ -51,12 +63,14 @@
           <li>Dummy accepts <b>awaiting 3ds result</b> callback and remember action at dummy transaction state</li>
           <li>Dummy replies <b>awaiting 3ds result</b> callback with structure:
           <pre class="m-0" v-highlightjs><code class="javascript">{
+  ...
   "acs": {
     "pa_req": "string",
     "md": "string",
-    "acs_url": "{{"ACS_URL"}}",
-    "term_url": "{{"TERM_URL"}}"
+    "acs_url": "&#123;&#123;ACS_URL&#125;&#125;",
+    "term_url": "&#123;&#123;TERM_URL&#125;&#125;"
   }
+  ...
 }</code></pre>
           </li>
           <li>Payment Page goes to dummy <b>ACS_URL</b> from callback with appropriate data</li>
@@ -82,11 +96,13 @@
           <li>Dummy accepts <b>awaiting redirect result</b> callback and remember action at dummy transaction state</li>
           <li>Dummy replies <b>awaiting redirect result</b> callback with structure:
             <pre class="m-0" v-highlightjs><code class="javascript">{
+  ...
   "return_url": {
     "method": "string",
     "body": [],
-    "url": "{{"APS_URL"}}"
+    "url": "&#123;&#123;APS_URL&#125;&#125;"
   }
+  ...
 }</code></pre>
           </li>
           <li>Payment Page goes to dummy <b>APS_URL</b> from callback with appropriate data</li>
@@ -100,14 +116,58 @@
           <CTableBody>
             <CTableRow>
               <CTableDataCell>
-                <CopyElement>QR_URL</CopyElement>
+                <CopyElement>QR_ACCEPT_LINK</CopyElement>
               </CTableDataCell>
               <CTableDataCell>QR emulated page provided by mock</CTableDataCell>
+              <CTableDataCell>display_data[0].data</CTableDataCell>
             </CTableRow>
           </CTableBody>
         </CTable>
+        <ol>
+          <li>Payment Page sends initial request</li>
+          <li>Dummy accepts <b>awaiting customer action</b> callback and remember action at dummy transaction state</li>
+          <li>Dummy replies <b>awaiting customer action</b> callback with structure:
+            <pre class="m-0" v-highlightjs><code class="javascript">{
+  ...
+  "display_data": [
+    {
+      "type": "qr_data",
+      "title": "QR code",
+      "data": "&#123;&#123;QR_ACCEPT_LINK&#125;&#125;"
+    }
+  ],
+  ...
+}</code></pre>
+          </li>
+          <li>User goes to dummy <b>QR_ACCEPT_LINK</b> from callback</li>
+          <li>User sends form on QR emulated page back to yourself</li>
+          <li>Dummy completes action at store and make redirect to Payment Page return url</li>
+          <li>Payment page closes QR window and await next callback from dummy</li>
+        </ol>
 
         <p class="fs-5">Clarification action flow</p>
+        <ol>
+          <li>Payment Page sends initial request</li>
+          <li>Dummy accepts <b>awaiting clarification</b> callback and remember action at dummy transaction state</li>
+          <li>Dummy replies <b>awaiting clarification</b> callback with structure:
+            <pre class="m-0" v-highlightjs><code class="javascript">{
+  ...
+  "clarification_fields": {
+    "avs_data": [
+      "avs_post_code",
+      "avs_street_address"
+    ]
+  },
+  ...
+}</code></pre>
+          </li>
+          <li>Payment Page shows fields <b>avs_post_code</b>, <b>avs_street_address</b> to user</li>
+          <li>User fills these fields</li>
+          <li>Payment page send them to dummy</li>
+          <li>Dummy completes clarification and switches to next callback</li>
+          <li>Payment page waits next callback from dummy</li>
+        </ol>
+
       </COffcanvasBody>
     </COffcanvas>
 </template>
