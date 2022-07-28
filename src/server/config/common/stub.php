@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 /** @var array $params */
 
+use App\Service\QrGenerator;
 use App\Stub\Service\Callback\CallbackSender;
 use App\Stub\Service\Callback\CallbackSenderInterface;
 use App\Stub\Service\Callback\CallbackSenderMock;
@@ -17,10 +18,12 @@ use Yiisoft\Router\UrlGeneratorInterface;
 return [
     OverrideProcessor::class => static fn (
         UrlGeneratorInterface $urlGenerator,
-        StateManager $stateManager
+        StateManager $stateManager,
+        QrGenerator $qrGenerator
     ) => new OverrideProcessor(
         $urlGenerator,
         $stateManager,
+        $qrGenerator,
         $params['host'],
     ),
     CallbackSenderInterface::class => function (LoggerInterface $logger) {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit;
 
 use App\Stub\Collection\ArrayCollection;
-use App\Stub\Service\Action\QrCodeAction;
+use App\Stub\Service\Action\QrDataAction;
 use App\Service\RouteMatcher;
 use App\Stub\Service\ActionException;
 use App\Stub\Session\State;
@@ -70,7 +70,7 @@ final class QrCodeActionTest extends Unit
         State $state,
         ?string $expectingKey = null,
         array $callback = self::CALLBACK
-    ): QrCodeAction {
+    ): QrDataAction {
         $that = $this;
         $collection = new ArrayCollection($callback);
         $routeMatcher = $this->make(RouteMatcher::class, [
@@ -82,6 +82,6 @@ final class QrCodeActionTest extends Unit
             }
         ]);
 
-        return new QrCodeAction($collection, $state, $routeMatcher);
+        return new QrDataAction($collection, $state, $routeMatcher);
     }
 }
