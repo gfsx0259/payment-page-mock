@@ -10,7 +10,8 @@ GITHUB_RAW := https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main
 RUNTIME_DIR := runtime
 PUBLIC_DIR := src/server/public
 SHARED_DIRS := $(RUNTIME_DIR)/assets $(RUNTIME_DIR)/uploads
-ROUTE_IMAGES := card gcash kakaopay pix
+ROUTE_IMAGES := card gcash kakaopay pix neofinance
+APP_TABLES := route callback stub resource
 
 install: prepare pull deploy
 
@@ -42,7 +43,7 @@ utils_db_load:
 	sudo docker exec -i $(CONTAINER_ID) mysql -uuser -ppassword app < runtime/app.sql
 
 utils_db_dump:
-	docker-compose exec db bash -c "mysqldump --no-tablespaces -proot app route callback stub -r "/docker-entrypoint-initdb.d/app.sql""
+	docker-compose exec db bash -c "mysqldump --no-tablespaces -proot app $(APP_TABLES) -r "/docker-entrypoint-initdb.d/app.sql""
 
 utils_images_load_dev:
 	mkdir -p $(CURRENT_DIR)/$(PUBLIC_DIR)/uploads/route

@@ -10,7 +10,8 @@ use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Service\Action\AcsAction;
 use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
-use App\Stub\Service\Action\QrCodeAction;
+use App\Stub\Service\Action\QrDataAction;
+use App\Stub\Service\Action\QrImageAction;
 use App\Stub\Service\ActionFactory;
 use App\Stub\Session\State;
 use App\Tests\UnitTester;
@@ -56,12 +57,20 @@ final class ActionFactoryTest extends Unit
         $this->assertAction(ApsAction::class, $action);
     }
 
-    public function testQrCodeActionMaking(): void
+    public function testQrDataActionMaking(): void
     {
         $collection = new ArrayCollection(['display_data' => [['type' => 'qr_data']]]);
         $action = $this->actionFactory->make($collection, $this->state);
 
-        $this->assertAction(QrCodeAction::class, $action);
+        $this->assertAction(QrDataAction::class, $action);
+    }
+
+    public function testQrImageActionMaking(): void
+    {
+        $collection = new ArrayCollection(['display_data' => [['type' => 'qr_img']]]);
+        $action = $this->actionFactory->make($collection, $this->state);
+
+        $this->assertAction(QrImageAction::class, $action);
     }
 
     public function testEmptyParamsHandling(): void

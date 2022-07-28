@@ -118,7 +118,14 @@
               <CTableDataCell>
                 <CopyElement>QR_ACCEPT_LINK</CopyElement>
               </CTableDataCell>
-              <CTableDataCell>QR emulated page provided by mock</CTableDataCell>
+              <CTableDataCell>Link to QR emulated page</CTableDataCell>
+              <CTableDataCell>display_data[0].data</CTableDataCell>
+            </CTableRow>
+            <CTableRow>
+              <CTableDataCell>
+                <CopyElement>QR_ACCEPT_IMAGE</CopyElement>
+              </CTableDataCell>
+              <CTableDataCell>Image data uri with link to QR emulated page</CTableDataCell>
               <CTableDataCell>display_data[0].data</CTableDataCell>
             </CTableRow>
           </CTableBody>
@@ -134,6 +141,18 @@
       "type": "qr_data",
       "title": "QR code",
       "data": "&#123;&#123;QR_ACCEPT_LINK&#125;&#125;"
+    }
+  ],
+  ...
+}</code></pre>
+            If you integration expects image data uri, provide next format:
+            <pre class="m-0" v-highlightjs><code class="javascript">{
+  ...
+  "display_data": [
+    {
+      "type": "qr_img",
+      "title": "QR code",
+      "data": "&#123;&#123;QR_ACCEPT_IMAGE&#125;&#125;"
     }
   ],
   ...
