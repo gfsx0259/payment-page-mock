@@ -7,6 +7,7 @@ use App\Stub\Service\Action\AbstractAction;
 use App\Stub\Service\Action\AcsAction;
 use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ClarificationAction;
+use App\Stub\Service\Action\PaymentAction;
 use App\Stub\Service\Action\QrCodeAction;
 use App\Stub\Session\State;
 use Psr\Container\ContainerExceptionInterface;
@@ -26,6 +27,10 @@ class ActionFactory
         try {
             if ($callback->get('acs')) {
                 return new AcsAction($callback, $state);
+            } elseif ($callback->get('threeds2.iframe.url')) {
+                return $this->injector->make(PaymentAction::class, [$callback, $state]);
+            } elseif ($callback->get('threeds2.redirect.url')) {
+                return $this->injector->make(PaymentAction::class, [$callback, $state]);
             } elseif ($callback->get('return_url.url')) {
                 return $this->injector->make(ApsAction::class, [$callback, $state]);
             } elseif ($callback->get('clarification_fields')) {
