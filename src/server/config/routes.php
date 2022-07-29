@@ -170,6 +170,8 @@ return [
                 ->action([StubController::class, 'sale']),
             Route::post('/payment/card/3ds_result')
                 ->action([ActionController::class, 'completeAcs']),
+            Route::post('/payment/card/3ds_check_iframe')
+                ->action([ActionController::class, 'completeAcs']),
             Route::post('/payment/clarification')
                 ->action([ActionController::class, 'completeClarification']),
         ),
@@ -180,6 +182,12 @@ return [
             Route::post('/renderAcs')
                 ->name('actions/renderAcs')
                 ->action([DummyPageController::class, 'renderAcs']),
+            Route::methods([Method::GET, Method::POST], '/renderAcsIframe/{uniqueKey}')
+                ->name('actions/renderAcsIframe')
+                ->action([DummyPageController::class, 'renderAcsIframe']),
+            Route::methods([Method::GET, Method::POST], '/renderAcsRedirect/{uniqueKey}')
+                ->name('actions/renderAcsRedirect')
+                ->action([DummyPageController::class, 'renderAcsRedirect']),
             Route::methods([Method::GET, Method::POST], '/renderAps/{uniqueKey}')
                 ->name('actions/renderAps')
                 ->action([DummyPageController::class, 'renderAps']),

@@ -10,6 +10,7 @@ use App\Stub\Service\Action\ApsWidgetAction;
 use App\Stub\Service\Action\ClarificationAction;
 use App\Stub\Service\Action\QrDataAction;
 use App\Stub\Service\Action\QrImageAction;
+use App\Stub\Service\Action\PaymentAction;
 use App\Stub\Session\State;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
@@ -32,6 +33,10 @@ class ActionFactory
         try {
             if ($callback->get('acs')) {
                 return new AcsAction($callback, $state);
+            } elseif ($callback->get('threeds2.iframe.url')) {
+                return $this->injector->make(PaymentAction::class, [$callback, $state]);
+            } elseif ($callback->get('threeds2.redirect.url')) {
+                return $this->injector->make(PaymentAction::class, [$callback, $state]);
             } elseif ($callback->get('return_url.url')) {
                 if ($callback->get('return_url.body.callback_url')) {
                     return $this->injector->make(ApsWidgetAction::class, [$callback, $state]);
