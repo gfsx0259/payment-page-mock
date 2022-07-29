@@ -20,6 +20,7 @@ use App\Stub\Api\CallbackController;
 use App\Stub\Api\RouteController;
 use App\Stub\Api\StubController as ApiStubController;
 use App\Stub\DummyPageController;
+use App\Stub\StaticController;
 use App\Stub\StubController;
 use App\User\Controller\ApiUserController;
 use App\User\Controller\UserController;
@@ -174,6 +175,14 @@ return [
             Route::post('/completeConfirmationQr')
                 ->name('actions/completeConfirmationQr')
                 ->action([ActionController::class, 'completeConfirmationQr']),
+        ),
+
+    Group::create()
+        ->middleware(CorsMiddleware::class)
+        ->disableMiddleware(CsrfMiddleware::class)
+        ->routes(
+            Route::get('/static/{slug}')
+                ->action([StaticController::class, 'render'])
         ),
 
     // Blog routes

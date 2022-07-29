@@ -18,6 +18,7 @@ class OverrideProcessor implements ProcessorInterface
         'REQUEST_ID' => 'request_id',
         'ACS_URL' => 'acs_url',
         'APS_URL' => 'aps_url',
+        'APS_WIDGET_URL' => 'additional_data.aps_widget_url',
         'QR_ACCEPT_LINK' => 'qr_accept_link',
     ];
 
