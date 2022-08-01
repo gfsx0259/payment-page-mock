@@ -21,10 +21,10 @@ use Yiisoft\DataResponse\DataResponseFactoryInterface;
 final class ActionController
 {
     public function __construct(
-    private DataResponseFactoryInterface $responseFactory,
-    private CallbackResolver $callbackResolver,
-    private CallbackProcessor $callbackProcessor,
-    private ActionFactory $actionFactory,
+        private DataResponseFactoryInterface $responseFactory,
+        private CallbackResolver $callbackResolver,
+        private CallbackProcessor $callbackProcessor,
+        private ActionFactory $actionFactory,
     ) {
     }
 
@@ -34,6 +34,22 @@ final class ActionController
      * @throws InvalidArgumentException
      */
     public function completeAcs(
+        ServerRequestInterface $request,
+        StateManager $stateManager,
+    ): ResponseInterface {
+        $body = json_decode($request->getBody()->getContents(), true);
+
+        $this->completeAction($stateManager, $body, 'general.payment_id');
+
+        return $this->responseFactory->createResponse();
+    }
+
+    /**
+     * Confirm the need of 3ds 2.0 and move cursor
+     *
+     * @throws InvalidArgumentException
+     */
+    public function checkAcs(
         ServerRequestInterface $request,
         StateManager $stateManager,
     ): ResponseInterface {

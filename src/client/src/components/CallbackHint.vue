@@ -39,7 +39,7 @@
           </CTableBody>
         </CTable>
 
-        <p class="fs-5">ACS action flow</p>
+        <p class="fs-5">ACS 1.0 action flow</p>
         <CTable hover bordered>
           <CTableBody>
             <CTableRow>
@@ -76,6 +76,68 @@
           <li>Payment Page goes to dummy <b>ACS_URL</b> from callback with appropriate data</li>
           <li>User sends form on ACS emulated page to Payment Page <b>TERM_URL</b></li>
           <li>Payment page closes ACS window and sends request to dummy complete endpoint</li>
+          <li>Dummy completes action at store and replies with next callback</li>
+        </ol>
+
+        <p class="fs-5">ACS 2.0 action flow</p>
+        <CTable hover bordered>
+          <CTableBody>
+            <CTableRow>
+              <CTableDataCell>
+                <CopyElement>ACS_IFRAME_URL</CopyElement>
+              </CTableDataCell>
+              <CTableDataCell>This page emulates waiting of async response from ACS</CTableDataCell>
+              <CTableDataCell>threeds2.iframe.url</CTableDataCell>
+            </CTableRow>
+            <CTableRow>
+              <CTableDataCell>
+                <CopyElement>ACS_REDIRECT_URL</CopyElement>
+              </CTableDataCell>
+              <CTableDataCell>This page emulates confirmation ACS form</CTableDataCell>
+              <CTableDataCell>threeds2.redirect.url</CTableDataCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
+        <ol>
+          <li>Payment Page sends initial request</li>
+          <li>Dummy accepts <b>awaiting 3ds result</b> callback and remember action at dummy transaction state</li>
+          <li>Dummy replies <b>awaiting 3ds result</b> callback with structure:
+          <pre class="m-0" v-highlightjs><code class="javascript">{
+  ...
+  "threeds2": {
+    "iframe": {
+      "url": "&#123;&#123;ACS_IFRAME_URL&#125;&#125;",
+      "params": {
+        "3DSMethodData": "string",
+        "threeDSMethodData": "string"
+      }
+    }
+  }
+  ...
+}</code></pre>
+          </li>
+          <li>Payment Page opens <b>ACS_IFRAME_URL</b> from callback with `threeds2.iframe.params` data</li>
+          <li>Opened page sends notification to Payment Page after few second</li>
+          <li>Payment Page sends 3ds_check_iframe request to Dummy when notification is received</li>
+          <li>Dummy completes action at store and replies with next callback:
+            <pre class="m-0" v-highlightjs><code class="javascript">{
+  ...
+  "threeds2": {
+    "redirect": {
+      "url": "&#123;&#123;ACS_REDIRECT_URL&#125;&#125;",
+      "params": {
+        "creq": "string",
+        "threeDSSessionData": "string"
+      }
+    }
+  }
+  ...
+}</code></pre>
+          </li>
+          <li>Payment Page opens <b>ACS_REDIRECT_URL</b> from callback with `threeds2.iframe.params` data</li>
+          <li>Customer clicks the button `submit` to emulate confirmation</li>
+          <li>Dummy opens a page which automatically sends request to Payment Page about completing ACS</li>
+          <li>Payment Page sends request to Dummy</li>
           <li>Dummy completes action at store and replies with next callback</li>
         </ol>
 

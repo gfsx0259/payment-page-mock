@@ -67,12 +67,12 @@ class Action extends \Codeception\Module
         $this->assertTrue($action->isCompleted());
     }
 
-    public function makeState(): State
+    public function makeState(array $initialRequest = []): State
     {
         return new State(
             uniqid('generated_request_id'),
             rand(1, 1000000),
-            []
+            $initialRequest
         );
     }
 }
