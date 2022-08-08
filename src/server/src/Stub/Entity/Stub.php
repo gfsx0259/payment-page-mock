@@ -9,10 +9,14 @@ use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\HasMany;
 use Doctrine\Common\Collections\ArrayCollection;
+use Yiisoft\Arrays\ArrayableInterface;
+use Yiisoft\Arrays\ArrayableTrait;
 
 #[Entity(repository: StubRepository::class)]
-class Stub
+class Stub implements ArrayableInterface
 {
+    use ArrayableTrait;
+
     #[Column(type: 'primary')]
     private int $id;
 
@@ -28,7 +32,7 @@ class Stub
     #[Column(type: 'boolean', default: false)]
     private bool $default;
 
-    #[HasMany(Callback::class)]
+    #[HasMany(Callback::class, orderBy: ['order' => 'asc'])]
     private ArrayCollection $callbacks;
 
     /**
@@ -41,7 +45,6 @@ class Stub
         $this->route_id = $routeId;
         $this->title = $title;
         $this->description = $description;
-        $this->callbacks = new ArrayCollection();
     }
 
     /**
@@ -109,5 +112,16 @@ class Stub
     public function setDescription(string $description): void
     {
         $this->description = $description;
+    }
+
+    public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'default' => $this->getDefault(),
+            'callbacks' => $this->getCallbacks()->map(fn (Callback $callback) => $callback->toArray()),
+        ];
     }
 }

@@ -7,6 +7,8 @@ namespace App\Stub\Entity;
 use App\Stub\Repository\RouteRepository;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Relation\HasMany;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[Entity(repository: RouteRepository::class)]
 class Route
@@ -25,6 +27,9 @@ class Route
 
     #[Column(type: 'integer')]
     private int $type;
+
+    #[HasMany(Stub::class)]
+    private ArrayCollection $stubs;
 
     /**
      * @param string $route
@@ -78,5 +83,13 @@ class Route
     public function getType(): int
     {
         return $this->type;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getStubs(): ArrayCollection
+    {
+        return $this->stubs;
     }
 }

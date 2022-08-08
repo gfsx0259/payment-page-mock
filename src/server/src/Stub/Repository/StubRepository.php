@@ -15,15 +15,6 @@ final class StubRepository extends Select\Repository
 {
     /**
      * @param int $routeId
-     * @return Stub[]
-     */
-    public function findByRoute(int $routeId): array
-    {
-        return $this->select()->where(['route_id' => $routeId])->fetchAll();
-    }
-
-    /**
-     * @param int $routeId
      * @return Stub
      */
     public function findDefaultByRoute(int $routeId): Stub
