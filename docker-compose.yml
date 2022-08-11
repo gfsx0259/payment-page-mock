@@ -7,6 +7,7 @@ x-environments: &environments
     MYSQL_PASSWORD: "password"
     NODE_ENV: "develop"
     API_URL: "http://localhost:8082"
+    VUE_APP_API_URL: "http://localhost:8082"
     CALLBACK_URL: "http://pp.terminal.test"
     CALLBACK_SECRET: "JYyVXAtQLQ"
     PHP_IDE_CONFIG: "serverName=docker"
@@ -23,6 +24,7 @@ services:
             context: ./src/client
             dockerfile: ../../build/images/client/Dockerfile
             target: development
+        environment: *environments
         volumes:
             - ./src/client/src:/home/node/app/src:rw
         ports:
