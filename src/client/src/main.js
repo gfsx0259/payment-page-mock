@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { CIcon } from '@coreui/icons-vue';
-import { cilFlagAlt, cilX, cilTrash, cilPencil, cilCompass, cilCopy } from '@coreui/icons'
+import { cilFlagAlt, cilX, cilTrash, cilPencil, cilCompass, cilCopy, cilCursorMove } from '@coreui/icons'
 import * as Components from '@coreui/vue';
 import { SnackbarPlugin } from 'snackbar-vue';
 
@@ -76,6 +76,7 @@ app.provide('icons', {
     cilPencil,
     cilCompass,
     cilCopy,
+    cilCursorMove,
 });
 
 app.use(SnackbarPlugin, SnackbarConfig);

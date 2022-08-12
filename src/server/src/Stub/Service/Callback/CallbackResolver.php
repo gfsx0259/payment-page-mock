@@ -16,8 +16,7 @@ class CallbackResolver
 {
     public function __construct(
         private StubRepository $stubRepository,
-    ) {
-    }
+    ) {}
 
     public function resolve(State $state): Callback
     {

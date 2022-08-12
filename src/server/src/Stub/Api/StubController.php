@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Stub\Api;
 
 use App\Service\WebControllerService;
-use App\Stub\Entity\Callback;
 use App\Stub\Entity\Stub;
+use App\Stub\Repository\RouteRepository;
 use App\Stub\Repository\StubRepository;
 use Cycle\ORM\Select\Repository;
 use Psr\Http\Message\ResponseInterface;
@@ -21,8 +21,8 @@ final class StubController extends EntityController
     public function __construct(
         private DataResponseFactoryInterface $responseFactory,
         private StubRepository $stubRepository,
-    ) {
-    }
+        private RouteRepository $routeRepository,
+    ) {}
 
     protected function getRepository(): Repository
     {
@@ -32,26 +32,10 @@ final class StubController extends EntityController
     public function index(
         CurrentRoute $route
     ): ResponseInterface {
-        $routeId = (int)$route->getArgument('routeId');
-
-        $stubs = [];
-        foreach ($this->stubRepository->findByRoute($routeId) as $stub) {
-            $stubs[] = [
-                'id' => $stub->getId(),
-                'title' => $stub->getTitle(),
-                'description' => $stub->getDescription(),
-                'default' => $stub->getDefault(),
-                'callbacks' => $stub->getCallbacks()->map(function (Callback $callback) {
-                    return [
-                        'id' => $callback->getId(),
-                        'body' => $callback->getBody(),
-                    ];
-                }),
-            ];
-        }
+        $route = $this->routeRepository->findByPK((int)$route->getArgument('routeId'));
 
         return $this->responseFactory
-            ->createResponse($stubs);
+            ->createResponse($route->getStubs()->map(fn ($callback) => $callback->toArray()));
     }
 
     /**
@@ -101,7 +85,8 @@ final class StubController extends EntityController
     public function setDefault(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
     {
         $data = json_decode($request->getBody()->getContents());
-        $stubs = $this->stubRepository->findByRoute($data->routeId);
+        $route = $this->routeRepository->findByPK($data->routeId);
+        $stubs = $route->getStubs();
 
         foreach ($stubs as $stub) {
             $stub->setDefault($stub->getId() === $data->stubId);

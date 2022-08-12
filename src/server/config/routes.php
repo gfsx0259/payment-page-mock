@@ -129,6 +129,8 @@ return [
 
                     Route::get('/callback/{stubId}')
                         ->action([CallbackController::class, 'index']),
+                    Route::patch('/callback/{stubId}')
+                    ->action([CallbackController::class, 'changeOrder']),
                     Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
                         ->action([CallbackController::class, 'update']),
                     Route::methods([Method::OPTIONS, Method::DELETE], '/callback/{id}')
