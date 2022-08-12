@@ -39,7 +39,7 @@ final class CallbackController extends EntityController
         $stub = $this->stubRepository->findByPK((int)$route->getArgument('stubId'));
 
         return $this->responseFactory
-            ->createResponse($stub->getCallbacks()->map(fn ($callback) => $callback->toArray()));
+            ->createResponse($stub->getCallbacks()->map(fn ($callback) => $callback->toArray())->getValues());
     }
 
     /**
