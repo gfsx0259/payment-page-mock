@@ -10,15 +10,18 @@ RUN npm install --only=production
 RUN cp -R node_modules production_dependencies
 
 RUN npm install
+
 COPY . ./
+
 RUN npm run build
 
 FROM base as production
 
 COPY --from=builder /home/node/app/production_dependencies ./node_modules
 COPY --from=builder /home/node/app/dist ./dist
+COPY --from=builder /home/node/app/entrypoint.sh ./
 
-CMD npm run start
+ENTRYPOINT ["/home/node/app/entrypoint.sh"]
 
 FROM base as development
 

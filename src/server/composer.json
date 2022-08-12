@@ -111,11 +111,7 @@
     "scripts": {
         "serve": "./yii serve",
         "post-update-cmd": [
-            "App\\Installer::postUpdate",
-            "App\\Installer::copyEnvFile"
-        ],
-        "post-install-cmd": [
-            "App\\Installer::copyEnvFile"
+            "App\\Installer::postUpdate"
         ],
         "test": "codecept run tests/Unit"
     },

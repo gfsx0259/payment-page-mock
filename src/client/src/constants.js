@@ -1,8 +1,10 @@
+import getEnv from "@/utils/env";
+
 /**
  * API URL
  * @type {string}
  */
-export const API_URL = process.env.VUE_APP_API_URL;
+export const API_URL = getEnv('VUE_APP_API_URL');
 
 export const MODULE_ROUTE = 'route';
 export const MODULE_STUB = 'stub';
