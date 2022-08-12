@@ -58,7 +58,6 @@ export default {
   data: () => {
     return {
       isHintVisible: false,
-      possibleToDrag: false,
     }
   },
   methods: {
