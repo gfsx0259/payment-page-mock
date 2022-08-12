@@ -27,7 +27,7 @@
             mode="code"
         />
         <CIcon
-            v-if="element.id"
+            v-if="!hasNewCallback()"
             class="icon-move"
             icon="cilCursorMove"
             size="xl"
@@ -58,6 +58,7 @@ export default {
   data: () => {
     return {
       isHintVisible: false,
+      possibleToDrag: false,
     }
   },
   methods: {
@@ -74,6 +75,9 @@ export default {
     },
     onChangeOrder() {
       this.$emit('changeOrder', _.map(this.callbacks, 'id'));
+    },
+    hasNewCallback() {
+      return this.callbacks.filter(({id}) => id === null).length !== 0;
     }
   },
 }

@@ -31,10 +31,11 @@ class Callback implements ArrayableInterface
      * @param int $stubId
      * @param string $body
      */
-    public function __construct(int $stubId, string $body)
+    public function __construct(int $stubId, string $body, int $order)
     {
         $this->stub_id = $stubId;
         $this->body = $body;
+        $this->order = $order;
     }
 
     public function getId(): int
