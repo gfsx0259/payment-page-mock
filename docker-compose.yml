@@ -7,19 +7,19 @@ services:
             dockerfile: ../../build/images/client/Dockerfile
             target: development
         environment:
-            NODE_ENV: $CLIENT_APP_NODE_ENV
-            VUE_APP_API_URL: $API_APP_URL
+            NODE_ENV: $SPA_NODE_ENV
+            VUE_APP_API_URL: $API_URL
         volumes:
             - ./src/client/src:/home/node/app/src:rw
         ports:
-            - "${CLIENT_APP_PORT}:8080"
+            - "${SPA_PORT}:8080"
 
     nginx:
         build:
             context: ./src/server
             dockerfile: ../../build/images/nginx/Dockerfile
         ports:
-            - "${API_APP_PORT}:80"
+            - "${API_PORT}:80"
         volumes:
             - ./src/server/public:/var/www/public
         links:
@@ -34,15 +34,15 @@ services:
                 GID: 1000
         environment:
             PHP_IDE_CONFIG: "serverName=docker"
-            YII_ENV: $API_APP_YII_ENV
-            YII_DEBUG: $API_APP_YII_DEBUG
-            API_URL: $API_APP_URL
-            CALLBACKS_QUEUE_NAME: $API_APP_CALLBACKS_QUEUE
-            CALLBACK_URL: $API_APP_CALLBACK_URL
-            CALLBACK_SECRET: $API_APP_CALLBACK_SECRET
+            YII_ENV: $API_YII_ENV
+            YII_DEBUG: $API_YII_DEBUG
+            API_URL: $API_URL
+            API_CALLBACKS_QUEUE_NAME: $API_CALLBACKS_QUEUE
+            API_CALLBACK_URL: $API_CALLBACK_URL
+            API_CALLBACK_SECRET: $API_CALLBACK_SECRET
             MYSQL_DATABASE: $MYSQL_DATABASE
             MYSQL_HOST: $MYSQL_HOST
-            MYSQL_PORT: 3306
+            MYSQL_PORT: $MYSQL_PORT
             MYSQL_USER: $MYSQL_USER
             MYSQL_PASSWORD: $MYSQL_PASSWORD
             RABBITMQ_HOST: $RABBITMQ_HOST
@@ -55,7 +55,7 @@ services:
             - memcached
         extra_hosts:
             - "host.docker.internal:host-gateway"
-            - "${API_APP_CALLBACK_HOST}:${API_APP_CALLBACK_IP}"
+            - "pp.terminal.test:192.168.20.20"
         volumes:
             - ./src/server:/var/www:rw
         links:
@@ -64,7 +64,7 @@ services:
     callbacks_queue_consumer:
         <<: *server_app
         restart: on-failure
-        entrypoint: ["php", "yii", "queue/listen", $API_APP_CALLBACKS_QUEUE]
+        entrypoint: ["php", "yii", "queue/listen", $API_CALLBACKS_QUEUE]
 
     rabbit:
         image: rabbitmq:latest
@@ -78,13 +78,13 @@ services:
 
     db:
         image: mysql:latest
-        ports:
-            - "${MYSQL_PORT}:3306"
         environment:
             MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
             MYSQL_DATABASE: $MYSQL_DATABASE
             MYSQL_USER: $MYSQL_USER
             MYSQL_PASSWORD: $MYSQL_PASSWORD
+        ports:
+            - "${MYSQL_PORT}:3306"
         volumes:
             - ./build/dump:/docker-entrypoint-initdb.d
             - dbdata:/var/lib/mysql
