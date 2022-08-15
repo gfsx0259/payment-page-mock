@@ -35,7 +35,7 @@ final class StubController extends EntityController
         $route = $this->routeRepository->findByPK((int)$route->getArgument('routeId'));
 
         return $this->responseFactory
-            ->createResponse($route->getStubs()->map(fn ($callback) => $callback->toArray()));
+            ->createResponse($route->getStubs()->map(fn ($callback) => $callback->toArray())->getValues());
     }
 
     /**

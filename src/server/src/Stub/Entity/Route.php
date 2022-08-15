@@ -43,6 +43,7 @@ class Route
         $this->title = $title;
         $this->logo = $logo;
         $this->type = $type;
+        $this->stubs = new ArrayCollection();
     }
 
     /**

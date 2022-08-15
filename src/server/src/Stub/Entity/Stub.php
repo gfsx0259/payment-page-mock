@@ -45,6 +45,7 @@ class Stub implements ArrayableInterface
         $this->route_id = $routeId;
         $this->title = $title;
         $this->description = $description;
+        $this->callbacks = new ArrayCollection();
     }
 
     /**
