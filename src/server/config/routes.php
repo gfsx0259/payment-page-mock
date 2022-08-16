@@ -137,8 +137,19 @@ return [
                     Route::methods([Method::OPTIONS, Method::DELETE], '/callback/{id}')
                         ->action([CallbackController::class, 'delete']),
 
+                    Route::get('/resource')
+                        ->action([ResourceController::class, 'index']),
                     Route::get('/resource/template-variables')
                         ->action([ResourceController::class, 'getTemplateVariables']),
+                    Route::methods([Method::OPTIONS, Method::POST], '/resource')
+                        ->name('api/resource/create')
+                        ->action([ResourceController::class, 'create']),
+                    Route::methods([Method::PUT], '/resource')
+                        ->name('api/resource/update')
+                        ->action([ResourceController::class, 'update']),
+                    Route::methods([Method::OPTIONS, Method::DELETE], '/resource/{id}')
+                        ->name('api/resource/delete')
+                        ->action([ResourceController::class, 'delete']),
                 ),
         ),
 

@@ -41,17 +41,26 @@ export default {
         return {
             items: [
                 {
-                    index: 0,
+                    id: 1,
+                    level: 1,
+                    name: 'resources',
+                    current: false,
+                },
+                {
+                    id: 2,
+                    level: 1,
                     name: 'routes',
                     current: false,
                 },
                 {
-                    index: 1,
+                    id: 3,
+                    level: 2,
                     name: 'stubs',
                     current: false,
                 },
                 {
-                    index: 2,
+                    id: 4,
+                    level: 3,
                     name: 'callbacks',
                     current: false,
                 },
@@ -70,10 +79,10 @@ export default {
             const currentItem = this.items
                 .find((item) => item.name === this.$route.name);
             const items = this.items
-                .filter((item) => item.index <= currentItem.index);
+                .filter((item) => item.level <= currentItem.level);
 
-            return items.map((item, index) => {
-               item.current = index === items.length - 1;
+            return items.map((item) => {
+               item.current = currentItem.id === item.id;
 
                return item;
             });

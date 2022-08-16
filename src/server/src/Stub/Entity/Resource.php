@@ -46,9 +46,19 @@ class Resource
         $this->content = $content;
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public function getContentType(): string
     {
         return $this->content_type;
+    }
+
+    public function setContentType(string $contentType): void
+    {
+        $this->content_type = $contentType;
     }
 
     public function getAlias(): string
@@ -56,9 +66,19 @@ class Resource
         return $this->alias;
     }
 
+    public function setAlias(string $alias): void
+    {
+        $this->alias = $alias;
+    }
+
     public function getPath(): string
     {
         return $this->path;
+    }
+
+    public function setPath(string $path): void
+    {
+        $this->path = $path;
     }
 
     public function getContent(): string
@@ -66,9 +86,19 @@ class Resource
         return $this->content;
     }
 
+    public function setContent(string $content): void
+    {
+        $this->content = $content;
+    }
+
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
     }
 
     public function getTemplateVariable(): string

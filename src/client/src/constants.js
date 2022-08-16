@@ -9,6 +9,7 @@ export const API_URL = getEnv('VUE_APP_API_URL');
 export const MODULE_ROUTE = 'route';
 export const MODULE_STUB = 'stub';
 export const MODULE_CALLBACK = 'callback';
+export const MODULE_RESOURCE = 'resource';
 
 /**
  * Route type - label map

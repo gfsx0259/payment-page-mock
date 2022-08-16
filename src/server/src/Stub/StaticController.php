@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Stub;
 
 use App\Middleware\ResourceDataResponseFormatter;
+use App\Service\WebControllerService;
 use App\Stub\Entity\Resource;
 use App\Stub\Repository\ResourceRepository;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
@@ -15,14 +16,15 @@ final class StaticController
     public function render(
         CurrentRoute $currentRoute,
         ResourceRepository $resourceRepository,
-        DataResponseFactoryInterface $responseFactory
+        DataResponseFactoryInterface $responseFactory,
+        WebControllerService $controllerService,
     ) {
         $destination = $currentRoute->getArgument('destination');
         $resource = $resourceRepository->findOne(['path' => $destination]);
 
         /** @var $resource Resource|null */
         if (!$resource) {
-            return $responseFactory->createResponse(null, 404);
+            return $controllerService->getNotFoundResponse();
         }
 
         return $responseFactory

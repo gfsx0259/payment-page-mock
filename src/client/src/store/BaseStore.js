@@ -46,7 +46,8 @@ export default class BaseStore {
             fetch: async ({state, commit}) => {
                 commit('setIsLoading', true);
 
-                const response = await HttpClient.get(this.endpoint() + '/' + state.relationId);
+                const url = state.relationId ? `${this.endpoint()}/${state.relationId}` : this.endpoint();
+                const response = await HttpClient.get(url);
 
                 commit('setEntities', response.data.data);
                 commit('setIsLoading', false);
@@ -68,7 +69,7 @@ export default class BaseStore {
             save: async ({state, dispatch}) => {
                 dispatch('request', {
                     method: state.form.id ? 'PUT' : 'POST',
-                    data: Object.assign(state.form, { relationId: state.relationId }),
+                    data: Object.assign(state.form, state.relationId ? { relationId: state.relationId } : {}),
                 });
             },
             /**
