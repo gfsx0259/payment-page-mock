@@ -183,7 +183,7 @@ return [
         ->middleware(CorsMiddleware::class)
         ->disableMiddleware(CsrfMiddleware::class)
         ->routes(
-            Route::get('/static/{slug}')
+            Route::get('{destination:[a-zA-Z/.]+}')
                 ->action([StaticController::class, 'render'])
         ),
 
