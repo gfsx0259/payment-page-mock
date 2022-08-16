@@ -4,6 +4,7 @@
   </CRow>
    <CallbackItems
      :callbacks="callbacks"
+     :dynamicTemplateVariables="dynamicTemplateVariables"
      @add="add"
      @update="update"
      @remove="remove"
@@ -27,6 +28,10 @@ export default {
   async mounted() {
     this.setStub(this.$route.params.id);
     await this.fetch();
+
+    if (!this.dynamicTemplateVariables.length) {
+      await this.fetchDynamicTemplateVariables();
+    }
   },
   methods: {
     ...mapMutations({
@@ -35,6 +40,7 @@ export default {
     }),
     ...mapActions({
       fetch: 'callback/fetch',
+      fetchDynamicTemplateVariables: 'callback/fetchDynamicTemplateVariables',
       update: 'callback/update',
       remove: 'callback/remove',
       changeOrder: 'callback/changeOrder',
@@ -43,6 +49,7 @@ export default {
   computed: {
     ...mapState({
       callbacks: state => state.callback.callbacks,
+      dynamicTemplateVariables: state => state.callback.dynamicTemplateVariables,
       isLoading: state => state.callback.isLoading,
     }),
   }

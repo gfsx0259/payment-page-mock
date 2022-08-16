@@ -51,8 +51,28 @@ class Resource
         return $this->content_type;
     }
 
+    public function getAlias(): string
+    {
+        return $this->alias;
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getTemplateVariable(): string
+    {
+        return $this->getAlias() . '_RESOURCE';
     }
 }

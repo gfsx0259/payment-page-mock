@@ -17,6 +17,7 @@ use App\Middleware\AccessChecker;
 use App\Middleware\ApiDataWrapper;
 use App\Stub\ActionController;
 use App\Stub\Api\CallbackController;
+use App\Stub\Api\ResourceController;
 use App\Stub\Api\RouteController;
 use App\Stub\Api\StubController as ApiStubController;
 use App\Stub\DummyPageController;
@@ -131,10 +132,13 @@ return [
                         ->action([CallbackController::class, 'index']),
                     Route::patch('/callback/{stubId}')
                     ->action([CallbackController::class, 'changeOrder']),
-                    Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
+                    Route::methods([Method::OPTIONS, Method::POST], '/stub/callback')
                         ->action([CallbackController::class, 'update']),
                     Route::methods([Method::OPTIONS, Method::DELETE], '/callback/{id}')
                         ->action([CallbackController::class, 'delete']),
+
+                    Route::get('/resource/template-variables')
+                        ->action([ResourceController::class, 'getTemplateVariables']),
                 ),
         ),
 
