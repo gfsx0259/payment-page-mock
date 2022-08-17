@@ -1,13 +1,22 @@
-# Bash
-repositoryRaw := https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main
-uploadImagesDir := src/server/public/uploads/route
+#!/usr/bin/make
+include .env
+export
+
+CURRENT_DIR := $(shell pwd)
+STACK_NAME := dummy
+STACK_CONFIG := docker-compose.prod.yml
+GITHUB_RAW := https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main
+
+RUNTIME_DIR := runtime
+PUBLIC_DIR := src/server/public
+SHARED_DIRS := $(RUNTIME_DIR)/assets $(RUNTIME_DIR)/uploads
+ROUTE_IMAGES := card gcash kakaopay pix
 
 install: prepare pull deploy
 
 prepare:
-	sudo mkdir -p assets uploads
-	sudo chown -R 1000:1000 assets
-	sudo chown -R 1000:1000 uploads
+	sudo mkdir -p $(SHARED_DIRS)
+	sudo chown -R 1000:1000 runtime
 
 pull:
 	sudo docker image pull konstantinpopov/payment-page-mock-api:main
@@ -15,37 +24,43 @@ pull:
 	sudo docker image pull konstantinpopov/payment-page-mock-client:main
 
 deploy:
-	sudo docker stack deploy -c docker-compose.prod.yml dummy
+	envsubst < $(STACK_CONFIG) | sudo docker stack deploy -c - $(STACK_NAME)
 
 clear:
-	sudo docker stack rm dummy
-	sudo rm -rf assets
-	sudo rm -rf uploads
+	sudo docker stack rm $(STACK_NAME)
+	sudo rm -rf $(SHARED_DIRS)
 
 status:
-	sudo docker stack services dummy
+	sudo docker stack services $(STACK_NAME)
 
-storage_clear:
-	sudo docker volume rm dummy_dbdata
+utils_db_clear:
+	sudo docker volume rm $(STACK_NAME)_dbdata
 
-storage_load:
-	curl -s -O $(repositoryRaw)/build/dump/app.sql
+utils_db_load:
+	curl $(GITHUB_RAW)/build/example/dump/app.sql > runtime/app.sql
 	$(eval CONTAINER_ID=$(shell sudo docker ps -q -f name="db"))
-	sudo docker exec -i $(CONTAINER_ID) mysql -uuser -ppassword app < ./app.sql
+	sudo docker exec -i $(CONTAINER_ID) mysql -uuser -ppassword app < runtime/app.sql
 
-storage_dump:
+utils_db_dump:
 	docker-compose exec db bash -c "mysqldump --no-tablespaces -proot app route callback stub -r "/docker-entrypoint-initdb.d/app.sql""
 
-image_load:
-	cd $(uploadImagesDir) && curl -O $(repositoryRaw)/build/example/card.svg
-	cd $(uploadImagesDir) && curl -O $(repositoryRaw)/build/example/gcash.svg
-	cd $(uploadImagesDir) && curl -O $(repositoryRaw)/build/example/kakaopay.svg
-	cd $(uploadImagesDir) && curl -O $(repositoryRaw)/build/example/pix.svg
+utils_images_load_dev:
+	mkdir -p $(CURRENT_DIR)/$(PUBLIC_DIR)/uploads/route
+	$(foreach ROUTE_IMAGE, $(ROUTE_IMAGES), \
+		cd $(CURRENT_DIR)/$(PUBLIC_DIR)/uploads/route && curl -O $(GITHUB_RAW)/build/example/images/$(ROUTE_IMAGE).svg; \
+  	)
 
-deps:
+utils_images_load_prod:
+	mkdir -p $(CURRENT_DIR)/$(RUNTIME_DIR)/uploads/route
+	$(foreach ROUTE_IMAGE, $(ROUTE_IMAGES), \
+		cd $(CURRENT_DIR)/$(RUNTIME_DIR)/uploads/route && curl -O $(GITHUB_RAW)/build/example/images/$(ROUTE_IMAGE).svg; \
+  	)
+
+utils_deps:
 	docker-compose exec api composer install
 
-test:
+utils_test:
 	docker-compose exec api bash -c "composer test"
 
-example: storage_load image_load
+utils_example: utils_db_load utils_images_load_dev
+

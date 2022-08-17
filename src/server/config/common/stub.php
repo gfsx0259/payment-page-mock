@@ -27,12 +27,12 @@ return [
         $params['host'],
     ),
     CallbackSenderInterface::class => function (LoggerInterface $logger) {
-        if (ArrayHelper::getValue($_ENV, 'DISABLE_SENDING_CALLBACKS')) {
+        if (ArrayHelper::getValue($_ENV, 'API_DISABLE_SENDING_CALLBACKS')) {
             return new CallbackSenderMock($logger);
         }
 
-        $url = ArrayHelper::getValue($_ENV, 'CALLBACK_URL');
-        $secret = ArrayHelper::getValue($_ENV, 'CALLBACK_SECRET');
+        $url = ArrayHelper::getValue($_ENV, 'API_CALLBACK_URL');
+        $secret = ArrayHelper::getValue($_ENV, 'API_CALLBACK_SECRET');
 
         if (!($url && $secret)) {
             throw new Exception('Can not initialize callback sender');
