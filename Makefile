@@ -47,13 +47,13 @@ utils_db_dump:
 utils_images_load_dev:
 	mkdir -p $(CURRENT_DIR)/$(PUBLIC_DIR)/uploads/route
 	$(foreach ROUTE_IMAGE, $(ROUTE_IMAGES), \
-		cd $(CURRENT_DIR)/$(PUBLIC_DIR)/uploads/route && curl -O $(GITHUB_RAW)/build/example/$(ROUTE_IMAGE).svg; \
+		cd $(CURRENT_DIR)/$(PUBLIC_DIR)/uploads/route && curl -O $(GITHUB_RAW)/build/example/images/$(ROUTE_IMAGE).svg; \
   	)
 
 utils_images_load_prod:
 	mkdir -p $(CURRENT_DIR)/$(RUNTIME_DIR)/uploads/route
 	$(foreach ROUTE_IMAGE, $(ROUTE_IMAGES), \
-		cd $(CURRENT_DIR)/$(RUNTIME_DIR)/uploads/route && curl -O $(GITHUB_RAW)/build/example/$(ROUTE_IMAGE).svg; \
+		cd $(CURRENT_DIR)/$(RUNTIME_DIR)/uploads/route && curl -O $(GITHUB_RAW)/build/example/images/$(ROUTE_IMAGE).svg; \
   	)
 
 utils_deps:
