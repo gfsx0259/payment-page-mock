@@ -27,6 +27,7 @@
     "vue": "^3.2.13",
     "vue-json-editor": "github:gfsx0259/vue-json-editor",
     "vue-router": "^4.0.3",
+    "vuedraggable": "^4.1.0",
     "vue3-clipboard": "^1.0.0",
     "vue3-highlightjs": "^1.0.5",
     "vuex": "^4.0.0"

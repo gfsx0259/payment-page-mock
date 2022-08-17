@@ -158,8 +158,8 @@ return [
                 'mysql' => new \Cycle\Database\Config\MySQLDriverConfig(
                     connection: new \Cycle\Database\Config\MySQL\TcpConnectionConfig(
                         database: getenv('MYSQL_DATABASE'),
-                        host: 'db',
-                        port: 3306,
+                        host: getenv('MYSQL_HOST'),
+                        port: intval(getenv('MYSQL_PORT')),
                         user: getenv('MYSQL_USER'),
                         password: getenv('MYSQL_PASSWORD'),
                     )

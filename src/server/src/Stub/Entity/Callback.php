@@ -7,15 +7,22 @@ namespace App\Stub\Entity;
 use App\Stub\Repository\CallbackRepository;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
+use Yiisoft\Arrays\ArrayableInterface;
+use Yiisoft\Arrays\ArrayableTrait;
 
 #[Entity(repository: CallbackRepository::class)]
-class Callback
+class Callback implements ArrayableInterface
 {
+    use ArrayableTrait;
+
     #[Column(type: 'primary')]
     private int $id;
 
     #[Column(type: 'integer')]
     private int $stub_id;
+
+    #[Column(type: 'integer')]
+    private int $order;
 
     #[Column(type: 'json')]
     private string $body;
@@ -24,10 +31,11 @@ class Callback
      * @param int $stubId
      * @param string $body
      */
-    public function __construct(int $stubId, string $body)
+    public function __construct(int $stubId, string $body, int $order)
     {
         $this->stub_id = $stubId;
         $this->body = $body;
+        $this->order = $order;
     }
 
     public function getId(): int
@@ -46,5 +54,21 @@ class Callback
     public function setBody(array $body): void
     {
         $this->body = json_encode($body);
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setOrder(int $order): void
+    {
+        $this->order = $order;
+    }
+
+    public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
+    {
+        return [
+            'id' => $this->getId(),
+            'body' => $this->getBody(),
+        ];
     }
 }

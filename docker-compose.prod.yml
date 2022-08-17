@@ -1,60 +1,74 @@
 version: '3.4'
 
-x-environments: &environments
-    MYSQL_ROOT_PASSWORD: "root"
-    MYSQL_PASSWORD: "password"
-    MYSQL_DATABASE: "app"
-    MYSQL_USER: "user"
-    NODE_ENV: "production"
-    API_URL: "http://staging01.dev.ru1:8082"
-    RABBITMQ_HOST: "rabbit"
-    RABBITMQ_DEFAULT_USER: "test"
-    RABBITMQ_DEFAULT_PASS: "#HJ@j$$%!Hjd"
-    CALLBACKS_QUEUE_NAME: &callback-queue-name "callbacks-queue"
-    DISABLE_SENDING_CALLBACKS: "true"
-    MEMCACHED_HOST: "memcached"
-    MEMCACHED_PORT: 11211
-
 services:
     client:
         image: konstantinpopov/payment-page-mock-client:main
         ports:
-            - target: 8080
-              published: 80
-        environment: *environments
+            - "${SPA_PORT}:8080"
+        environment:
+            NODE_ENV: $SPA_NODE_ENV
+            VUE_APP_API_URL: $API_URL
+
     nginx:
         image: konstantinpopov/payment-page-mock-nginx:main
         volumes: &sharedStatic
             - type: bind
-              source: ./assets
+              source: ./runtime/assets
               target: /var/www/public/assets
             - type: bind
-              source: ./uploads
+              source: ./runtime/uploads
               target: /var/www/public/uploads
         ports:
-            - target: 80
-              published: 8082
+            - "${API_PORT}:80"
+
     api: &server_app
         image: konstantinpopov/payment-page-mock-api:main
-        environment: *environments
         volumes: *sharedStatic
+        environment:
+            DISABLE_SENDING_CALLBACKS: "true"
+            YII_ENV: $API_YII_ENV
+            YII_DEBUG: $API_YII_DEBUG
+            API_URL: $API_URL
+            API_CALLBACKS_QUEUE_NAME: $API_CALLBACKS_QUEUE
+            API_CALLBACK_URL: $API_CALLBACK_URL
+            API_CALLBACK_SECRET: $API_CALLBACK_SECRET
+            MYSQL_DATABASE: $MYSQL_DATABASE
+            MYSQL_HOST: $MYSQL_HOST
+            MYSQL_PORT: $MYSQL_PORT
+            MYSQL_USER: $MYSQL_USER
+            MYSQL_PASSWORD: $MYSQL_PASSWORD
+            RABBITMQ_HOST: $RABBITMQ_HOST
+            RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
+            RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+            MEMCACHED_HOST: $MEMCACHED_HOST
+            MEMCACHED_PORT: $MEMCACHED_PORT
+
     callbacks_queue_consumer:
         <<: *server_app
-        restart: on-failure
-        entrypoint: ["php", "yii", "queue/listen", *callback-queue-name]
+        entrypoint: ["php", "yii", "queue/listen", $API_CALLBACKS_QUEUE]
+
     rabbit:
         image: rabbitmq:latest
-        environment: *environments
+        environment:
+            RABBITMQ_HOST: $RABBITMQ_HOST
+            RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
+            RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+
     memcached:
         image: memcached:latest
+
     db:
         image: mysql:latest
         ports:
-            - target: 3306
-              published: 3306
-        environment: *environments
+            - "${MYSQL_PORT}:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: $MYSQL_DATABASE
+            MYSQL_USER: $MYSQL_USER
+            MYSQL_PASSWORD: $MYSQL_PASSWORD
         volumes:
             - dbdata:/var/lib/mysql
+
 volumes:
     dbdata:
     static:
