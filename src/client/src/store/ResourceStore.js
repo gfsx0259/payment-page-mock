@@ -15,8 +15,9 @@ export default class ResourceStore extends BaseStore {
                 path: '',
                 description: '',
                 content_type: 'application/json',
-                content: '',
+                content: ''
             },
+            invalidFormFields: []
         }
     }
 
@@ -47,6 +48,7 @@ export default class ResourceStore extends BaseStore {
                 state.form.description = resource.description;
                 state.form.content_type = resource.content_type;
                 state.form.content = resource.content;
+                state.invalidFormFields = [];
             },
             cleanForm(state) {
                 state.form.id = null;
@@ -55,13 +57,35 @@ export default class ResourceStore extends BaseStore {
                 state.form.description = '';
                 state.form.content_type = 'application/json';
                 state.form.content = '';
+                state.invalidFormFields = [];
             },
+            setFieldInvalid(state, fieldName) {
+                state.invalidFormFields.push(fieldName);
+            },
+            unsetFieldInvalid(state, fieldName) {
+                state.invalidFormFields = state.invalidFormFields.filter(
+                    invalidFieldName => invalidFieldName !== fieldName
+                );
+            }
         }
     }
 
     actions() {
         return {
             ...super.actions(),
+            validateForm: ({state, commit}) => {
+                if (!/^[A-Z_]+$/.test(state.form.alias)) {
+                    commit('setFieldInvalid', 'alias');
+                } else {
+                    commit('unsetFieldInvalid', 'alias');
+                }
+
+                if (!/^\/[A-Za-z0-9/_.]+$/.test(state.form.path)) {
+                    commit('setFieldInvalid', 'path');
+                } else {
+                    commit('unsetFieldInvalid', 'path');
+                }
+            }
         }
     }
 }

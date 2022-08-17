@@ -40,8 +40,9 @@ export default {
             this.$emit('update:visible', false);
         },
         save() {
-            this.saveCallback();
-            this.hideModal();
+            if (this.saveCallback()) {
+              this.hideModal();
+            }
         },
     }
 }
