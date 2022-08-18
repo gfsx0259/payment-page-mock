@@ -155,7 +155,7 @@ return [
             Route::post('/payment/card/3ds_result')
                 ->action([ActionController::class, 'completeAcs']),
             Route::post('/payment/card/3ds_check_iframe')
-                ->action([ActionController::class, 'checkAcs']),
+                ->action([ActionController::class, 'completeAcs']),
             Route::post('/payment/clarification')
                 ->action([ActionController::class, 'completeClarification']),
         ),
@@ -172,9 +172,6 @@ return [
             Route::methods([Method::GET, Method::POST], '/renderAcsRedirect/{uniqueKey}')
                 ->name('actions/renderAcsRedirect')
                 ->action([DummyPageController::class, 'renderAcsRedirect']),
-            Route::methods([Method::GET, Method::POST], '/renderAcsForm/{uniqueKey}')
-                ->name('actions/renderAcsForm')
-                ->action([DummyPageController::class, 'renderAcsForm']),
             Route::methods([Method::GET, Method::POST], '/renderAps/{uniqueKey}')
                 ->name('actions/renderAps')
                 ->action([DummyPageController::class, 'renderAps']),

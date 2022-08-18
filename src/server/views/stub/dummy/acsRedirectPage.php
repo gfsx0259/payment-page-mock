@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @var WebView $this
- * @var string $completeUrl
+ * @var string $actionUrl
  * @var string $uniqueKey
  */
 
@@ -18,12 +18,14 @@ $this->setTitle('Acs by code page');
 
 <h2>ACS by code emulation page</h2>
 <div class="col-12 col-md-6 col-lg-6 col-xl-8">
-    <?= Form::widget()
-        ->action($completeUrl)
-        ->id('form-aps-page')
-        ->begin()
-    ?>
-    <?= Input::hidden('uniqueKey', $uniqueKey)->render(); ?>
-
-    <?= Field::widget()->submitButton([], ['class' => 'btn btn-primary']) ?>
+    <form id="redirectForm" name="redirectForm" action="<?= $actionUrl ?>" method="post">
+        <input type="hidden" name="cres" value="{{res}}"/>
+        <input type="hidden" name="threeDSSessionData" value="2275084971"/>
+        <input id="submit" type="submit" value="Submit">
+    </form>
 </div>
+<script type="text/javascript">
+    document.getElementById('submit').addEventListener("click", function () {
+        document.getElementById('redirectForm').submit();
+    }, false);
+</script>

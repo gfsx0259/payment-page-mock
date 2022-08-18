@@ -25,39 +25,17 @@ final class ActionController
         private CallbackResolver $callbackResolver,
         private CallbackProcessor $callbackProcessor,
         private ActionFactory $actionFactory,
-    ) {
-    }
+        private StateManager $stateManager,
+    ) {}
 
     /**
      * Accept complete request (3ds result) from Payment Page and move cursor
      *
      * @throws InvalidArgumentException
      */
-    public function completeAcs(
-        ServerRequestInterface $request,
-        StateManager $stateManager,
-    ): ResponseInterface {
-        $body = json_decode($request->getBody()->getContents(), true);
-
-        $this->completeAction($stateManager, $body, 'general.payment_id');
-
-        return $this->responseFactory->createResponse();
-    }
-
-    /**
-     * Confirm the need of 3ds 2.0 and move cursor
-     *
-     * @throws InvalidArgumentException
-     */
-    public function checkAcs(
-        ServerRequestInterface $request,
-        StateManager $stateManager,
-    ): ResponseInterface {
-        $body = json_decode($request->getBody()->getContents(), true);
-
-        $this->completeAction($stateManager, $body, 'general.payment_id');
-
-        return $this->responseFactory->createResponse();
+    public function completeAcs(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->completeActionByPaymentId($request);
     }
 
     /**
@@ -68,9 +46,8 @@ final class ActionController
     public function completeAps(
         ServerRequestInterface $request,
         WebControllerService $webControllerService,
-        StateManager $stateManager,
     ): ResponseInterface {
-        $state = $this->completeAction($stateManager, $request->getParsedBody(), 'uniqueKey');
+        $state = $this->completeAction($this->stateManager, $request->getParsedBody(), 'uniqueKey');
 
         return $webControllerService->getRedirectResponseByUrl(
             $state->getInitialRequest()->get('return_url.success')
@@ -83,9 +60,8 @@ final class ActionController
     public function completeConfirmationQr(
         ServerRequestInterface $request,
         WebControllerService $webControllerService,
-        StateManager $stateManager,
     ): ResponseInterface {
-        $state = $this->completeAction($stateManager, $request->getParsedBody(), 'uniqueKey');
+        $state = $this->completeAction($this->stateManager, $request->getParsedBody(), 'uniqueKey');
 
         return $webControllerService->getRedirectResponseByUrl(
             $state->getInitialRequest()->get('return_url.success')
@@ -95,12 +71,10 @@ final class ActionController
     /**
      * @throws InvalidArgumentException
      */
-    public function completeClarification(
-        ServerRequestInterface $request,
-        StateManager $stateManager,
-    ): ResponseInterface {
+    public function completeClarification(ServerRequestInterface $request): ResponseInterface
+    {
         $body = json_decode($request->getBody()->getContents(), true);
-        $state = $this->completeAction($stateManager, $body, 'general.payment_id');
+        $state = $this->completeAction($this->stateManager, $body, 'general.payment_id');
 
         return $this->responseFactory
             ->createResponse([
@@ -109,6 +83,15 @@ final class ActionController
                 'project_id' => $state->getInitialRequest()->get('general.project_id'),
                 'payment_id' => $state->getInitialRequest()->get('general.payment_id')
             ]);
+    }
+
+    private function completeActionByPaymentId(ServerRequestInterface $request): ResponseInterface
+    {
+        $body = json_decode($request->getBody()->getContents(), true);
+
+        $this->completeAction($this->stateManager, $body, 'general.payment_id');
+
+        return $this->responseFactory->createResponse();
     }
 
     private function completeAction(

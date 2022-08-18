@@ -15,6 +15,7 @@ use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\UrlGeneratorInterface;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Yii\View\ViewRenderer;
+use Psr\SimpleCache\InvalidArgumentException;
 
 final class DummyPageController
 {
@@ -67,7 +68,7 @@ final class DummyPageController
      * @param CurrentRoute $currentRoute
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function renderAcsIframe(CurrentRoute $currentRoute, ServerRequestInterface $request): ResponseInterface
     {
@@ -97,17 +98,18 @@ final class DummyPageController
      * @param CurrentRoute $currentRoute
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function renderAcsRedirect(CurrentRoute $currentRoute, ServerRequestInterface $request): ResponseInterface
     {
         $uniqueKey = $currentRoute->getArgument('uniqueKey');
-        $completeUrl = $this->urlGenerator->generate('actions/renderAcsForm', ['uniqueKey' => $uniqueKey]);
 
         if (!$state = $this->stateManager->get($uniqueKey)) {
             throw new LogicException('State must be exists');
         }
 
+        $operationId = rand(1, 10000000);
+        $actionUrl = $state->getInitialRequest()->get('acs_return_url.return_url') . "?operation_id=$operationId";
         $callback = new ArrayCollection($this->callbackResolver->resolve($state)->getBody());
         $expectedBody = $callback->get('threeds2.redirect.params');
         $body = $request->getParsedBody();
@@ -116,31 +118,6 @@ final class DummyPageController
             throw new LogicException('Expected body: ' . json_encode($expectedBody));
         }
 
-        return $this->viewRenderer->render('acsRedirectPage', [
-            'completeUrl' => $completeUrl,
-            'uniqueKey' => $uniqueKey,
-        ]);
-    }
-
-    /**
-     * Third step of 3ds 2.0 check
-     * This page emulates ending of the checking
-     * It makes a redirect to acs return url
-     *
-     * @param CurrentRoute $currentRoute
-     * @return ResponseInterface
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function renderAcsForm(CurrentRoute $currentRoute): ResponseInterface
-    {
-        if (!$state = $this->stateManager->get($currentRoute->getArgument('uniqueKey'))) {
-            throw new LogicException('State must be exists');
-        }
-
-        $operationId = rand(1, 10000000);
-        $actionUrl = $state->getInitialRequest()->get('acs_return_url.return_url')
-            . "?operation_id=$operationId";
-
-        return $this->viewRenderer->render('acsFormPage', ['actionUrl' => $actionUrl]);
+        return $this->viewRenderer->render('acsRedirectPage', ['actionUrl' => $actionUrl]);
     }
 }
