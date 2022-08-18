@@ -8,12 +8,16 @@ use App\Stub\Repository\ResourceRepository;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Table\Index;
+use Yiisoft\Arrays\ArrayableInterface;
+use Yiisoft\Arrays\ArrayableTrait;
 
 #[Entity(repository: ResourceRepository::class)]
 #[Index(columns: ['alias'], unique: true)]
 #[Index(columns: ['path'], unique: true)]
-class Resource
+class Resource implements ArrayableInterface
 {
+    use ArrayableTrait;
+
     #[Column(type: 'primary')]
     private int $id;
 
@@ -104,5 +108,17 @@ class Resource
     public function getTemplateVariable(): string
     {
         return $this->getAlias() . '_RESOURCE';
+    }
+
+    public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
+    {
+        return [
+            'id' => $this->getId(),
+            'content_type' => $this->getContentType(),
+            'content' => $this->getContent(),
+            'path' => $this->getPath(),
+            'alias' => $this->getAlias(),
+            'description' => $this->getDescription(),
+        ];
     }
 }

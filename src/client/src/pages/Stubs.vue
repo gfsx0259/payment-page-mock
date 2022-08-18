@@ -16,6 +16,7 @@
 
       <StubItems
           :stubs="stubs"
+          :routeId="routeId"
           @setDefault="changeDefault"
           @remove="remove($event)"
           @edit="editFormShow($event)"
@@ -46,7 +47,7 @@ export default {
       }
     },
     mounted() {
-        this.setRoute(parseInt(this.$route.params.id));
+        this.setRoute(parseInt(this.$route.params.routeId));
         this.fetch();
     },
     methods: {
@@ -85,6 +86,7 @@ export default {
     computed: {
         ...mapState({
             stubs: state => state.stub.entities,
+            routeId: state => state.stub.relationId,
             isLoading: state => state.stub.isLoading,
         }),
     }

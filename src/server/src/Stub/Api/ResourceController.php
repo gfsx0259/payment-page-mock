@@ -6,7 +6,6 @@ namespace App\Stub\Api;
 
 use App\Service\WebControllerService;
 use App\Stub\Entity\Resource;
-use App\Stub\Entity\Stub;
 use App\Stub\Repository\ResourceRepository;
 use Cycle\ORM\Select\Repository;
 use Psr\Http\Message\ResponseInterface;
@@ -33,14 +32,7 @@ final class ResourceController extends EntityController
 
         /** @var Resource $resource  */
         foreach ($this->resourceRepository->findAll() as $resource) {
-            $resources[] = [
-                'id' => $resource->getId(),
-                'content_type' => $resource->getContentType(),
-                'content' => $resource->getContent(),
-                'path' => $resource->getPath(),
-                'alias' => $resource->getAlias(),
-                'description' => $resource->getDescription(),
-            ];
+            $resources[] = $resource->toArray();
         }
 
         return $this->responseFactory

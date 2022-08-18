@@ -24,8 +24,6 @@ class OverrideProcessor implements ProcessorInterface
         'QR_ACCEPT_LINK' => 'qr_accept_link',
     ];
 
-    private ?iterable $resources = null;
-
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private ResourceRepository $resourceRepository,
@@ -35,58 +33,27 @@ class OverrideProcessor implements ProcessorInterface
 
     public function process(ArrayCollection $callback, State $state): ArrayCollection
     {
-        $source = $this->getSource($state);
-
-        foreach ($this->getSchema() as $placeholder => $sourcePath) {
-            if ($value = $source->get($sourcePath)) {
-                $callback->replace('{{' . $placeholder . '}}', $value);
-            }
-        }
-
-        return $callback;
-    }
-
-    private function getSource(State $state): ArrayCollection
-    {
         $source = $state->getInitialRequest();
-        $resources = $this->getResources();
 
         $source->set('request_id', $state->getRequestId());
         $source->set('acs_url', $this->generateAcsUrl());
         $source->set('aps_url', $this->generateApsUrl($state));
         $source->set('qr_accept_link', $this->generateQrAcceptUrl($state));
 
-        /** @var $resource Resource */
-        foreach ($resources as $resource) {
-            $placeholder = $resource->getTemplateVariable();
-
-            $source->set(strtolower($placeholder), $this->generateResourceUrl($resource));
+        foreach (self::SCHEMA as $placeholder => $sourcePath) {
+            if ($value = $source->get($sourcePath)) {
+                $callback->replace('{{' . $placeholder . '}}', $value);
+            }
         }
 
-        return $source;
-    }
+        /** @var Resource $resource */
+        foreach ($this->resourceRepository->findAll() as $resource) {
+            $value = $this->generateResourceUrl($resource);
 
-    private function getSchema(): array
-    {
-        $schema = self::SCHEMA;
-        $resources = $this->getResources();
-
-        /** @var $resource Resource */
-        foreach ($resources as $resource) {
-            $placeholder = $resource->getTemplateVariable();
-            $schema[$placeholder] = strtolower($placeholder);
+            $callback->replace('{{' . $resource->getTemplateVariable() . '}}', $value);
         }
 
-        return $schema;
-    }
-
-    private function getResources(): iterable
-    {
-        if ($this->resources === null) {
-            $this->resources = $this->resourceRepository->findAll();
-        }
-
-        return $this->resources;
+        return $callback;
     }
 
     private function generateResourceUrl(Resource $resource): string

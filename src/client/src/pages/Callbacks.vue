@@ -26,7 +26,7 @@ export default {
     CallbackItems,
   },
   async mounted() {
-    this.setStub(this.$route.params.id);
+    this.setStub(this.$route.params.stubId);
     await this.fetch();
 
     if (!this.dynamicTemplateVariables.length) {

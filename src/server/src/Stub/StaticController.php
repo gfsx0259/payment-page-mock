@@ -8,6 +8,7 @@ use App\Middleware\ResourceDataResponseFormatter;
 use App\Service\WebControllerService;
 use App\Stub\Entity\Resource;
 use App\Stub\Repository\ResourceRepository;
+use Psr\Http\Message\ResponseInterface;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
 use Yiisoft\Router\CurrentRoute;
 
@@ -18,7 +19,7 @@ final class StaticController
         ResourceRepository $resourceRepository,
         DataResponseFactoryInterface $responseFactory,
         WebControllerService $controllerService,
-    ) {
+    ): ResponseInterface {
         $destination = $currentRoute->getArgument('destination');
         $resource = $resourceRepository->findOne(['path' => $destination]);
 

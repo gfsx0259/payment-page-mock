@@ -25,7 +25,7 @@
                 <CTableDataCell>{{ stub.title }}</CTableDataCell>
                 <CTableDataCell>{{ stub.description }}</CTableDataCell>
                 <CTableDataCell class="text-center">
-                    <router-link :to="'/stub/' + stub.id">
+                    <router-link :to="'/route/' + routeId + '/stub/' + stub.id">
                         <CButton color="dark">Callbacks</CButton>
                     </router-link>
                 </CTableDataCell>
@@ -53,6 +53,9 @@ export default {
     props: {
         stubs: {
             type: Array,
+            required: true,
+        },
+        routeId: {
             required: true,
         }
     },
