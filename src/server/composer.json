@@ -25,6 +25,7 @@
         "cycle/entity-behavior": "^1.0",
         "cycle/orm": "^2.0",
         "doctrine/collections": "^1.6",
+        "endroid/qr-code": "^4.4",
         "fakerphp/faker": "^1.14",
         "httpsoft/http-message": "^1.0.5",
         "itechpsp/paymentpage-sdk": "^1.0",

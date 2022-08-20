@@ -2,6 +2,7 @@
 
 namespace App\Stub\Service\Callback;
 
+use App\Service\QrGenerator;
 use App\Stub\Collection\ArrayCollection;
 use App\Stub\Entity\Resource;
 use App\Stub\Repository\ResourceRepository;
@@ -22,12 +23,14 @@ class OverrideProcessor implements ProcessorInterface
         'APS_URL' => 'aps_url',
         'APS_WIDGET_URL' => 'additional_data.aps_widget_url',
         'QR_ACCEPT_LINK' => 'qr_accept_link',
+        'QR_ACCEPT_IMAGE' => 'qr_accept_image',
     ];
 
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private ResourceRepository $resourceRepository,
         private StateManager $stateManager,
+        private QrGenerator $qrGenerator,
         private string $host,
     ) {}
 
@@ -38,7 +41,13 @@ class OverrideProcessor implements ProcessorInterface
         $source->set('request_id', $state->getRequestId());
         $source->set('acs_url', $this->generateAcsUrl());
         $source->set('aps_url', $this->generateApsUrl($state));
-        $source->set('qr_accept_link', $this->generateQrAcceptUrl($state));
+
+        $qrLink = $this->generateQrAcceptUrl($state);
+
+        $source->set('qr_accept_link', $qrLink);
+        $source->set('qr_accept_image', $this->qrGenerator->generateDataUri($qrLink));
+
+        $callback->set('@.qr_data', $qrLink);
 
         foreach (self::SCHEMA as $placeholder => $sourcePath) {
             if ($value = $source->get($sourcePath)) {

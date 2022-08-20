@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 /** @var array $params */
 
+use App\Service\QrGenerator;
 use App\Stub\Repository\ResourceRepository;
 use App\Stub\Service\Callback\CallbackSender;
 use App\Stub\Service\Callback\CallbackSenderInterface;
@@ -19,11 +20,13 @@ return [
     OverrideProcessor::class => static fn (
         UrlGeneratorInterface $urlGenerator,
         ResourceRepository $resourceRepository,
-        StateManager $stateManager
+        StateManager $stateManager,
+        QrGenerator $qrGenerator
     ) => new OverrideProcessor(
         $urlGenerator,
         $resourceRepository,
         $stateManager,
+        $qrGenerator,
         $params['host'],
     ),
     CallbackSenderInterface::class => function (LoggerInterface $logger) {

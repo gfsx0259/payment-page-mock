@@ -8,7 +8,8 @@ use App\Stub\Service\Action\AcsAction;
 use App\Stub\Service\Action\ApsAction;
 use App\Stub\Service\Action\ApsWidgetAction;
 use App\Stub\Service\Action\ClarificationAction;
-use App\Stub\Service\Action\QrCodeAction;
+use App\Stub\Service\Action\QrDataAction;
+use App\Stub\Service\Action\QrImageAction;
 use App\Stub\Session\State;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
@@ -17,6 +18,10 @@ use Yiisoft\Injector\Injector;
 
 class ActionFactory
 {
+    private const
+        DISPLAY_DATA_TYPE_RAW = 'qr_data',
+        DISPLAY_DATA_TYPE_IMG = 'qr_img';
+
     public function __construct(
         private Injector $injector,
         private LoggerInterface $logger
@@ -35,8 +40,10 @@ class ActionFactory
                 }
             } elseif ($callback->get('clarification_fields')) {
                 return new ClarificationAction($callback, $state);
-            } elseif ($callback->get('display_data.0.type') === QrCodeAction::DISPLAY_DATA_TYPE_RAW) {
-                return $this->injector->make(QrCodeAction::class, [$callback, $state]);
+            } elseif ($callback->get('display_data.0.type') === self::DISPLAY_DATA_TYPE_RAW) {
+                return $this->injector->make(QrDataAction::class, [$callback, $state]);
+            } elseif ($callback->get('display_data.0.type') === self::DISPLAY_DATA_TYPE_IMG) {
+                return $this->injector->make(QrImageAction::class, [$callback, $state]);
             }
         } catch (ReflectionException | ContainerExceptionInterface $exception) {
             $this->logger->error($exception->getMessage());
