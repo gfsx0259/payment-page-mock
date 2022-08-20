@@ -6,6 +6,7 @@ export const callbackStore = {
             stubId: null,
         },
         callbacks: [],
+        dynamicTemplateVariables: [],
         isLoading: false,
     }),
     mutations: {
@@ -14,6 +15,9 @@ export const callbackStore = {
         },
         setCallbacks(state, callbacks) {
             state.callbacks = callbacks;
+        },
+        setDynamicTemplateVariables(state, templateVariables) {
+            state.dynamicTemplateVariables = templateVariables;
         },
         setIsLoading(state, isLoading) {
             state.isLoading = isLoading;
@@ -32,6 +36,13 @@ export const callbackStore = {
 
             commit('setCallbacks', response.data.data);
             commit('setIsLoading', false);
+        },
+        async fetchDynamicTemplateVariables({state, commit}) {
+            if (!state.dynamicTemplateVariables.length) {
+                const response = await HttpClient.get('resource/template-variables');
+
+                commit('setDynamicTemplateVariables', response.data.data);
+            }
         },
         async update({ state, commit, dispatch }, { id, callback }) {
             try {

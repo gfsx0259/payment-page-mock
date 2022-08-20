@@ -8,6 +8,7 @@
   </CButton>
   <CallbackHint
       :visible="isHintVisible"
+      :dynamicTemplateVariables="dynamicTemplateVariables"
       @hide="isHintVisible = false"
   />
   <draggable
@@ -51,6 +52,10 @@ export default {
   },
   props: {
     callbacks: {
+      type: Array,
+      required: true,
+    },
+    dynamicTemplateVariables: {
       type: Array,
       required: true,
     }

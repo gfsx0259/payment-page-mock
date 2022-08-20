@@ -6,13 +6,13 @@
                   <CNavItem v-for="item in getItems">
                       <CNavLink
                           @click="go(item)"
-                          :disabled="item.current"
+                          :disabled="item.routeName === currentRouteName"
                       >
-                          {{ item.name }}
+                          {{ item.title }}
                       </CNavLink>
                   </CNavItem>
                 </CCol>
-                <CCol xs="4" v-if="this.$route.name === 'routes'">
+                <CCol xs="4" v-if="showSearchRouteInput">
                   <CForm class="d-flex">
                     <CFormInput
                         type="search"
@@ -34,27 +34,19 @@ import {
   mapState,
   mapMutations,
 } from "vuex";
+import {MODULE_CALLBACK, MODULE_RESOURCE, MODULE_ROUTE, MODULE_STUB} from "@/constants";
 
 export default {
     name: "NavBar",
     data() {
         return {
+            currentRouteName: null,
+            showSearchRouteInput: false,
             items: [
-                {
-                    index: 0,
-                    name: 'routes',
-                    current: false,
-                },
-                {
-                    index: 1,
-                    name: 'stubs',
-                    current: false,
-                },
-                {
-                    index: 2,
-                    name: 'callbacks',
-                    current: false,
-                },
+                { level: 1, routeName: MODULE_RESOURCE, title: 'resources' },
+                { level: 1, routeName: MODULE_ROUTE, title: 'routes' },
+                { level: 2, routeName: MODULE_STUB, title: 'stubs' },
+                { level: 3, routeName: MODULE_CALLBACK, title: 'callbacks' },
             ],
         }
     },
@@ -62,21 +54,14 @@ export default {
         ...mapState({
           searchQuery: state => state.route.searchQuery,
         }),
+
         getItems() {
-            if (!this.$route.name) {
-                return this.items;
-            }
+          this.currentRouteName = this.$route.name || MODULE_ROUTE;
+          this.showSearchRouteInput = this.currentRouteName === MODULE_ROUTE;
 
-            const currentItem = this.items
-                .find((item) => item.name === this.$route.name);
-            const items = this.items
-                .filter((item) => item.index <= currentItem.index);
+          const currentItem = this.items.find((item) => item.routeName === this.currentRouteName);
 
-            return items.map((item, index) => {
-               item.current = index === items.length - 1;
-
-               return item;
-            });
+          return this.items.filter((item) => item.level <= currentItem.level);
         }
     },
     methods: {
@@ -87,12 +72,8 @@ export default {
           this.setSearchQuery($event.target.value);
         },
         go(targetItem) {
-            if (!targetItem.index) {
-                this.$router.push({name: targetItem.name});
-            } else {
-                this.$router.go(-1);
-            }
-        }
+          this.$router.push({ name: targetItem.routeName, params: this.$route.params });
+        },
     }
 }
 </script>

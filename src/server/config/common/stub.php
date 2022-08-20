@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 /** @var array $params */
 
+use App\Stub\Repository\ResourceRepository;
 use App\Stub\Service\Callback\CallbackSender;
 use App\Stub\Service\Callback\CallbackSenderInterface;
 use App\Stub\Service\Callback\CallbackSenderMock;
@@ -17,9 +18,11 @@ use Yiisoft\Router\UrlGeneratorInterface;
 return [
     OverrideProcessor::class => static fn (
         UrlGeneratorInterface $urlGenerator,
+        ResourceRepository $resourceRepository,
         StateManager $stateManager
     ) => new OverrideProcessor(
         $urlGenerator,
+        $resourceRepository,
         $stateManager,
         $params['host'],
     ),

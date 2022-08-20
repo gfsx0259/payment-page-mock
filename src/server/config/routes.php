@@ -17,9 +17,11 @@ use App\Middleware\AccessChecker;
 use App\Middleware\ApiDataWrapper;
 use App\Stub\ActionController;
 use App\Stub\Api\CallbackController;
+use App\Stub\Api\ResourceController;
 use App\Stub\Api\RouteController;
 use App\Stub\Api\StubController as ApiStubController;
 use App\Stub\DummyPageController;
+use App\Stub\StaticController;
 use App\Stub\StubController;
 use App\User\Controller\ApiUserController;
 use App\User\Controller\UserController;
@@ -130,10 +132,24 @@ return [
                         ->action([CallbackController::class, 'index']),
                     Route::patch('/callback/{stubId}')
                     ->action([CallbackController::class, 'changeOrder']),
-                    Route::methods([Method::OPTIONS, Method::POST],'/stub/callback')
+                    Route::methods([Method::OPTIONS, Method::POST], '/stub/callback')
                         ->action([CallbackController::class, 'update']),
                     Route::methods([Method::OPTIONS, Method::DELETE], '/callback/{id}')
                         ->action([CallbackController::class, 'delete']),
+
+                    Route::get('/resource')
+                        ->action([ResourceController::class, 'index']),
+                    Route::get('/resource/template-variables')
+                        ->action([ResourceController::class, 'getTemplateVariables']),
+                    Route::methods([Method::OPTIONS, Method::POST], '/resource')
+                        ->name('api/resource/create')
+                        ->action([ResourceController::class, 'create']),
+                    Route::methods([Method::PUT], '/resource')
+                        ->name('api/resource/update')
+                        ->action([ResourceController::class, 'update']),
+                    Route::methods([Method::OPTIONS, Method::DELETE], '/resource/{id}')
+                        ->name('api/resource/delete')
+                        ->action([ResourceController::class, 'delete']),
                 ),
         ),
 
@@ -176,6 +192,14 @@ return [
             Route::post('/completeConfirmationQr')
                 ->name('actions/completeConfirmationQr')
                 ->action([ActionController::class, 'completeConfirmationQr']),
+        ),
+
+    Group::create()
+        ->middleware(CorsMiddleware::class)
+        ->disableMiddleware(CsrfMiddleware::class)
+        ->routes(
+            Route::get('{destination:[a-zA-Z/.]+}')
+                ->action([StaticController::class, 'render'])
         ),
 
     // Blog routes

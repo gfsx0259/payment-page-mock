@@ -168,6 +168,19 @@
           <li>Payment page waits next callback from dummy</li>
         </ol>
 
+        <h5 v-if="dynamicTemplateVariables.length">Also you can use some static resources</h5>
+        <CTable hover bordered>
+          <CTableBody>
+            <CTableRow v-for="templateVariable in dynamicTemplateVariables">
+              <CTableDataCell>
+                <CopyElement>{{templateVariable.name}}</CopyElement>
+              </CTableDataCell>
+              <CTableDataCell>{{templateVariable.description}}</CTableDataCell>
+              <CTableDataCell>-</CTableDataCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
+
       </COffcanvasBody>
     </COffcanvas>
 </template>
@@ -181,6 +194,10 @@ export default {
   },
   props: {
     disabled: Boolean,
+    dynamicTemplateVariables: {
+      type: Array,
+      required: true,
+    }
   },
   methods: {
     hide() {

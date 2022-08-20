@@ -2,10 +2,13 @@
     <CTable bordered striped>
         <CTableHead>
             <CTableHeaderCell class="text-center">
-                Default
+                Alias
             </CTableHeaderCell>
             <CTableHeaderCell>
-                Title
+                Content Type
+            </CTableHeaderCell>
+            <CTableHeaderCell>
+                Path
             </CTableHeaderCell>
             <CTableHeaderCell>
                 Description
@@ -14,33 +17,23 @@
             <CTableHeaderCell/>
         </CTableHead>
         <CTableBody>
-            <CTableRow v-for="stub in this.stubs">
-                <CTableDataCell class="text-center" :class="{active: stub.default}">
-                    <CIcon
-                        icon="cilFlagAlt"
-                        size="xxl"
-                        @click="setDefault(stub.id)"
-                    />
-                </CTableDataCell>
-                <CTableDataCell>{{ stub.title }}</CTableDataCell>
-                <CTableDataCell>{{ stub.description }}</CTableDataCell>
-                <CTableDataCell class="text-center">
-                    <router-link :to="'/route/' + routeId + '/stub/' + stub.id">
-                        <CButton color="dark">Callbacks</CButton>
-                    </router-link>
-                </CTableDataCell>
+            <CTableRow v-for="resource in this.resources">
+                <CTableDataCell class="text-center">{{ resource.alias }}</CTableDataCell>
+                <CTableDataCell>{{ resource.content_type }}</CTableDataCell>
+                <CTableDataCell>{{ resource.path }}</CTableDataCell>
+                <CTableDataCell>{{ resource.description }}</CTableDataCell>
                 <CTableDataCell class="text-center">
                     <CIcon
                         icon="cilPencil"
                         size="xl"
                         class="cursor-pointer m-1"
-                        @click="edit(stub.id)"
+                        @click="edit(resource.id)"
                     />
                     <CIcon
                         icon="cilTrash"
                         size="xl"
                         class="cursor-pointer m-1"
-                        @click="remove(stub.id)"
+                        @click="remove(resource.id)"
                     />
                 </CTableDataCell>
             </CTableRow>
@@ -51,18 +44,12 @@
 <script>
 export default {
     props: {
-        stubs: {
+        resources: {
             type: Array,
-            required: true,
-        },
-        routeId: {
             required: true,
         }
     },
     methods: {
-        setDefault(id) {
-            this.$emit('setDefault', id);
-        },
         remove(id) {
             if (confirm('Are you sure?')) {
                 this.$emit('remove', id);
@@ -76,9 +63,6 @@ export default {
 </script>
 
 <style scoped>
-.active .icon {
-    color: darkred;
-}
 .cursor-pointer {
   cursor: pointer;
 }
