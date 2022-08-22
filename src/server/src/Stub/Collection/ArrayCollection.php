@@ -13,8 +13,7 @@ class ArrayCollection
 
     public function __construct(
         public array $data
-    ) {
-    }
+    ) {}
 
     public function get(string $key): mixed
     {

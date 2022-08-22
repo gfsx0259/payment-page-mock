@@ -198,7 +198,7 @@ return [
         ->middleware(CorsMiddleware::class)
         ->disableMiddleware(CsrfMiddleware::class)
         ->routes(
-            Route::get('{destination:[\/\-\w.]+}')
+            Route::methods([Method::GET, Method::POST], '{destination:[\/\-\w.]+}')
                 ->action([StaticController::class, 'render'])
         ),
 

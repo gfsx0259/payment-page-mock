@@ -25,8 +25,7 @@ final class ActionController
     private CallbackResolver $callbackResolver,
     private CallbackProcessor $callbackProcessor,
     private ActionFactory $actionFactory,
-    ) {
-    }
+    ) {}
 
     /**
      * Accept complete request (3ds result) from Payment Page and move cursor
