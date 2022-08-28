@@ -17,7 +17,16 @@ export default class ResourceStore extends BaseStore {
                 content_type: 'application/json',
                 content: ''
             },
-            invalidFormFields: []
+        }
+    }
+
+    rules() {
+        return {
+            alias: 'alphanumeric _',
+            path: [
+                'alphanumeric _/.',
+                'startsWith /',
+            ],
         }
     }
 
@@ -59,33 +68,6 @@ export default class ResourceStore extends BaseStore {
                 state.form.content = '';
                 state.invalidFormFields = [];
             },
-            setFieldInvalid(state, fieldName) {
-                state.invalidFormFields.push(fieldName);
-            },
-            unsetFieldInvalid(state, fieldName) {
-                state.invalidFormFields = state.invalidFormFields.filter(
-                    invalidFieldName => invalidFieldName !== fieldName
-                );
-            }
-        }
-    }
-
-    actions() {
-        return {
-            ...super.actions(),
-            validateForm: ({state, commit}) => {
-                if (!/^[A-Z_]+$/.test(state.form.alias)) {
-                    commit('setFieldInvalid', 'alias');
-                } else {
-                    commit('unsetFieldInvalid', 'alias');
-                }
-
-                if (!/^\/[A-Za-z0-9/_.]+$/.test(state.form.path)) {
-                    commit('setFieldInvalid', 'path');
-                } else {
-                    commit('unsetFieldInvalid', 'path');
-                }
-            }
         }
     }
 }

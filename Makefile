@@ -14,6 +14,7 @@ ROUTE_IMAGES := card gcash kakaopay pix neofinance
 APP_TABLES := route callback stub resource
 
 install: prepare pull deploy
+utils_example: utils_db_load utils_images_load_dev
 
 prepare:
 	sudo mkdir -p $(SHARED_DIRS)
@@ -61,7 +62,4 @@ utils_deps:
 	docker-compose exec api composer install
 
 utils_test:
-	docker-compose exec api bash -c "composer test"
-
-utils_example: utils_db_load utils_images_load_dev
-
+	docker-compose exec api composer test

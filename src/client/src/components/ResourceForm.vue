@@ -5,7 +5,7 @@
             <CFormInput
                 type="text"
                 id="alias"
-                feedbackInvalid="Only latin capital letters and underscores can be used"
+                feedbackInvalid="Required. Only latin capital letters and underscores can be used"
                 :invalid="invalidFormFields.includes('alias')"
                 :model-value="alias"
                 @update:model-value="setAlias"
@@ -16,7 +16,7 @@
             <CFormInput
                 type="text"
                 id="path"
-                feedbackInvalid="No spaces must be here. Only latin letters, digits, slashes, underscores, hyphens are allowed. One slash at the beginning is required"
+                feedbackInvalid="Required. No spaces must be here. Only latin letters, digits, slashes, underscores, hyphens are allowed. One slash at the beginning is required"
                 :invalid="invalidFormFields.includes('path')"
                 :model-value="path"
                 @update:model-value="setPath"
@@ -64,24 +64,24 @@ import {
 } from 'vuex';
 
 export default {
-    methods: {
-        ...mapMutations({
-            setAlias: 'resource/setAlias',
-            setPath: 'resource/setPath',
-            setDescription: 'resource/setDescription',
-            setContentType: 'resource/setContentType',
-            setContent: 'resource/setContent',
-        }),
-    },
-    computed: {
-        ...mapState({
-            alias: state => state.resource.form.alias,
-            path: state => state.resource.form.path,
-            description: state => state.resource.form.description,
-            content_type: state => state.resource.form.content_type,
-            content: state => state.resource.form.content,
-            invalidFormFields: state => state.resource.invalidFormFields,
-        }),
-    }
+  methods: {
+    ...mapMutations({
+      setAlias: 'resource/setAlias',
+      setPath: 'resource/setPath',
+      setDescription: 'resource/setDescription',
+      setContentType: 'resource/setContentType',
+      setContent: 'resource/setContent',
+    }),
+  },
+  computed: {
+    ...mapState({
+      alias: state => state.resource.form.alias,
+      path: state => state.resource.form.path,
+      description: state => state.resource.form.description,
+      content_type: state => state.resource.form.content_type,
+      content: state => state.resource.form.content,
+      invalidFormFields: state => state.resource.invalidFormFields,
+    }),
+  }
 }
 </script>

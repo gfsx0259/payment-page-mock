@@ -17,6 +17,12 @@ export default class StubStore extends BaseStore {
         }
     }
 
+    rules() {
+        return {
+            title: 'alphanumeric',
+        }
+    }
+
     mutations() {
         return {
             ...super.mutations(),
