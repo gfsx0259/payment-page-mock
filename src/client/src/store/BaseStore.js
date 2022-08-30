@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Validator from "js-validate";
 import HttpClient from "@/network/client";
 import { CRUD_METHOD_LABEL } from "@/constants";
 
@@ -10,6 +11,15 @@ export default class BaseStore {
         new Error('Implement endpoint');
     }
 
+    /**
+     * Return form validation rules map
+     *
+     * @return {Object.<string, string|string[]>}
+     */
+    rules() {
+        return {};
+    }
+
     state() {
         return {
             isLoading: false,
@@ -17,7 +27,8 @@ export default class BaseStore {
             entities: [],
             form: {
                 id: null,
-            }
+            },
+            invalidFormFields: [],
         }
     }
 
@@ -38,6 +49,14 @@ export default class BaseStore {
 
                 state.entities.splice(index, 1);
             },
+            setFieldInvalid(state, fieldName) {
+                state.invalidFormFields.push(fieldName);
+            },
+            unsetFieldInvalid(state, fieldName) {
+                state.invalidFormFields = state.invalidFormFields.filter(
+                    invalidFieldName => invalidFieldName !== fieldName
+                );
+            }
         }
     }
 
@@ -67,10 +86,31 @@ export default class BaseStore {
                     );
             },
             save: async ({state, dispatch}) => {
+                dispatch('validate');
+
+                if (state.invalidFormFields.length) {
+                    return false;
+                }
+
                 dispatch('request', {
                     method: state.form.id ? 'PUT' : 'POST',
                     data: Object.assign(state.form, state.relationId ? { relationId: state.relationId } : {}),
                 });
+
+                return true;
+            },
+            validate: ({state, commit}) => {
+                const validator = new Validator();
+
+                Object.entries(this.rules())
+                    .map(config => {
+                        const field = config[0];
+                        const rule = config[1];
+
+                        validator(state.form[field], rule)
+                            ? commit('unsetFieldInvalid', field)
+                            : commit('setFieldInvalid', field);
+                    });
             },
             /**
              * @private

@@ -2,7 +2,7 @@
   <CRow>
     <CSpinner class="m-sm-auto" color="dark" v-if="isLoading"/>
   </CRow>
-  <Modal v-model:visible="visible" :title="title" :saveCallback="handleSaveCallback">
+  <Modal v-model:visible="visible" :title="title" :saveCallback="save">
     <ResourceForm/>
   </Modal>
   <CRow v-if="!isLoading">
@@ -44,7 +44,6 @@ export default {
       fetch: 'resource/fetch',
       save: 'resource/save',
       remove: 'resource/remove',
-      validateForm: 'resource/validateForm',
     }),
     ...mapMutations({
       loadFormByResource: 'resource/loadFormByResource',
@@ -64,17 +63,6 @@ export default {
 
       this.visible = true;
     },
-    handleSaveCallback() {
-      this.validateForm();
-
-      if (!this.invalidFormFields.length) {
-        this.save();
-
-        return true;
-      }
-
-      return false;
-    }
   },
   computed: {
     ...mapState({
