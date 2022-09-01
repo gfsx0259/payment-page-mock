@@ -17,6 +17,7 @@ use App\Stub\Session\State;
 use App\Tests\UnitTester;
 use Codeception\Test\Unit;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Yiisoft\Injector\Injector;
 
 final class ActionFactoryTest extends Unit
@@ -91,7 +92,10 @@ final class ActionFactoryTest extends Unit
     {
         $stubs = [RouteMatcher::class => $this->make(RouteMatcher::class)];
 
-        return $this->make(ActionFactory::class, ['injector' => $this->makeInjector($stubs)]);
+        return $this->make(ActionFactory::class, [
+            'injector' => $this->makeInjector($stubs),
+            'logger' => $this->makeEmpty(LoggerInterface::class)
+        ]);
     }
 
     private function makeInjector(array $instances = []): Injector

@@ -14,6 +14,7 @@ use App\Stub\Session\StateManager;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
@@ -25,6 +26,7 @@ final class ActionController
         private CallbackResolver $callbackResolver,
         private CallbackProcessor $callbackProcessor,
         private ActionFactory $actionFactory,
+        private LoggerInterface $logger,
         private StateManager $stateManager,
     ) {}
 
@@ -103,11 +105,20 @@ final class ActionController
             throw new LogicException('State must be exists');
         }
 
+        $this->logger->info('Complete action', [
+            'state' => $state,
+        ]);
+
         $callback = $this->callbackResolver->resolve($state);
         $action = $this->actionFactory->make(
             $this->callbackProcessor->process($state, $callback),
             $state
         );
+
+        $this->logger->info('Action factory result', [
+            'action' => $action,
+            'state' => $state,
+        ]);
 
         if (!$action) {
             throw new LogicException('Action must be exists');

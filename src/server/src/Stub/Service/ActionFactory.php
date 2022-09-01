@@ -30,6 +30,11 @@ class ActionFactory
 
     public function make(ArrayCollection $callback, State $state): ?AbstractAction
     {
+        $this->logger->info('Try to create action', [
+            'callback' => $callback,
+            'state' => $state,
+        ]);
+
         try {
             if ($callback->get('acs')) {
                 return new AcsAction($callback, $state);
