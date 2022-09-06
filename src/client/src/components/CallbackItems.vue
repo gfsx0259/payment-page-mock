@@ -1,37 +1,41 @@
 <template>
   <CButton color="dark" @click="onAdd">Add callback</CButton>
-  <CButton class="btn-hint ms-2" color="light" @click="isHintVisible = !isHintVisible">
+  <CButton
+    class="btn-hint ms-2"
+    color="light"
+    @click="isHintVisible = !isHintVisible"
+  >
     <span class="pe-1">
-      <CIcon size="xl" icon="cilCompass"/>
+      <CIcon size="xl" icon="cilCompass" />
     </span>
     <span>Show hint</span>
   </CButton>
   <CallbackHint
-      :visible="isHintVisible"
-      :dynamicTemplateVariables="dynamicTemplateVariables"
-      @hide="isHintVisible = false"
+    :visible="isHintVisible"
+    :dynamicTemplateVariables="dynamicTemplateVariables"
+    @hide="isHintVisible = false"
   />
   <draggable
-      :list="callbacks"
-      item-key="id"
-      animation="400"
-      @end="onChangeOrder"
-      tag="CRow"
+    :list="callbacks"
+    item-key="id"
+    animation="400"
+    @end="onChangeOrder"
+    tag="CRow"
   >
-    <template #item="{element}">
+    <template #item="{ element }">
       <CCol md="6" class="position-relative">
         <vue-json-editor
-            v-bind:value="element.body"
-            @json-save="onUpdate(element.id, $event)"
-            @json-remove="onRemove(element.id)"
-            show-btns
-            mode="code"
+          v-bind:value="element.body"
+          @json-save="onUpdate(element.id, $event)"
+          @json-remove="onRemove(element.id)"
+          show-btns
+          mode="code"
         />
         <CIcon
-            v-if="!hasNewCallback()"
-            class="icon-move"
-            icon="cilCursorMove"
-            size="xl"
+          v-if="!hasNewCallback()"
+          class="icon-move"
+          icon="cilCursorMove"
+          size="xl"
         />
       </CCol>
     </template>
@@ -39,9 +43,9 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import draggable from 'vuedraggable';
-import VueJsonEditor from 'vue-json-editor'
+import _ from "lodash";
+import draggable from "vuedraggable";
+import VueJsonEditor from "vue-json-editor";
 import CallbackHint from "@/components/CallbackHint";
 
 export default {
@@ -58,33 +62,33 @@ export default {
     dynamicTemplateVariables: {
       type: Array,
       required: true,
-    }
+    },
   },
   data: () => {
     return {
       isHintVisible: false,
-    }
+    };
   },
   methods: {
     onAdd() {
-      this.$emit('add');
+      this.$emit("add");
     },
     onUpdate(id, callback) {
-      this.$emit('update', { id, callback });
+      this.$emit("update", { id, callback });
     },
     onRemove(id) {
-      if (confirm('Are you sure?')) {
-        this.$emit('remove', id);
+      if (confirm("Are you sure?")) {
+        this.$emit("remove", id);
       }
     },
     onChangeOrder() {
-      this.$emit('changeOrder', _.map(this.callbacks, 'id'));
+      this.$emit("changeOrder", _.map(this.callbacks, "id"));
     },
     hasNewCallback() {
-      return this.callbacks.filter(({id}) => id === null).length !== 0;
-    }
+      return this.callbacks.filter(({ id }) => id === null).length !== 0;
+    },
   },
-}
+};
 </script>
 
 <style>
@@ -94,10 +98,12 @@ export default {
 .jsoneditor-vue {
   margin-top: 20px;
 }
-.jsoneditor,.ace-jsoneditor {
+.jsoneditor,
+.ace-jsoneditor {
   min-height: 700px;
 }
-.jsoneditor-btns .json-save-btn,.json-remove-btn {
+.jsoneditor-btns .json-save-btn,
+.json-remove-btn {
   padding: 0.375rem 0.75rem;
   border: none;
   color: #fff;
@@ -123,12 +129,13 @@ export default {
   right: 224px;
 }
 .sortable-ghost {
-  border:1px dotted gray;
+  border: 1px dotted gray;
 }
 .sortable-chosen {
   opacity: 0.5;
 }
-.btn-hint svg,.btn-hint span {
+.btn-hint svg,
+.btn-hint span {
   vertical-align: top;
 }
 .btn-hint svg {
