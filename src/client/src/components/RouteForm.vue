@@ -3,9 +3,11 @@
     <div class="mb-3">
       <CFormLabel for="route">Path</CFormLabel>
       <CFormInput
+        feedbackInvalid="Required. No spaces must be here. Only latin letters, digits, slashes, underscores, hyphens are allowed."
+        :invalid="invalidFormFields.includes('path')"
         :model-value="route"
-        @update:model-value="setRoute"
-        placeholder="card/sale"
+        @update:model-value="setPath"
+        placeholder="unique-path/action"
       />
     </div>
     <div class="mb-3">
@@ -18,7 +20,10 @@
     </div>
     <div class="mb-3">
       <CFormLabel for="title">Description</CFormLabel>
-      <CFormTextarea :model-value="title" @update:model-value="setTitle" />
+      <CFormTextarea
+          :model-value="title"
+          @update:model-value="setDescription"
+      />
     </div>
     <div class="mb-3">
       <FileReader @load="setLogo" />
@@ -32,7 +37,6 @@ import FileReader from "@/components/common/FileReader";
 import { ROUTE_TYPE_MAP } from "@/constants";
 
 export default {
-  name: "RouteForm",
   components: {
     FileReader,
   },
@@ -43,10 +47,10 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setTitle: "route/setFormTitle",
-      setRoute: "route/setFormRoute",
-      setLogo: "route/setFormLogo",
-      setType: "route/setFormType",
+      setPath: "route/setPath",
+      setType: "route/setType",
+      setDescription: "route/setDescription",
+      setLogo: "route/setLogo",
     }),
     create() {
       this.$emit("create", this.route);
@@ -54,10 +58,11 @@ export default {
   },
   computed: {
     ...mapState({
-      title: (state) => state.route.routeForm.title,
-      route: (state) => state.route.routeForm.route,
-      logo: (state) => state.route.routeForm.logo,
-      type: (state) => state.route.routeForm.type,
+      path: (state) => state.route.form.path,
+      type: (state) => state.route.form.type,
+      description: (state) => state.route.form.description,
+      logo: (state) => state.route.form.logo,
+      invalidFormFields: (state) => state.route.invalidFormFields,
     }),
   },
 };

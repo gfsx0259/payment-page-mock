@@ -31,19 +31,13 @@ final class RouteController extends EntityController
 
     public function index(): ResponseInterface
     {
-        $stubs = [];
-        foreach ($this->routeRepository->findAll() as $stub) {
-            $stubs[] = [
-                'id' => $stub->getId(),
-                'route' => $stub->getRoute(),
-                'title' => $stub->getTitle(),
-                'logo' => $stub->getLogo(),
-                'type' => $stub->getType(),
-            ];
+        $routes = [];
+
+        foreach ($this->routeRepository->findAll() as $route) {
+            $routes[] = $route->toArray();
         }
 
-        return $this->responseFactory
-            ->createResponse($stubs);
+        return $this->responseFactory->createResponse($routes);
     }
 
     /**
@@ -54,9 +48,9 @@ final class RouteController extends EntityController
         $data = json_decode($request->getBody()->getContents());
 
         $route = new Route(
-            $data->route,
-            $data->title,
-            $this->imageUploader->handle($data->logo, $this->getLogoFilename($data->route)),
+            $data->path,
+            $data->description,
+            $this->imageUploader->handle($data->logo, $this->getLogoFilename($data->path)),
             (int)$data->type
         );
         $entityWriter->write([$route]);

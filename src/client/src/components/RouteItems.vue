@@ -15,7 +15,7 @@
           :src="this.getImagePath(route.logo)"
         />
         <CCardBody>
-          <CCardTitle class="mb-3">{{ route.route }}</CCardTitle>
+          <CCardTitle class="mb-3">{{ route.path }}</CCardTitle>
           <router-link :to="'/route/' + route.id">
             <CButton color="dark">Stubs</CButton>
           </router-link>
@@ -31,7 +31,6 @@ import { API_URL } from "@/constants";
 import RouteType from "@/components/RouteType";
 
 export default {
-  name: "RouteItems",
   components: { RouteType },
   props: {
     routes: {

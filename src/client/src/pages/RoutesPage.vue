@@ -38,8 +38,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      fetch: "route/fetchRoutes",
-      create: "route/createRoute",
+      fetch: "route/fetch",
+      create: "route/save",
       remove: "route/remove",
     }),
     showForm() {
@@ -51,13 +51,13 @@ export default {
   },
   computed: {
     ...mapState({
-      routes: (state) => state.route.routes,
+      routes: (state) => state.route.entities,
       isLoading: (state) => state.route.isLoading,
       searchQuery: (state) => state.route.searchQuery,
     }),
     searchedRoutes() {
       return this.routes.filter((route) =>
-        route.route.includes(this.searchQuery)
+        route.path.includes(this.searchQuery)
       );
     },
   },

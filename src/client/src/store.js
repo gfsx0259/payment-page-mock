@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import StubStore from "@/store/StubStore";
-import { routeStore } from "@/store/routeStore";
+import RouteStore from "@/store/RouteStore";
+import ResourceStore from "@/store/ResourceStore";
 import { callbackStore } from "@/store/callbackStore";
 import {
   MODULE_ROUTE,
@@ -8,7 +9,6 @@ import {
   MODULE_CALLBACK,
   MODULE_RESOURCE,
 } from "@/constants";
-import ResourceStore from "@/store/ResourceStore";
 
 export default createStore({
   state: {
@@ -21,7 +21,7 @@ export default createStore({
   },
   modules: {
     [MODULE_STUB]: new StubStore().getModule(),
-    [MODULE_ROUTE]: routeStore,
+    [MODULE_ROUTE]: new RouteStore().getModule(),
     [MODULE_CALLBACK]: callbackStore,
     [MODULE_RESOURCE]: new ResourceStore().getModule(),
   },
