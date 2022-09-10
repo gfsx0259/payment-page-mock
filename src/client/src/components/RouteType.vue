@@ -11,28 +11,25 @@ export default {
     type: {
       type: Number,
       required: true,
-    }
+    },
   },
   methods: {
     getColor() {
       switch (this.type) {
         case 1:
-          return 'danger';
+          return "danger";
         case 2:
-          return 'warning';
+          return "warning";
         case 3:
-          return 'success'
+          return "success";
       }
     },
     getLabel() {
       const type = ROUTE_TYPE_MAP.find((type) => type.value === this.type);
-      return type
-        ? type.label
-        : '';
+      return type ? type.label : "";
     },
-
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

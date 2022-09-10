@@ -1,9 +1,9 @@
 <template>
   <div class="copy-container">
     <span @click="copy">
-      <slot/>
+      <slot />
     </span>
-    <CIcon class="copy-icon" icon="cilCopy"/>
+    <CIcon class="copy-icon" icon="cilCopy" />
   </div>
 </template>
 
@@ -14,9 +14,9 @@ export default {
   methods: {
     copy(event) {
       copyText(event.target.innerText, event.target, () => {});
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
