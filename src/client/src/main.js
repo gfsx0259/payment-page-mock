@@ -32,6 +32,7 @@ const UIComponents = [
   Components.CCardBody,
   Components.CButton,
   Components.CCol,
+  Components.CCallout,
   Components.CRow,
   Components.CHeader,
   Components.CTable,

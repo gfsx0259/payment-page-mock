@@ -21,7 +21,8 @@ export default class RouteStore extends BaseStore {
 
   rules() {
     return {
-      path: "alphanumeric _",
+      path: "alphanumeric _/-",
+      type: "numeric",
     };
   }
 

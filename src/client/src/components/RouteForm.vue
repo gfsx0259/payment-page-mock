@@ -5,7 +5,7 @@
       <CFormInput
         feedbackInvalid="Required. No spaces must be here. Only latin letters, digits, slashes, underscores, hyphens are allowed."
         :invalid="invalidFormFields.includes('path')"
-        :model-value="route"
+        :model-value="path"
         @update:model-value="setPath"
         placeholder="unique-path/action"
       />
@@ -13,6 +13,8 @@
     <div class="mb-3">
       <CFormLabel for="type">Type</CFormLabel>
       <CFormSelect
+        feedbackInvalid="Required."
+        :invalid="invalidFormFields.includes('type')"
         :model-value="type"
         @update:model-value="setType"
         :options="types"
@@ -21,7 +23,7 @@
     <div class="mb-3">
       <CFormLabel for="title">Description</CFormLabel>
       <CFormTextarea
-          :model-value="title"
+          :model-value="description"
           @update:model-value="setDescription"
       />
     </div>
