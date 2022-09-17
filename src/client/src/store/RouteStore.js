@@ -45,6 +45,21 @@ export default class RouteStore extends BaseStore {
       setSearchQuery(state, searchQuery) {
         state.searchQuery = searchQuery;
       },
+      loadForm(state, id) {
+        const route = state.entities.find((route) => route.id === id);
+
+        state.form.id = id;
+        state.form.path = route.path;
+        state.form.type = route.type;
+        state.form.description = route.description;
+        state.form.logo = route.logo;
+      },
+      clean(state) {
+        state.form.path = "";
+        state.form.type = null;
+        state.form.description = "";
+        state.form.logo = "";
+      },
     }
   }
 };

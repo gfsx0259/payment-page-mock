@@ -7,11 +7,12 @@
     <RouteForm />
   </ModalWindow>
   <div class="d-flex justify-content-start mb-4">
-    <CButton color="light" @click="showForm">Add route</CButton>
+    <CButton color="light" @click="createFormShow">Add route</CButton>
   </div>
   <RouteItems
     :routes="searchedRoutes"
     @remove="remove($event)"
+    @edit="editFormShow($event)"
     v-if="!isLoading"
   />
   <RoutePlaceholder v-if="isLoading" />
@@ -22,7 +23,7 @@ import ModalWindow from "@/components/common/ModalWindow";
 import RouteItems from "@/components/RouteItems";
 import RoutePlaceholder from "@/components/RoutePlaceholder";
 import RouteForm from "@/components/RouteForm";
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 
 export default {
   components: {
@@ -37,12 +38,21 @@ export default {
     };
   },
   methods: {
+    ...mapMutations({
+      loadForm: "route/loadForm",
+      clean: "route/clean",
+    }),
     ...mapActions({
       fetch: "route/fetch",
       create: "route/save",
       remove: "route/remove",
     }),
-    showForm() {
+    createFormShow() {
+      this.clean();
+      this.visible = true;
+    },
+    editFormShow(id) {
+      this.loadForm(id);
       this.visible = true;
     },
   },

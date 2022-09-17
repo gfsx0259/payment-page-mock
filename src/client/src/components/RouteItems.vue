@@ -3,10 +3,16 @@
     <CCol xs v-for="route in routes" :key="route">
       <CCard style="width: 18rem" class="mb-4">
         <CIcon
-          icon="cilX"
-          size="xl"
-          class="delete-btn m-1"
-          @click="remove(route.id)"
+            icon="cilX"
+            size="xl"
+            class="delete-btn cursor-pointer m-1"
+            @click="remove(route.id)"
+        />
+        <CIcon
+            icon="cilPencil"
+            size="xl"
+            class="edit-btn cursor-pointer m-1"
+            @click="edit(route.id)"
         />
         <CCardImage
           v-if="route.logo"
@@ -47,18 +53,30 @@ export default {
         this.$emit("remove", id);
       }
     },
+    edit(id) {
+      this.$emit("edit", id);
+    },
   },
 };
 </script>
 
 <style scoped>
-.card:hover .delete-btn {
+.card:hover .delete-btn,.card:hover .edit-btn {
   display: block;
 }
 .delete-btn {
   position: absolute;
   display: none;
+  top: 0;
   right: 0;
+}
+.edit-btn {
+  position: absolute;
+  display: none;
+  top: 30px;
+  right: 0;
+}
+.cursor-pointer {
   cursor: pointer;
 }
 </style>

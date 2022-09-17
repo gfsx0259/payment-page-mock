@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Stub\Api;
 
+use App\Service\WebControllerService;
 use App\Stub\Api\Service\ImageUploader;
 use App\Stub\Entity\Route;
 use App\Stub\Repository\RouteRepository;
@@ -57,6 +58,32 @@ final class RouteController extends EntityController
 
         return $this->responseFactory
             ->createResponse(['success' => true]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function update(
+        ServerRequestInterface $request,
+        EntityWriter $entityWriter,
+        WebControllerService $controllerService
+    ): ResponseInterface {
+        $data = json_decode($request->getBody()->getContents());
+        $route = $this->routeRepository->findByPK($data->id);
+
+        if (!$route) {
+            return $controllerService->getNotFoundResponse();
+        }
+
+        $route->setRoute($data->path);
+        $route->setType((int)$data->type);
+        $route->setTitle($data->description);
+        $route->setLogo($this->imageUploader->handle($data->logo, $this->getLogoFilename($data->path)));
+
+        $entityWriter->write([$route]);
+
+        return $this->responseFactory
+            ->createResponse(['success' => $data]);
     }
 
     /**

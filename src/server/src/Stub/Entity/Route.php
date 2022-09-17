@@ -91,6 +91,38 @@ class Route implements ArrayableInterface
     }
 
     /**
+     * @param string $route
+     */
+    public function setRoute(string $route): void
+    {
+        $this->route = $route;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @param string $logo
+     */
+    public function setLogo(string $logo): void
+    {
+        $this->logo = $logo;
+    }
+
+    /**
+     * @param int $type
+     */
+    public function setType(int $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getStubs(): ArrayCollection

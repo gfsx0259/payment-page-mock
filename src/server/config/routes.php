@@ -109,6 +109,9 @@ return [
                     Route::methods([Method::OPTIONS, Method::POST], '/route')
                         ->name('api/route/create')
                         ->action([RouteController::class, 'create']),
+                    Route::methods([Method::PUT], '/route')
+                        ->name('api/route/update')
+                        ->action([RouteController::class, 'update']),
                     Route::methods([Method::OPTIONS, Method::DELETE], '/route/{id}')
                         ->action([RouteController::class, 'delete']),
 
