@@ -9,6 +9,7 @@ use App\Stub\Entity\Stub;
 use App\Stub\Repository\RouteRepository;
 use App\Stub\Repository\StubRepository;
 use Cycle\ORM\Select\Repository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -29,13 +30,9 @@ final class StubController extends EntityController
         return $this->stubRepository;
     }
 
-    public function index(
-        CurrentRoute $route
-    ): ResponseInterface {
-        $route = $this->routeRepository->findByPK((int)$route->getArgument('routeId'));
-
-        return $this->responseFactory
-            ->createResponse($route->getStubs()->map(fn ($callback) => $callback->toArray())->getValues());
+    protected function getCollection(CurrentRoute $route): ArrayCollection
+    {
+        return $this->routeRepository->findByPK((int)$route->getArgument('routeId'))->getStubs();
     }
 
     /**

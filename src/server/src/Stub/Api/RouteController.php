@@ -9,6 +9,7 @@ use App\Stub\Api\Service\ImageUploader;
 use App\Stub\Entity\Route;
 use App\Stub\Repository\RouteRepository;
 use Cycle\ORM\Select\Repository;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -28,17 +29,6 @@ final class RouteController extends EntityController
     protected function getRepository(): Repository
     {
         return $this->routeRepository;
-    }
-
-    public function index(): ResponseInterface
-    {
-        $routes = [];
-
-        foreach ($this->routeRepository->findAll() as $route) {
-            $routes[] = $route->toArray();
-        }
-
-        return $this->responseFactory->createResponse($routes);
     }
 
     /**
@@ -78,7 +68,11 @@ final class RouteController extends EntityController
         $route->setRoute($data->path);
         $route->setType((int)$data->type);
         $route->setTitle($data->description);
-        $route->setLogo($this->imageUploader->handle($data->logo, $this->getLogoFilename($data->path)));
+        try {
+            $route->setLogo($this->imageUploader->handle($data->logo, $this->getLogoFilename($data->path)));
+        } catch (Exception $exception) {
+
+        }
 
         $entityWriter->write([$route]);
 

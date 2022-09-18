@@ -1,5 +1,5 @@
 import BaseStore from "@/store/BaseStore";
-import { MODULE_ROUTE } from "@/constants";
+import {MODULE_ROUTE} from "@/constants";
 
 export default class RouteStore extends BaseStore {
   endpoint() {
