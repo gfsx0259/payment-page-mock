@@ -26,19 +26,6 @@ final class ResourceController extends EntityController
         return $this->resourceRepository;
     }
 
-    public function index(): ResponseInterface
-    {
-        $resources = [];
-
-        /** @var Resource $resource  */
-        foreach ($this->resourceRepository->findAll() as $resource) {
-            $resources[] = $resource->toArray();
-        }
-
-        return $this->responseFactory
-            ->createResponse($resources);
-    }
-
     public function create(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
     {
         $data = json_decode($request->getBody()->getContents());

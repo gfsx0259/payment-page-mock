@@ -19,7 +19,7 @@ export default class StubStore extends BaseStore {
 
   rules() {
     return {
-      title: "alphanumeric",
+      title: "alphanumeric _space_",
     };
   }
 

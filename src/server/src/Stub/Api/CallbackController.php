@@ -9,6 +9,7 @@ use App\Stub\Entity\Callback;
 use App\Stub\Repository\CallbackRepository;
 use App\Stub\Repository\StubRepository;
 use Cycle\ORM\Select\Repository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Safe\Exceptions\ArrayException;
@@ -32,14 +33,9 @@ final class CallbackController extends EntityController
         return $this->callbackRepository;
     }
 
-    public function index(
-        CurrentRoute $route
-    ): ResponseInterface
+    protected function getCollection(CurrentRoute $route): ArrayCollection
     {
-        $stub = $this->stubRepository->findByPK((int)$route->getArgument('stubId'));
-
-        return $this->responseFactory
-            ->createResponse($stub->getCallbacks()->map(fn ($callback) => $callback->toArray())->getValues());
+        return $this->stubRepository->findByPK((int)$route->getArgument('stubId'))->getCallbacks();
     }
 
     /**

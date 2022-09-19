@@ -131,9 +131,6 @@ export default {
 .sortable-ghost {
   border: 1px dotted gray;
 }
-.sortable-chosen {
-  opacity: 0.5;
-}
 .btn-hint svg,
 .btn-hint span {
   vertical-align: top;

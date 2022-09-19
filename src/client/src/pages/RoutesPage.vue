@@ -1,17 +1,18 @@
 <template>
   <ModalWindow
-    title="Create route"
+    :title="title"
     v-model:visible="visible"
     :saveCallback="create"
   >
     <RouteForm />
   </ModalWindow>
   <div class="d-flex justify-content-start mb-4">
-    <CButton color="light" @click="showForm">Add route</CButton>
+    <CButton color="light" @click="createFormShow">Add route</CButton>
   </div>
   <RouteItems
     :routes="searchedRoutes"
     @remove="remove($event)"
+    @edit="editFormShow($event)"
     v-if="!isLoading"
   />
   <RoutePlaceholder v-if="isLoading" />
@@ -22,7 +23,7 @@ import ModalWindow from "@/components/common/ModalWindow";
 import RouteItems from "@/components/RouteItems";
 import RoutePlaceholder from "@/components/RoutePlaceholder";
 import RouteForm from "@/components/RouteForm";
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 
 export default {
   components: {
@@ -33,16 +34,30 @@ export default {
   },
   data() {
     return {
+      title: "",
       visible: false,
     };
   },
   methods: {
+    ...mapMutations({
+      loadForm: "route/loadForm",
+      clean: "route/clean",
+    }),
     ...mapActions({
-      fetch: "route/fetchRoutes",
-      create: "route/createRoute",
+      fetch: "route/fetch",
+      create: "route/save",
       remove: "route/remove",
     }),
-    showForm() {
+    createFormShow() {
+      this.title = "Create route";
+
+      this.clean();
+      this.visible = true;
+    },
+    editFormShow(id) {
+      this.title = "Edit route";
+
+      this.loadForm(id);
       this.visible = true;
     },
   },
@@ -51,13 +66,13 @@ export default {
   },
   computed: {
     ...mapState({
-      routes: (state) => state.route.routes,
+      routes: (state) => state.route.entities,
       isLoading: (state) => state.route.isLoading,
       searchQuery: (state) => state.route.searchQuery,
     }),
     searchedRoutes() {
       return this.routes.filter((route) =>
-        route.route.includes(this.searchQuery)
+        route.path.includes(this.searchQuery)
       );
     },
   },

@@ -20,6 +20,11 @@ export default class BaseStore {
     return {};
   }
 
+  /**
+   * Describe module state
+   *
+   * @return {Object}
+   */
   state() {
     return {
       isLoading: false,

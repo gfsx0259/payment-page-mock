@@ -9,10 +9,14 @@ use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\HasMany;
 use Doctrine\Common\Collections\ArrayCollection;
+use Yiisoft\Arrays\ArrayableInterface;
+use Yiisoft\Arrays\ArrayableTrait;
 
 #[Entity(repository: RouteRepository::class)]
-class Route
+class Route implements ArrayableInterface
 {
+    use ArrayableTrait;
+
     #[Column(type: 'primary')]
     private int $id;
 
@@ -37,7 +41,7 @@ class Route
      * @param string $logo
      * @param int $type
      */
-    public function __construct(string $route, string $title, string $logo, int $type)
+    public function __construct(string $route = '', string $title = '', string $logo = '', int $type = 0)
     {
         $this->route = $route;
         $this->title = $title;
@@ -87,10 +91,53 @@ class Route
     }
 
     /**
+     * @param string $route
+     */
+    public function setRoute(string $route): void
+    {
+        $this->route = $route;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @param string $logo
+     */
+    public function setLogo(string $logo): void
+    {
+        $this->logo = $logo;
+    }
+
+    /**
+     * @param int $type
+     */
+    public function setType(int $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getStubs(): ArrayCollection
     {
         return $this->stubs;
+    }
+
+    public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
+    {
+        return [
+            'id' => $this->id,
+            'path' => $this->route,
+            'description' => $this->title,
+            'type' => $this->type,
+            'logo' => $this->logo,
+        ];
     }
 }

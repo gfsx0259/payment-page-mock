@@ -21,9 +21,6 @@
               class="me-2"
               placeholder="Search"
             />
-            <CButton type="submit" color="light" variant="outline"
-              >Search</CButton
-            >
           </CForm>
         </CCol>
       </CNavbarNav>
@@ -41,7 +38,6 @@ import {
 } from "@/constants";
 
 export default {
-  name: "NavBar",
   data() {
     return {
       currentRouteName: null,

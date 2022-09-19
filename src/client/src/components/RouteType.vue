@@ -6,7 +6,6 @@
 import { ROUTE_TYPE_MAP } from "@/constants";
 
 export default {
-  name: "RouteType",
   props: {
     type: {
       type: Number,
