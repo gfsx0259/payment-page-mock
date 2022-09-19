@@ -1,6 +1,6 @@
 <template>
   <ModalWindow
-    title="Create route"
+    :title="title"
     v-model:visible="visible"
     :saveCallback="create"
   >
@@ -34,6 +34,7 @@ export default {
   },
   data() {
     return {
+      title: "",
       visible: false,
     };
   },
@@ -48,10 +49,14 @@ export default {
       remove: "route/remove",
     }),
     createFormShow() {
+      this.title = "Create route";
+
       this.clean();
       this.visible = true;
     },
     editFormShow(id) {
+      this.title = "Edit route";
+
       this.loadForm(id);
       this.visible = true;
     },

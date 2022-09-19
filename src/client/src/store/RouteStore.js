@@ -55,6 +55,7 @@ export default class RouteStore extends BaseStore {
         state.form.logo = route.logo;
       },
       clean(state) {
+        state.form.id = null;
         state.form.path = "";
         state.form.type = null;
         state.form.description = "";
