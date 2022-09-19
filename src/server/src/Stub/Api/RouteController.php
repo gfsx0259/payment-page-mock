@@ -5,28 +5,24 @@ declare(strict_types=1);
 namespace App\Stub\Api;
 
 use App\Service\WebControllerService;
-use App\Stub\Api\Service\ImageUploader;
+use App\Stub\Api\Form\RouteForm;
+use App\Stub\Api\Service\RouteService;
 use App\Stub\Entity\Route;
 use App\Stub\Repository\RouteRepository;
-use Cycle\ORM\Select\Repository;
-use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Yiisoft\DataResponse\DataResponseFactoryInterface;
-use Yiisoft\Yii\Cycle\Data\Writer\EntityWriter;
+use Yiisoft\Arrays\ArrayHelper;
 
 final class RouteController extends EntityController
 {
     public function __construct(
-        private DataResponseFactoryInterface $responseFactory,
+        private WebControllerService $controllerService,
+        private RouteService $routeService,
         private RouteRepository $routeRepository,
-        private ImageUploader $imageUploader,
-    ) {
-        $this->imageUploader->setUploadPath('route/');
-    }
+    ) {}
 
-    protected function getRepository(): Repository
+    protected function getRepository(): RouteRepository
     {
         return $this->routeRepository;
     }
@@ -34,66 +30,36 @@ final class RouteController extends EntityController
     /**
      * @throws Throwable
      */
-    public function create(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
+    public function create(ServerRequestInterface $request): ResponseInterface
     {
-        $data = json_decode($request->getBody()->getContents());
+        $form = new RouteForm();
+        $form->load($request->getParsedBody());
 
-        $route = new Route(
-            $data->path,
-            $data->description,
-            $this->imageUploader->handle($data->logo, $this->getLogoFilename($data->path)),
-            (int)$data->type
+        $this->routeService->save(
+            new Route(),
+            $form
         );
-        $entityWriter->write([$route]);
 
-        return $this->responseFactory
-            ->createResponse(['success' => true]);
+        return $this->controllerService->getEmptySuccessResponse();
     }
 
     /**
      * @throws Throwable
      */
-    public function update(
-        ServerRequestInterface $request,
-        EntityWriter $entityWriter,
-        WebControllerService $controllerService
-    ): ResponseInterface {
-        $data = json_decode($request->getBody()->getContents());
-        $route = $this->routeRepository->findByPK($data->id);
-
-        if (!$route) {
-            return $controllerService->getNotFoundResponse();
-        }
-
-        $route->setRoute($data->path);
-        $route->setType((int)$data->type);
-        $route->setTitle($data->description);
-        try {
-            $route->setLogo($this->imageUploader->handle($data->logo, $this->getLogoFilename($data->path)));
-        } catch (Exception $exception) {
-
-        }
-
-        $entityWriter->write([$route]);
-
-        return $this->responseFactory
-            ->createResponse(['success' => $data]);
-    }
-
-    /**
-     * Make logo filename from route path
-     *
-     * @param string $route
-     * @return string
-     */
-    private function getLogoFilename(string $route): string
+    public function update(ServerRequestInterface $request): ResponseInterface
     {
-        $routeParts = explode('/', $route);
+        $form = new RouteForm();
+        $form->load($request->getParsedBody());
 
-        if ($routeParts > 1) {
-            array_pop($routeParts);
+        if (!$route = $this->routeRepository->findByPK(ArrayHelper::getValue($request->getParsedBody(), 'id'))) {
+            return $this->controllerService->getNotFoundResponse();
         }
 
-        return implode('-', $routeParts);
+        $this->routeService->save(
+            $route,
+            $form
+        );
+
+        return $this->controllerService->getEmptySuccessResponse();
     }
 }

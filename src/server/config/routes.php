@@ -15,6 +15,7 @@ use App\Controller\Actions\ApiInfo;
 use App\Controller\SiteController;
 use App\Middleware\AccessChecker;
 use App\Middleware\ApiDataWrapper;
+use App\Middleware\ApiRequestParser;
 use App\Stub\ActionController;
 use App\Stub\Api\CallbackController;
 use App\Stub\Api\ResourceController;
@@ -107,9 +108,11 @@ return [
                         ->name('api/route/index')
                         ->action([RouteController::class, 'index']),
                     Route::methods([Method::OPTIONS, Method::POST], '/route')
+                        ->middleware(ApiRequestParser::class)
                         ->name('api/route/create')
                         ->action([RouteController::class, 'create']),
                     Route::methods([Method::PUT], '/route')
+                        ->middleware(ApiRequestParser::class)
                         ->name('api/route/update')
                         ->action([RouteController::class, 'update']),
                     Route::methods([Method::OPTIONS, Method::DELETE], '/route/{id}')

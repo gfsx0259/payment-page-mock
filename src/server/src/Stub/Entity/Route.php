@@ -41,7 +41,7 @@ class Route implements ArrayableInterface
      * @param string $logo
      * @param int $type
      */
-    public function __construct(string $route, string $title, string $logo, int $type)
+    public function __construct(string $route = '', string $title = '', string $logo = '', int $type = 0)
     {
         $this->route = $route;
         $this->title = $title;
