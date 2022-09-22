@@ -1,6 +1,7 @@
 <template>
   <CCallout color="dark" v-if="!this.stubs.length">
-    This route has not scenarios yet. Please create your first scenario and adjust it
+    This route has not scenarios yet. Please create your first scenario and
+    adjust it
   </CCallout>
   <CTable bordered striped v-if="this.stubs.length">
     <CTableHead>

@@ -81,18 +81,6 @@ export const callbackStore = {
         dispatch("fetch");
       }
     },
-    async changeOrder({ state, commit }, ids) {
-      try {
-        await HttpClient.patch("callback/" + state.form.stubId, ids);
-        commit(
-          "setMessage",
-          { text: "Order changed successfully" },
-          { root: true }
-        );
-      } catch (error) {
-        commit("setMessage", { text: error }, { root: true });
-      }
-    },
   },
   namespaced: true,
 };

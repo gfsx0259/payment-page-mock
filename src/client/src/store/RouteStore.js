@@ -1,5 +1,5 @@
 import BaseStore from "@/store/BaseStore";
-import {MODULE_ROUTE} from "@/constants";
+import { MODULE_ROUTE } from "@/constants";
 
 export default class RouteStore extends BaseStore {
   endpoint() {
@@ -16,7 +16,7 @@ export default class RouteStore extends BaseStore {
         logo: "",
       },
       searchQuery: "",
-    }
+    };
   }
 
   rules() {
@@ -25,7 +25,6 @@ export default class RouteStore extends BaseStore {
       type: "numeric",
     };
   }
-
 
   mutations() {
     return {
@@ -61,6 +60,6 @@ export default class RouteStore extends BaseStore {
         state.form.description = "";
         state.form.logo = "";
       },
-    }
+    };
   }
-};
+}

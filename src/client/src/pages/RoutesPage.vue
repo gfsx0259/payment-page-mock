@@ -1,9 +1,5 @@
 <template>
-  <ModalWindow
-    :title="title"
-    v-model:visible="visible"
-    :saveCallback="create"
-  >
+  <ModalWindow :title="title" v-model:visible="visible" :saveCallback="create">
     <RouteForm />
   </ModalWindow>
   <div class="d-flex justify-content-start mb-4">
@@ -23,7 +19,7 @@ import ModalWindow from "@/components/common/ModalWindow";
 import RouteItems from "@/components/RouteItems";
 import RoutePlaceholder from "@/components/RoutePlaceholder";
 import RouteForm from "@/components/RouteForm";
-import {mapActions, mapMutations, mapState} from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   components: {

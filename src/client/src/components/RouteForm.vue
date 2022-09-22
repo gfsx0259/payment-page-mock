@@ -23,8 +23,8 @@
     <div class="mb-3">
       <CFormLabel for="title">Description</CFormLabel>
       <CFormTextarea
-          :model-value="description"
-          @update:model-value="setDescription"
+        :model-value="description"
+        @update:model-value="setDescription"
       />
     </div>
     <div class="mb-3">

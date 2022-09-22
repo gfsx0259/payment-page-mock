@@ -15,36 +15,25 @@
     :dynamicTemplateVariables="dynamicTemplateVariables"
     @hide="isHintVisible = false"
   />
-  <draggable
-    :list="callbacks"
-    item-key="id"
-    animation="400"
-    @end="onChangeOrder"
-    tag="CRow"
-  >
-    <template #item="{ element }">
-      <CCol md="6" class="position-relative">
-        <vue-json-editor
-          v-bind:value="element.body"
-          @json-save="onUpdate(element.id, $event)"
-          @json-remove="onRemove(element.id)"
-          show-btns
-          mode="code"
-        />
-        <CIcon
-          v-if="!hasNewCallback()"
-          class="icon-move"
-          icon="cilCursorMove"
-          size="xl"
-        />
-      </CCol>
-    </template>
-  </draggable>
+  <CRow>
+    <CCol
+      md="6"
+      v-for="callback in callbacks"
+      :key="callback"
+      class="position-relative"
+    >
+      <vue-json-editor
+        v-bind:value="callback.body"
+        @json-save="onUpdate(callback.id, $event)"
+        @json-remove="onRemove(callback.id)"
+        show-btns
+        mode="code"
+      />
+    </CCol>
+  </CRow>
 </template>
 
 <script>
-import _ from "lodash";
-import draggable from "vuedraggable";
 import VueJsonEditor from "vue-json-editor";
 import CallbackHint from "@/components/CallbackHint";
 
@@ -52,7 +41,6 @@ export default {
   components: {
     VueJsonEditor,
     CallbackHint,
-    draggable,
   },
   props: {
     callbacks: {
@@ -80,9 +68,6 @@ export default {
       if (confirm("Are you sure?")) {
         this.$emit("remove", id);
       }
-    },
-    onChangeOrder() {
-      this.$emit("changeOrder", _.map(this.callbacks, "id"));
     },
     hasNewCallback() {
       return this.callbacks.filter(({ id }) => id === null).length !== 0;
@@ -121,15 +106,6 @@ export default {
 }
 .jsoneditor-btns .json-remove-btn:hover {
   background-color: #e96d6d;
-}
-.icon-move {
-  position: absolute;
-  cursor: move;
-  bottom: 6px;
-  right: 224px;
-}
-.sortable-ghost {
-  border: 1px dotted gray;
 }
 .btn-hint svg,
 .btn-hint span {
