@@ -8,6 +8,7 @@
       <CTableHeaderCell class="text-center"> Default </CTableHeaderCell>
       <CTableHeaderCell> Title </CTableHeaderCell>
       <CTableHeaderCell> Description </CTableHeaderCell>
+      <CTableHeaderCell> Creator`s telegram alias </CTableHeaderCell>
       <CTableHeaderCell />
       <CTableHeaderCell />
     </CTableHead>
@@ -18,6 +19,7 @@
         </CTableDataCell>
         <CTableDataCell>{{ stub.title }}</CTableDataCell>
         <CTableDataCell>{{ stub.description }}</CTableDataCell>
+        <CTableDataCell>{{ stub.creator_telegram_alias }}</CTableDataCell>
         <CTableDataCell class="text-center">
           <router-link :to="'/route/' + routeId + '/stub/' + stub.id">
             <CButton color="dark">Callbacks</CButton>

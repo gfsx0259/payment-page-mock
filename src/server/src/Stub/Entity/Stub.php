@@ -29,6 +29,9 @@ class Stub implements ArrayableInterface
     #[Column(type: 'text')]
     private string $description = '';
 
+    #[Column(type: 'string(191)')]
+    private string $creator_telegram_alias = '';
+
     #[Column(type: 'boolean', default: false)]
     private bool $default;
 
@@ -40,11 +43,12 @@ class Stub implements ArrayableInterface
      * @param string $title
      * @param string $description
      */
-    public function __construct(int $routeId, string $title, string $description)
+    public function __construct(int $routeId, string $title, string $description, string $telegramAlias)
     {
         $this->route_id = $routeId;
         $this->title = $title;
         $this->description = $description;
+        $this->creator_telegram_alias = $telegramAlias;
         $this->callbacks = new ArrayCollection();
     }
 
@@ -70,6 +74,14 @@ class Stub implements ArrayableInterface
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatorTelegramAlias(): string
+    {
+        return $this->creator_telegram_alias;
     }
 
     /**
@@ -115,12 +127,22 @@ class Stub implements ArrayableInterface
         $this->description = $description;
     }
 
+    /**
+     * @param string $alias
+     * @return void
+     */
+    public function setCreatorTelegramAlias(string $alias): void
+    {
+        $this->creator_telegram_alias = $alias;
+    }
+
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
     {
         return [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
+            'creator_telegram_alias' => $this->getCreatorTelegramAlias(),
             'default' => $this->getDefault(),
             'callbacks' => $this->getCallbacks()->map(fn (Callback $callback) => $callback->toArray()),
         ];
