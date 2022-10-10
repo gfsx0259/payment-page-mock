@@ -8,6 +8,7 @@
     @add="add"
     @update="update"
     @remove="remove"
+    @changeOrder="changeOrder"
     v-if="!isLoading"
   />
 </template>
@@ -38,6 +39,7 @@ export default {
       fetchDynamicTemplateVariables: "callback/fetchDynamicTemplateVariables",
       update: "callback/update",
       remove: "callback/remove",
+      changeOrder: "callback/changeOrder",
     }),
   },
   computed: {

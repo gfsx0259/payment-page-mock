@@ -22,6 +22,14 @@ export const callbackStore = {
     setIsLoading(state, isLoading) {
       state.isLoading = isLoading;
     },
+    sort(state, orderedIds) {
+      state.callbacks.sort((callbackCurrent, callbackPrevious) => {
+        const indexCurrent = orderedIds.indexOf(callbackCurrent.id);
+        const indexPrevious = orderedIds.indexOf(callbackPrevious.id);
+
+        return indexCurrent < indexPrevious ? -1 : 1;
+      });
+    },
     add(state) {
       state.callbacks.push({ id: null });
     },
@@ -79,6 +87,20 @@ export const callbackStore = {
         commit("setMessage", { text: error }, { root: true });
 
         dispatch("fetch");
+      }
+    },
+
+    async changeOrder({ state, commit }, ids) {
+      try {
+        await HttpClient.patch("callback/" + state.form.stubId, ids);
+        commit("sort", ids);
+        commit(
+          "setMessage",
+          { text: "Order changed successfully" },
+          { root: true }
+        );
+      } catch (error) {
+        commit("setMessage", { text: error }, { root: true });
       }
     },
   },

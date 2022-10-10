@@ -18,14 +18,19 @@
   <CRow>
     <CCol
       md="6"
-      v-for="callback in callbacks"
+      v-for="(callback, index) in callbacks"
       :key="callback"
       class="position-relative"
     >
-      <vue-json-editor
+      <callback-editor
         v-bind:value="callback.body"
+        v-bind:showMoveLeftControl="Boolean(!hasNewCallback() && index !== 0)"
+        v-bind:showMoveRightControl="
+          Boolean(!hasNewCallback() && index !== callbacks.length - 1)
+        "
         @json-save="onUpdate(callback.id, $event)"
         @json-remove="onRemove(callback.id)"
+        @json-move="onMove(callback.id, $event)"
         show-btns
         mode="code"
       />
@@ -34,12 +39,13 @@
 </template>
 
 <script>
-import VueJsonEditor from "vue-json-editor";
+import CallbackEditor from "./CallbackEditor";
 import CallbackHint from "@/components/CallbackHint";
+import { MOVE_LEFT, MOVE_RIGHT } from "@/constants";
 
 export default {
   components: {
-    VueJsonEditor,
+    CallbackEditor,
     CallbackHint,
   },
   props: {
@@ -68,6 +74,27 @@ export default {
       if (confirm("Are you sure?")) {
         this.$emit("remove", id);
       }
+    },
+    onMove(id, direction) {
+      let orderedIds = [];
+
+      for (let i = 0; i < this.callbacks.length; i++) {
+        let callback = this.callbacks[i];
+
+        if (callback.id === id) {
+          if (direction === MOVE_LEFT) {
+            orderedIds.splice(orderedIds.length - 1, 1);
+            orderedIds.push(id, this.callbacks[i - 1].id);
+          } else if (direction === MOVE_RIGHT) {
+            orderedIds.push(this.callbacks[i + 1].id, id);
+            i++;
+          }
+        } else {
+          orderedIds.push(callback.id);
+        }
+      }
+
+      this.$emit("changeOrder", orderedIds);
     },
     hasNewCallback() {
       return this.callbacks.filter(({ id }) => id === null).length !== 0;
