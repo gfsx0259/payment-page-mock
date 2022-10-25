@@ -15,44 +15,38 @@
     :dynamicTemplateVariables="dynamicTemplateVariables"
     @hide="isHintVisible = false"
   />
-  <draggable
-    :list="callbacks"
-    item-key="id"
-    animation="400"
-    @end="onChangeOrder"
-    tag="CRow"
-  >
-    <template #item="{ element }">
-      <CCol md="6" class="position-relative">
-        <vue-json-editor
-          v-bind:value="element.body"
-          @json-save="onUpdate(element.id, $event)"
-          @json-remove="onRemove(element.id)"
-          show-btns
-          mode="code"
-        />
-        <CIcon
-          v-if="!hasNewCallback()"
-          class="icon-move"
-          icon="cilCursorMove"
-          size="xl"
-        />
-      </CCol>
-    </template>
-  </draggable>
+  <CRow>
+    <CCol
+      md="6"
+      v-for="(callback, index) in callbacks"
+      :key="callback"
+      class="position-relative"
+    >
+      <callback-editor
+        v-bind:value="callback.body"
+        v-bind:showMoveLeftControl="Boolean(!hasNewCallback() && index !== 0)"
+        v-bind:showMoveRightControl="
+          Boolean(!hasNewCallback() && index !== callbacks.length - 1)
+        "
+        @json-save="onUpdate(callback.id, $event)"
+        @json-remove="onRemove(callback.id)"
+        @json-move="onMove(callback.id, $event)"
+        show-btns
+        mode="code"
+      />
+    </CCol>
+  </CRow>
 </template>
 
 <script>
-import _ from "lodash";
-import draggable from "vuedraggable";
-import VueJsonEditor from "vue-json-editor";
+import CallbackEditor from "./CallbackEditor";
 import CallbackHint from "@/components/CallbackHint";
+import { MOVE_LEFT, MOVE_RIGHT } from "@/constants";
 
 export default {
   components: {
-    VueJsonEditor,
+    CallbackEditor,
     CallbackHint,
-    draggable,
   },
   props: {
     callbacks: {
@@ -81,8 +75,26 @@ export default {
         this.$emit("remove", id);
       }
     },
-    onChangeOrder() {
-      this.$emit("changeOrder", _.map(this.callbacks, "id"));
+    onMove(id, direction) {
+      let orderedIds = [];
+
+      for (let i = 0; i < this.callbacks.length; i++) {
+        let callback = this.callbacks[i];
+
+        if (callback.id === id) {
+          if (direction === MOVE_LEFT) {
+            orderedIds.splice(orderedIds.length - 1, 1);
+            orderedIds.push(id, this.callbacks[i - 1].id);
+          } else if (direction === MOVE_RIGHT) {
+            orderedIds.push(this.callbacks[i + 1].id, id);
+            i++;
+          }
+        } else {
+          orderedIds.push(callback.id);
+        }
+      }
+
+      this.$emit("changeOrder", orderedIds);
     },
     hasNewCallback() {
       return this.callbacks.filter(({ id }) => id === null).length !== 0;
@@ -121,15 +133,6 @@ export default {
 }
 .jsoneditor-btns .json-remove-btn:hover {
   background-color: #e96d6d;
-}
-.icon-move {
-  position: absolute;
-  cursor: move;
-  bottom: 6px;
-  right: 224px;
-}
-.sortable-ghost {
-  border: 1px dotted gray;
 }
 .btn-hint svg,
 .btn-hint span {

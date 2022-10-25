@@ -7,7 +7,8 @@ import {
   cilPencil,
   cilCompass,
   cilCopy,
-  cilCursorMove,
+  cilArrowThickLeft,
+  cilArrowThickRight,
 } from "@coreui/icons";
 import * as Components from "@coreui/vue";
 import { SnackbarPlugin } from "snackbar-vue";
@@ -83,7 +84,8 @@ app.provide("icons", {
   cilPencil,
   cilCompass,
   cilCopy,
-  cilCursorMove,
+  cilArrowThickLeft,
+  cilArrowThickRight,
 });
 
 app.use(SnackbarPlugin, SnackbarConfig);

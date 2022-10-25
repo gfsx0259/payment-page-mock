@@ -13,6 +13,7 @@ export default class StubStore extends BaseStore {
       form: {
         title: "",
         description: "",
+        creator_telegram_alias: "",
       },
     };
   }
@@ -20,6 +21,7 @@ export default class StubStore extends BaseStore {
   rules() {
     return {
       title: "alphanumeric _space_",
+      creator_telegram_alias: ["alphanumeric _@", "startsWith @"],
     };
   }
 
@@ -32,17 +34,22 @@ export default class StubStore extends BaseStore {
       setFormDescription(state, description) {
         state.form.description = description;
       },
+      setFormCreatorTelegramAlias(state, telegramAlias) {
+        state.form.creator_telegram_alias = telegramAlias;
+      },
       loadFormByStub(state, stubId) {
         const stub = state.entities.find((stub) => stub.id === stubId);
 
         state.form.id = stub.id;
         state.form.title = stub.title;
         state.form.description = stub.description;
+        state.form.creator_telegram_alias = stub.creator_telegram_alias;
       },
       cleanForm(state) {
         state.form.id = null;
         state.form.title = "";
         state.form.description = "";
+        state.form.creator_telegram_alias = "";
       },
       setDefault(state, id) {
         state.entities.map((stub) => {

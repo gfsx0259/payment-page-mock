@@ -1,12 +1,14 @@
 <template>
   <CCallout color="dark" v-if="!this.stubs.length">
-    This route has not scenarios yet. Please create your first scenario and adjust it
+    This route has not scenarios yet. Please create your first scenario and
+    adjust it
   </CCallout>
   <CTable bordered striped v-if="this.stubs.length">
     <CTableHead>
       <CTableHeaderCell class="text-center"> Default </CTableHeaderCell>
       <CTableHeaderCell> Title </CTableHeaderCell>
       <CTableHeaderCell> Description </CTableHeaderCell>
+      <CTableHeaderCell> Creator`s telegram alias </CTableHeaderCell>
       <CTableHeaderCell />
       <CTableHeaderCell />
     </CTableHead>
@@ -17,6 +19,7 @@
         </CTableDataCell>
         <CTableDataCell>{{ stub.title }}</CTableDataCell>
         <CTableDataCell>{{ stub.description }}</CTableDataCell>
+        <CTableDataCell>{{ stub.creator_telegram_alias }}</CTableDataCell>
         <CTableDataCell class="text-center">
           <router-link :to="'/route/' + routeId + '/stub/' + stub.id">
             <CButton color="dark">Callbacks</CButton>

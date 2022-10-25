@@ -11,6 +11,9 @@ export const MODULE_RESOURCE = "resource";
 export const MODULE_STUB = "stub";
 export const MODULE_CALLBACK = "callback";
 
+export const MOVE_LEFT = 1;
+export const MOVE_RIGHT = 2;
+
 /**
  * Route type - label map
  */

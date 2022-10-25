@@ -39,7 +39,6 @@
     "vue-router": "^4.0.3",
     "vue3-clipboard": "^1.0.0",
     "vue3-highlightjs": "^1.0.5",
-    "vuedraggable": "^4.1.0",
     "vuex": "^4.0.0"
   },
   "browserslist": [

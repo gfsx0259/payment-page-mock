@@ -44,7 +44,8 @@ final class StubController extends EntityController
         $stub = new Stub(
             (int)$data->relationId,
             $data->title,
-            $data->description
+            $data->description,
+            $data->creator_telegram_alias
         );
         $entityWriter->write([$stub]);
 
@@ -69,6 +70,7 @@ final class StubController extends EntityController
 
         $stub->setTitle($data->title);
         $stub->setDescription($data->description);
+        $stub->setCreatorTelegramAlias($data->creator_telegram_alias);
 
         $entityWriter->write([$stub]);
 
