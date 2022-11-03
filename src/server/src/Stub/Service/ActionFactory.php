@@ -36,8 +36,13 @@ class ActionFactory
         ]);
 
         try {
-            if ($callback->get('acs')) {
-                return new AcsAction($callback, $state);
+            if ($paReq = $callback->get('acs.pa_req')) {
+                $isProxyFlow = isset(json_decode(base64_decode($paReq))->threeds2);
+
+                return $isProxyFlow
+                    ? $this->injector->make(PaymentAction::class, [$callback, $state])
+                    : $this->injector->make(AcsAction::class, [$callback, $state]);
+
             } elseif ($callback->get('threeds2.iframe.url')) {
                 return $this->injector->make(PaymentAction::class, [$callback, $state]);
             } elseif ($callback->get('threeds2.redirect.url')) {

@@ -44,6 +44,16 @@
             >
             <CTableDataCell>request_id</CTableDataCell>
           </CTableRow>
+          <CTableRow>
+            <CTableDataCell>
+              <CopyElement>PAYMENT_ID</CopyElement>
+            </CTableDataCell>
+            <CTableDataCell
+              >Unique transaction payment id from initial
+              request</CTableDataCell
+            >
+            <CTableDataCell>general.payment_id</CTableDataCell>
+          </CTableRow>
         </CTableBody>
       </CTable>
 

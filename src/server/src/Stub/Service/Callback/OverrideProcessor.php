@@ -8,8 +8,15 @@ use App\Stub\Entity\Resource;
 use App\Stub\Repository\ResourceRepository;
 use App\Stub\Session\State;
 use App\Stub\Session\StateManager;
+use Exception;
 use HttpSoft\Message\Uri;
+use Psr\Log\LoggerInterface;
+use Safe\Exceptions\JsonException;
+use Safe\Exceptions\StringsException;
 use Yiisoft\Router\UrlGeneratorInterface;
+
+use function Safe\json_encode;
+use function Safe\sprintf;
 
 /**
  * Replace callback placeholders {{PLACEHOLDER_NAME}} with values from state init request
@@ -19,6 +26,7 @@ class OverrideProcessor implements ProcessorInterface
     private const SCHEMA = [
         'TERM_URL' => 'acs_return_url.return_url',
         'REQUEST_ID' => 'request_id',
+        'PAYMENT_ID' => 'general.payment_id',
         'ACS_URL' => 'acs_url',
         'ACS_IFRAME_URL' => 'acs_iframe_url',
         'ACS_REDIRECT_URL' => 'acs_redirect_url',
@@ -33,6 +41,7 @@ class OverrideProcessor implements ProcessorInterface
         private ResourceRepository $resourceRepository,
         private StateManager $stateManager,
         private QrGenerator $qrGenerator,
+        private LoggerInterface $logger,
         private string $host,
     ) {}
 
@@ -66,7 +75,7 @@ class OverrideProcessor implements ProcessorInterface
             $callback->replace('{{' . $resource->getTemplateVariable() . '}}', $value);
         }
 
-        return $callback;
+        return $this->applyFilters($callback);
     }
 
     private function generateResourceUrl(Resource $resource): string
@@ -105,5 +114,45 @@ class OverrideProcessor implements ProcessorInterface
         return new Uri($this->host . $this->urlGenerator->generate('actions/renderConfirmationQr', [
             'uniqueKey' => $this->stateManager->generateAccessKey($state),
         ]));
+    }
+
+    private function applyFilters(ArrayCollection $callback): ArrayCollection
+    {
+        if (!$filters = $callback->get('@.filters')) {
+            return $callback;
+        }
+
+        if (!is_array($filters)) {
+            return $callback;
+        }
+
+        foreach ($filters as $filter) {
+            try {
+                $this->applyFilter($callback, $filter['action'], $filter['path']);
+            } catch (Exception $exception) {
+                $this->logger->warning(
+                    sprintf('Can not apply action %s: %s ', $filter['action'], $exception->getMessage())
+                );
+            }
+        }
+
+        return $callback;
+    }
+
+    /**
+     * @throws JsonException
+     * @throws StringsException
+     */
+    private function applyFilter(ArrayCollection $callback, string $action, string $path): void
+    {
+        $value = $callback->get($path);
+
+        switch ($action) {
+            case 'base64':
+                $callback->set($path, is_array($value) ? base64_encode(json_encode($value)) : base64_encode($value));
+                break;
+            default:
+                $this->logger->info(sprintf('Action %s not found', $action));
+        }
     }
 }

@@ -1,0 +1,3 @@
+<?php
+
+idimsh\BypassFinals::enable();
