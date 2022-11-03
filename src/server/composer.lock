@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17d935e5007195d6f082d890286b9239",
+    "content-hash": "8a1063fc07c941a2842982f3240da16d",
     "packages": [
         {
             "name": "alexkart/curl-builder",
@@ -11332,6 +11332,66 @@
             "time": "2021-10-06T17:43:30+00:00"
         },
         {
+            "name": "idimsh/better-bypass-finals",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/idimsh/better-bypass-finals.git",
+                "reference": "782b6107c582cdd959e3573ee2c213a5449eb1a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/idimsh/better-bypass-finals/zipball/782b6107c582cdd959e3573ee2c213a5449eb1a3",
+                "reference": "782b6107c582cdd959e3573ee2c213a5449eb1a3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^7"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "idimsh\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Abdulrahman Dimashki",
+                    "email": "idimsh@gmail.com",
+                    "homepage": "https://github.com/idimsh",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Removes final keyword from source code on-the-fly and allows mocking of final methods and classes",
+            "keywords": [
+                "finals",
+                "mocking",
+                "phpunit",
+                "testing",
+                "unit"
+            ],
+            "support": {
+                "issues": "https://github.com/idimsh/better-bypass-finals/issues",
+                "source": "https://github.com/idimsh/better-bypass-finals/tree/master"
+            },
+            "time": "2020-10-04T21:40:35+00:00"
+        },
+        {
             "name": "infection/abstract-testframework-adapter",
             "version": "0.5.0",
             "source": {
@@ -15820,6 +15880,7 @@
         "yiisoft/yii-debug": 20,
         "yiisoft/yii-debug-api": 20,
         "yiisoft/yii-middleware": 20,
+        "idimsh/better-bypass-finals": 20,
         "roave/security-advisories": 20,
         "yiisoft/yii-debug-viewer": 20
     },

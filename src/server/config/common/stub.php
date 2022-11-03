@@ -21,12 +21,14 @@ return [
         UrlGeneratorInterface $urlGenerator,
         ResourceRepository $resourceRepository,
         StateManager $stateManager,
-        QrGenerator $qrGenerator
+        QrGenerator $qrGenerator,
+        LoggerInterface $logger
     ) => new OverrideProcessor(
         $urlGenerator,
         $resourceRepository,
         $stateManager,
         $qrGenerator,
+        $logger,
         $params['host'],
     ),
     CallbackSenderInterface::class => function (LoggerInterface $logger) {

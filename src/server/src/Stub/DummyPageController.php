@@ -70,14 +70,19 @@ final class DummyPageController
      * @return ResponseInterface
      * @throws InvalidArgumentException
      */
-    public function renderAcsIframe(CurrentRoute $currentRoute, ServerRequestInterface $request): ResponseInterface
+    public function renderAcsIframe(
+        CurrentRoute $currentRoute,
+        ServerRequestInterface $request
+    ): ResponseInterface
     {
         if (!$state = $this->stateManager->get($currentRoute->getArgument('uniqueKey'))) {
             throw new LogicException('State must be exists');
         }
 
         $callback = new ArrayCollection($this->callbackResolver->resolve($state)->getBody());
-        $expectedBody = $callback->get('threeds2.iframe.params');
+
+        $expectedBody = $callback->get('threeds2.iframe.params') ?? $callback->get('acs.pa_req.threeds2.iframe.params');
+
         $body = $request->getParsedBody();
 
         if ($expectedBody !== $body) {

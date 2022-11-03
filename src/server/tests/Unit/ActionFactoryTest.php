@@ -36,7 +36,7 @@ final class ActionFactoryTest extends Unit
 
     public function testAcsActionMaking(): void
     {
-        $collection = new ArrayCollection(['acs' => 'test']);
+        $collection = new ArrayCollection(['acs' => ['pa_req' => base64_encode(json_encode(['simple 3ds 1']))]]);
         $action = $this->actionFactory->make($collection, $this->state);
 
         $this->assertAction(AcsAction::class, $action);
