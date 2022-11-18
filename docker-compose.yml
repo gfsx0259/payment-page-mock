@@ -1,7 +1,8 @@
 version: '3.4'
 
 services:
-    client:
+    dummy-spa:
+        container_name: dummy-spa
         build:
             context: ./src/client
             dockerfile: ../../build/images/client/Dockerfile
@@ -14,7 +15,8 @@ services:
         ports:
             - "${SPA_PORT}:8080"
 
-    nginx:
+    dummy-api:
+        container_name: dummy-api
         build:
             context: ./src/server
             dockerfile: ../../build/images/nginx/Dockerfile
@@ -23,9 +25,10 @@ services:
         volumes:
             - ./src/server/public:/var/www/public
         links:
-            - api
+            - dummy-fpm
 
-    api: &server_app
+    dummy-fpm: &server_app
+        container_name: dummy-fpm
         build:
             context: ./src/server
             dockerfile: ../../build/images/server/Dockerfile
@@ -51,32 +54,34 @@ services:
             MEMCACHED_HOST: $MEMCACHED_HOST
             MEMCACHED_PORT: $MEMCACHED_PORT
         depends_on:
-            - rabbit
-            - memcached
+            - dummy-rabbit
+            - dummy-memcached
         extra_hosts:
             - "host.docker.internal:host-gateway"
             - "pp.terminal.test:192.168.20.20"
         volumes:
             - ./src/server:/var/www:rw
-        links:
-            - db
 
-    callbacks_queue_consumer:
+    dummy-callbacks_queue_consumer:
         <<: *server_app
+        container_name: dummy-consumer
         restart: on-failure
         entrypoint: ["php", "yii", "queue/listen", $API_CALLBACKS_QUEUE]
 
-    rabbit:
+    dummy-rabbit:
+        container_name: dummy-rabbit
         image: rabbitmq:latest
         environment:
             RABBITMQ_HOST: $RABBITMQ_HOST
             RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
             RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
 
-    memcached:
+    dummy-memcached:
+        container_name: dummy-memcached
         image: memcached:latest
 
-    db:
+    dummy-db:
+        container_name: dummy-db
         image: mysql:latest
         environment:
             MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD

@@ -30,7 +30,7 @@ jobs:
           context: src/server
           file: build/images/server/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/payment-page-mock-api:${{ steps.get_version.outputs.VERSION }}
+          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/dummy-fpm:${{ steps.get_version.outputs.VERSION }}
           build-args: |
             UID=1000
             GID=1000
@@ -42,7 +42,7 @@ jobs:
           file: build/images/client/Dockerfile
           target: production
           push: true
-          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/payment-page-mock-client:${{ steps.get_version.outputs.VERSION }}
+          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/dummy-spa:${{ steps.get_version.outputs.VERSION }}
 
       - name: Build and push Nginx image
         uses: docker/build-push-action@v3
@@ -50,4 +50,4 @@ jobs:
           context: src/server
           file: build/images/nginx/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/payment-page-mock-nginx:${{ steps.get_version.outputs.VERSION }}
+          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/dummy-api:${{ steps.get_version.outputs.VERSION }}

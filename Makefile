@@ -10,7 +10,7 @@ GITHUB_RAW := https://raw.githubusercontent.com/gfsx0259/payment-page-mock/main
 RUNTIME_DIR := runtime
 PUBLIC_DIR := src/server/public
 SHARED_DIRS := $(RUNTIME_DIR)/assets $(RUNTIME_DIR)/uploads
-ROUTE_IMAGES := card gcash kakaopay pix neofinance
+ROUTE_IMAGES := card gcash kakaopay pix neofinance googlepay
 APP_TABLES := route callback stub resource
 
 install: prepare pull deploy
@@ -21,9 +21,9 @@ prepare:
 	sudo chown -R 1000:1000 runtime
 
 pull:
-	sudo docker image pull konstantinpopov/payment-page-mock-api:main
-	sudo docker image pull konstantinpopov/payment-page-mock-nginx:main
-	sudo docker image pull konstantinpopov/payment-page-mock-client:main
+	sudo docker image pull konstantinpopov/dummy-api:main
+	sudo docker image pull konstantinpopov/dummy-fpm:main
+	sudo docker image pull konstantinpopov/dummy-spa:main
 
 deploy:
 	envsubst < $(STACK_CONFIG) | sudo docker stack deploy -c - $(STACK_NAME)
