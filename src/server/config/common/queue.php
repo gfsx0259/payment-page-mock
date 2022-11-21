@@ -7,6 +7,7 @@ declare(strict_types=1);
 use App\Service\Queue\Broker\RabbitMQBroker;
 use App\Service\Queue\BrokerInterface;
 use App\Service\Queue\Queue;
+use App\Service\Queue\QueueDummy;
 use App\Service\Queue\QueueInterface;
 use App\Stub\Job\SendCallbackJob;
 use Yiisoft\Arrays\ArrayHelper;
@@ -24,6 +25,10 @@ return [
         return new RabbitMQBroker($client);
     },
     QueueInterface::class => function (Injector $injector) {
+        if (ArrayHelper::getValue($_ENV, 'DUMMY_API_DISABLE_SENDING_CALLBACKS')) {
+            return new QueueDummy();
+        }
+
         $mapping = [
             ['queue_name' => ArrayHelper::getValue($_ENV, 'DUMMY_API_CALLBACKS_QUEUE_NAME'), 'jobs' => [SendCallbackJob::class]],
         ];
