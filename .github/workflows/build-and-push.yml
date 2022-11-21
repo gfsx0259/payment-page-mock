@@ -24,7 +24,7 @@ jobs:
         id: build-x
         uses: docker/setup-buildx-action@v1
 
-      - name: Build and push API image
+      - name: Build and push application fpm image
         uses: docker/build-push-action@v3
         with:
           context: src/server
@@ -44,7 +44,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_LOGIN }}/dummy-spa:${{ steps.get_version.outputs.VERSION }}
 
-      - name: Build and push Nginx image
+      - name: Build and push nginx server image
         uses: docker/build-push-action@v3
         with:
           context: src/server

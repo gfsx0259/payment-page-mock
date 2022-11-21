@@ -2,15 +2,15 @@ version: '3.4'
 
 services:
     client:
-        image: konstantinpopov/payment-page-mock-client:main
+        image: konstantinpopov/dummy-spa:main
         ports:
-            - "${SPA_PORT}:8080"
+            - "${DUMMY_SPA_PORT}:8080"
         environment:
-            NODE_ENV: $SPA_NODE_ENV
-            VUE_APP_API_URL: $API_URL
+            NODE_ENV: $DUMMY_SPA_NODE_ENV
+            VUE_APP_API_URL: $DUMMY_API_URL
 
     nginx:
-        image: konstantinpopov/payment-page-mock-nginx:main
+        image: konstantinpopov/dummy-api:main
         volumes: &sharedStatic
             - type: bind
               source: ./runtime/assets
@@ -19,40 +19,24 @@ services:
               source: ./runtime/uploads
               target: /var/www/public/uploads
         ports:
-            - "${API_PORT}:80"
+            - "${DUMMY_API_PORT}:80"
 
     api: &server_app
-        image: konstantinpopov/payment-page-mock-api:main
+        image: konstantinpopov/dummy-fpm:main
         volumes: *sharedStatic
-        environment:
-            DISABLE_SENDING_CALLBACKS: "true"
-            YII_ENV: $API_YII_ENV
-            YII_DEBUG: $API_YII_DEBUG
-            API_URL: $API_URL
-            API_CALLBACKS_QUEUE_NAME: $API_CALLBACKS_QUEUE
-            API_CALLBACK_URL: $API_CALLBACK_URL
-            API_CALLBACK_SECRET: $API_CALLBACK_SECRET
-            MYSQL_DATABASE: $MYSQL_DATABASE
-            MYSQL_HOST: $MYSQL_HOST
-            MYSQL_PORT: $MYSQL_PORT
-            MYSQL_USER: $MYSQL_USER
-            MYSQL_PASSWORD: $MYSQL_PASSWORD
-            RABBITMQ_HOST: $RABBITMQ_HOST
-            RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
-            RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
-            MEMCACHED_HOST: $MEMCACHED_HOST
-            MEMCACHED_PORT: $MEMCACHED_PORT
+        env_file:
+            - .env
 
     callbacks_queue_consumer:
         <<: *server_app
-        entrypoint: ["php", "yii", "queue/listen", $API_CALLBACKS_QUEUE]
+        entrypoint: ["php", "yii", "queue/listen", $DUMMY_API_CALLBACKS_QUEUE]
 
     rabbit:
         image: rabbitmq:latest
         environment:
-            RABBITMQ_HOST: $RABBITMQ_HOST
-            RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
-            RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+            RABBITMQ_HOST: $DUMMY_RABBITMQ_HOST
+            RABBITMQ_DEFAULT_USER: $DUMMY_RABBITMQ_DEFAULT_USER
+            RABBITMQ_DEFAULT_PASS: $DUMMY_RABBITMQ_DEFAULT_PASS
 
     memcached:
         image: memcached:latest
@@ -60,12 +44,12 @@ services:
     db:
         image: mysql:latest
         ports:
-            - "${MYSQL_PORT}:3306"
+            - "${DUMMY_MYSQL_PORT}:3306"
         environment:
-            MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-            MYSQL_DATABASE: $MYSQL_DATABASE
-            MYSQL_USER: $MYSQL_USER
-            MYSQL_PASSWORD: $MYSQL_PASSWORD
+            MYSQL_ROOT_PASSWORD: $DUMMY_MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: $DUMMY_MYSQL_DATABASE
+            MYSQL_USER: $DUMMY_MYSQL_USER
+            MYSQL_PASSWORD: $DUMMY_MYSQL_PASSWORD
         volumes:
             - dbdata:/var/lib/mysql
 

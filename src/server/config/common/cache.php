@@ -13,8 +13,8 @@ use Yiisoft\Cache\Memcached\Memcached;
 return [
     CacheInterface::class => new Memcached('', [
         [
-            'host' => ArrayHelper::getValue($_ENV, 'MEMCACHED_HOST'),
-            'port' => ArrayHelper::getValue($_ENV, 'MEMCACHED_PORT'),
+            'host' => ArrayHelper::getValue($_ENV, 'DUMMY_MEMCACHED_HOST'),
+            'port' => ArrayHelper::getValue($_ENV, 'DUMMY_MEMCACHED_PORT'),
         ],
     ]),
     YiiCacheInterface::class => Cache::class,

@@ -8,12 +8,12 @@ services:
             dockerfile: ../../build/images/client/Dockerfile
             target: development
         environment:
-            NODE_ENV: $SPA_NODE_ENV
-            VUE_APP_API_URL: $API_URL
+            NODE_ENV: $DUMMY_SPA_NODE_ENV
+            VUE_APP_API_URL: $DUMMY_API_URL
         volumes:
             - ./src/client/src:/home/node/app/src:rw
         ports:
-            - "${SPA_PORT}:8080"
+            - "${DUMMY_SPA_PORT}:8080"
 
     dummy-api:
         container_name: dummy-api
@@ -21,7 +21,7 @@ services:
             context: ./src/server
             dockerfile: ../../build/images/nginx/Dockerfile
         ports:
-            - "${API_PORT}:80"
+            - "${DUMMY_API_PORT}:80"
         volumes:
             - ./src/server/public:/var/www/public
         links:
@@ -35,30 +35,13 @@ services:
             args:
                 UID: 1000
                 GID: 1000
-        environment:
-            PHP_IDE_CONFIG: "serverName=docker"
-            YII_ENV: $API_YII_ENV
-            YII_DEBUG: $API_YII_DEBUG
-            API_URL: $API_URL
-            API_CALLBACKS_QUEUE_NAME: $API_CALLBACKS_QUEUE
-            API_CALLBACK_URL: $API_CALLBACK_URL
-            API_CALLBACK_SECRET: $API_CALLBACK_SECRET
-            MYSQL_DATABASE: $MYSQL_DATABASE
-            MYSQL_HOST: $MYSQL_HOST
-            MYSQL_PORT: $MYSQL_PORT
-            MYSQL_USER: $MYSQL_USER
-            MYSQL_PASSWORD: $MYSQL_PASSWORD
-            RABBITMQ_HOST: $RABBITMQ_HOST
-            RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
-            RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
-            MEMCACHED_HOST: $MEMCACHED_HOST
-            MEMCACHED_PORT: $MEMCACHED_PORT
+        env_file:
+            - .env
         depends_on:
             - dummy-rabbit
             - dummy-memcached
         extra_hosts:
             - "host.docker.internal:host-gateway"
-            - "pp.terminal.test:192.168.20.20"
         volumes:
             - ./src/server:/var/www:rw
 
@@ -66,15 +49,15 @@ services:
         <<: *server_app
         container_name: dummy-consumer
         restart: on-failure
-        entrypoint: ["php", "yii", "queue/listen", $API_CALLBACKS_QUEUE]
+        entrypoint: ["php", "yii", "queue/listen", $DUMMY_API_CALLBACKS_QUEUE]
 
     dummy-rabbit:
         container_name: dummy-rabbit
         image: rabbitmq:latest
         environment:
-            RABBITMQ_HOST: $RABBITMQ_HOST
-            RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
-            RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+            RABBITMQ_HOST: $DUMMY_RABBITMQ_HOST
+            RABBITMQ_DEFAULT_USER: $DUMMY_RABBITMQ_DEFAULT_USER
+            RABBITMQ_DEFAULT_PASS: $DUMMY_RABBITMQ_DEFAULT_PASS
 
     dummy-memcached:
         container_name: dummy-memcached
@@ -84,12 +67,12 @@ services:
         container_name: dummy-db
         image: mysql:latest
         environment:
-            MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-            MYSQL_DATABASE: $MYSQL_DATABASE
-            MYSQL_USER: $MYSQL_USER
-            MYSQL_PASSWORD: $MYSQL_PASSWORD
+            MYSQL_ROOT_PASSWORD: $DUMMY_DB_ROOT_PASSWORD
+            MYSQL_DATABASE: $DUMMY_DB_NAME
+            MYSQL_USER: $DUMMY_DB_USER
+            MYSQL_PASSWORD: $DUMMY_DB_PASSWORD
         ports:
-            - "${MYSQL_PORT}:3306"
+            - "${DUMMY_MYSQL_PORT}:3306"
         volumes:
             - ./build/example/dump:/docker-entrypoint-initdb.d
             - dbdata:/var/lib/mysql

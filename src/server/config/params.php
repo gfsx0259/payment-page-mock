@@ -27,7 +27,7 @@ return [
         'adminEmail' => 'admin@example.com',
         'senderEmail' => 'sender@example.com',
     ],
-    'host' => getenv('API_URL'),
+    'host' => getenv('DUMMY_API_URL'),
     'middlewares' => [
         ErrorCatcher::class,
         SessionMiddleware::class,
@@ -157,11 +157,11 @@ return [
             'connections' => [
                 'mysql' => new \Cycle\Database\Config\MySQLDriverConfig(
                     connection: new \Cycle\Database\Config\MySQL\TcpConnectionConfig(
-                        database: getenv('MYSQL_DATABASE'),
-                        host: getenv('MYSQL_HOST'),
-                        port: intval(getenv('MYSQL_PORT')),
-                        user: getenv('MYSQL_USER'),
-                        password: getenv('MYSQL_PASSWORD'),
+                        database: getenv('DUMMY_DB_NAME'),
+                        host: getenv('DUMMY_DB_HOST'),
+                        port: intval(getenv('DUMMY_DB_PORT')),
+                        user: getenv('DUMMY_DB_USER'),
+                        password: getenv('DUMMY_DB_PASSWORD'),
                     )
                 ),
             ],

@@ -25,7 +25,7 @@ return [
     },
     QueueInterface::class => function (Injector $injector) {
         $mapping = [
-            ['queue_name' => ArrayHelper::getValue($_ENV, 'API_CALLBACKS_QUEUE_NAME'), 'jobs' => [SendCallbackJob::class]],
+            ['queue_name' => ArrayHelper::getValue($_ENV, 'DUMMY_API_CALLBACKS_QUEUE_NAME'), 'jobs' => [SendCallbackJob::class]],
         ];
 
         return $injector->make(Queue::class, ['mapping' => $mapping]);
