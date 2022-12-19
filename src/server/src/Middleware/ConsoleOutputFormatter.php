@@ -7,7 +7,7 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
 
 class ConsoleOutputFormatter extends OutputFormatter
 {
-    public function format(?string $message)
+    public function format(?string $message): ?string
     {
         $date = (new DateTime())->format('Y-m-d H:i:s');
 

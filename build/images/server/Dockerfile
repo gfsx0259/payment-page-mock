@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.0-fpm as production
 
 ARG UID
 ARG GID
@@ -13,13 +13,11 @@ RUN install-php-extensions \
         opcache \
         pdo_mysql \
         memcached \
-        xdebug \
         gd
-
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY php.ini /usr/local/etc/php/conf.d/40-custom.ini
+COPY build/php.ini /usr/local/etc/php/conf.d/40-custom.ini
 
 RUN usermod -u $UID www-data \
  && groupmod -g $GID www-data
@@ -38,3 +36,7 @@ COPY --chown=$UID:$GID . ./
 RUN composer run-script post-install-cmd
 
 ENTRYPOINT ["php-fpm"]
+
+FROM production as development
+
+RUN install-php-extensions xdebug

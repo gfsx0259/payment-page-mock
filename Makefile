@@ -59,7 +59,7 @@ utils_images_load_prod:
   	)
 
 utils_deps:
-	docker-compose exec api composer install
+	docker-compose exec dummy-fpm composer install
 
 utils_test:
-	docker-compose exec api composer test
+	docker-compose exec dummy-fpm composer test
