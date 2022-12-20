@@ -7,15 +7,12 @@ use App\ViewInjection\LayoutViewInjection;
 use App\ViewInjection\LinkTagsViewInjection;
 use App\ViewInjection\MetaTagsViewInjection;
 use Yiisoft\Assets\AssetManager;
-use Yiisoft\Cookies\CookieMiddleware;
 use Yiisoft\Definitions\Reference;
 use Yiisoft\ErrorHandler\Middleware\ErrorCatcher;
 use Yiisoft\Router\CurrentRoute;
 use Yiisoft\Router\Middleware\Router;
 use Yiisoft\Router\UrlGeneratorInterface;
-use Yiisoft\Session\SessionMiddleware;
 use Yiisoft\Translator\TranslatorInterface;
-use Yiisoft\User\Login\Cookie\CookieLoginMiddleware;
 use Yiisoft\Yii\Console\Application;
 use Yiisoft\Yii\Console\Command\Serve;
 use Yiisoft\Yii\Cycle\Schema\Conveyor\AttributedSchemaConveyor;
@@ -30,9 +27,6 @@ return [
     'host' => getenv('DUMMY_API_URL'),
     'middlewares' => [
         ErrorCatcher::class,
-        SessionMiddleware::class,
-        CookieMiddleware::class,
-        CookieLoginMiddleware::class,
         Router::class,
     ],
 
@@ -195,7 +189,7 @@ return [
          */
         'schema-providers' => [
             // Uncomment next line to enable a Schema caching in the common cache
-            // \Yiisoft\Yii\Cycle\Schema\Provider\SimpleCacheSchemaProvider::class => ['key' => 'cycle-orm-cache-key'],
+             \Yiisoft\Yii\Cycle\Schema\Provider\SimpleCacheSchemaProvider::class => ['key' => 'cycle-orm-cache-key'],
 
             // Store generated Schema in the file
             \Yiisoft\Yii\Cycle\Schema\Provider\PhpFileSchemaProvider::class => [

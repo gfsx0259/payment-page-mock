@@ -29,6 +29,7 @@ jobs:
         with:
           context: src/server
           file: build/images/server/Dockerfile
+          target: production
           push: true
           tags: ${{ secrets.DOCKER_HUB_LOGIN }}/dummy-fpm:${{ steps.get_version.outputs.VERSION }}
           build-args: |
@@ -43,11 +44,3 @@ jobs:
           target: production
           push: true
           tags: ${{ secrets.DOCKER_HUB_LOGIN }}/dummy-spa:${{ steps.get_version.outputs.VERSION }}
-
-      - name: Build and push nginx server image
-        uses: docker/build-push-action@v3
-        with:
-          context: src/server
-          file: build/images/nginx/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_LOGIN }}/dummy-api:${{ steps.get_version.outputs.VERSION }}
