@@ -8,8 +8,8 @@ declare(strict_types=1);
  * @var string $uniqueKey
  */
 
-use Yiisoft\Form\Widget\Field;
-use Yiisoft\Form\Widget\Form;
+use Yiisoft\Form\Field;
+use Yiisoft\Html\Tag\Form;
 use Yiisoft\Html\Tag\Input;
 use Yiisoft\View\WebView;
 
@@ -18,12 +18,13 @@ $this->setTitle('Aps page');
 
 <h2>APS emulation page</h2>
 <div class="col-12 col-md-6 col-lg-6 col-xl-8">
-    <?= Form::widget()
-        ->action($completeUrl)
+    <?= Form::tag()
+        ->post($completeUrl)
         ->id('form-aps-page')
-        ->begin()
+        ->open()
     ?>
     <?= Input::hidden('uniqueKey', $uniqueKey)->render(); ?>
 
-    <?= Field::widget()->submitButton([], ['class' => 'btn btn-primary']) ?>
+    <?= Field::submitButton('Подтвердить') ?>
+    <?= Form::tag()->close() ?>
 </div>

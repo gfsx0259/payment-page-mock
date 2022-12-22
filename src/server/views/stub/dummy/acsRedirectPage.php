@@ -7,10 +7,6 @@ declare(strict_types=1);
  * @var string $actionUrl
  * @var string $uniqueKey
  */
-
-use Yiisoft\Form\Widget\Field;
-use Yiisoft\Form\Widget\Form;
-use Yiisoft\Html\Tag\Input;
 use Yiisoft\View\WebView;
 
 $this->setTitle('Acs by code page');
