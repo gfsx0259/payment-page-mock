@@ -162,13 +162,14 @@ return [
 
     Group::create('/v2')
         ->middleware(FormatDataResponseAsJson::class)
+        ->middleware(CorsMiddleware::class)
         ->disableMiddleware(CsrfMiddleware::class)
         ->routes(
-            Route::post('/info/check/signature')
+            Route::methods([Method::OPTIONS, Method::POST], '/info/check/signature')
                 ->action(function (DataResponseFactoryInterface $responseFactory) {
                     return $responseFactory->createResponse();
                 }),
-            Route::post('/payment/status')
+            Route::methods([Method::OPTIONS, Method::POST], '/payment/status')
                 ->action([StubController::class, 'status']),
             Route::post('/payment/status/request')
                 ->action([StubController::class, 'statusByRequest']),
