@@ -174,14 +174,14 @@ return [
             Route::post('/payment/status/request')
                 ->action([StubController::class, 'statusByRequest']),
 
-            Route::post('/payment/{route:[\w\/-_]+}')
-                ->action([StubController::class, 'sale']),
             Route::post('/payment/card/3ds_result')
                 ->action([ActionController::class, 'completeAcs']),
             Route::post('/payment/card/3ds_check_iframe')
                 ->action([ActionController::class, 'completeAcs']),
             Route::post('/payment/clarification')
                 ->action([ActionController::class, 'completeClarification']),
+            Route::post('/payment/{route:[\w\/-_]+}')
+                ->action([StubController::class, 'sale']),
         ),
 
     Group::create('/actions')
