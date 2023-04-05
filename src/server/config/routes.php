@@ -174,7 +174,7 @@ return [
             Route::post('/payment/status/request')
                 ->action([StubController::class, 'statusByRequest']),
 
-            Route::post('/payment/{route:[\w\/-]+/[sale|auth]+}')
+            Route::post('/payment/{route:[\w\/-_]+}')
                 ->action([StubController::class, 'sale']),
             Route::post('/payment/card/3ds_result')
                 ->action([ActionController::class, 'completeAcs']),
