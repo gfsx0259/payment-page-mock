@@ -182,6 +182,8 @@ return [
                 ->action([ActionController::class, 'completeClarification']),
             Route::post('/payment/{route:[\w\/-_]+}')
                 ->action([StubController::class, 'sale']),
+            Route::post('/customer/{route:[\w\/-_]+}')
+                ->action([StubController::class, 'sale']),
         ),
 
     Group::create('/actions')
