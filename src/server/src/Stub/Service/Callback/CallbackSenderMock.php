@@ -14,7 +14,7 @@ class CallbackSenderMock implements CallbackSenderInterface
         private LoggerInterface $logger
     ) {}
 
-    public function send(ArrayCollection $callbackCollection): void
+    public function send(string $url, ArrayCollection $callbackCollection): void
     {
         $this->logger->warning('Callback has not been sent cause `' . self::class . '` used');
     }

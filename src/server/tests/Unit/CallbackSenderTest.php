@@ -36,7 +36,7 @@ final class CallbackSenderTest extends Unit
             ]),
         ]);
 
-        $stubCallbackSender->send(new ArrayCollection(self::CALLBACK));
+        $stubCallbackSender->send('callbacks', new ArrayCollection(self::CALLBACK));
 
         $this->assertEquals('callbacks', $sentAtEndpoint);
         $this->assertEquals($expectedJson, $sentJson);
@@ -60,7 +60,7 @@ final class CallbackSenderTest extends Unit
             ]),
         ]);
 
-        $stubCallbackSender->send(new ArrayCollection(self::CALLBACK));
+        $stubCallbackSender->send('test', new ArrayCollection(self::CALLBACK));
 
         $this->assertEquals($exception->getMessage(), $loggedMessage);
     }

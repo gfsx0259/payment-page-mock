@@ -36,16 +36,13 @@ return [
             return new CallbackSenderMock($logger);
         }
 
-        $url = ArrayHelper::getValue($_ENV, 'DUMMY_API_CALLBACK_URL');
         $secret = ArrayHelper::getValue($_ENV, 'DUMMY_API_CALLBACK_SECRET');
 
-        if (!($url && $secret)) {
+        if (!$secret) {
             throw new Exception('Can not initialize callback sender');
         }
 
-        $client = new Client([
-            'base_uri' => $url . '/',
-        ]);
+        $client = new Client();
 
         return new CallbackSender(
             $client,

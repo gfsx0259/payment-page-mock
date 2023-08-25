@@ -27,9 +27,11 @@ class SendCallbackJob extends AbstractJob
     public function run(): void
     {
         $state = $this->stateManager->get($this->requestId);
+        $url = $state->getInitialRequest()->get('general.terminal_callback_url');
         $callback = $this->callbackResolver->resolve($state);
 
         $this->callbackSender->send(
+            $url,
             $this->callbackProcessor->process($state, $callback)
         );
     }

@@ -18,7 +18,7 @@ class CallbackSender implements CallbackSenderInterface
         private string $secret,
     ) {}
 
-    public function send(ArrayCollection $callbackCollection): void
+    public function send(string $url, ArrayCollection $callbackCollection): void
     {
         $callbackCollection->remove(self::SIGNATURE_PATH);
 
@@ -28,9 +28,7 @@ class CallbackSender implements CallbackSenderInterface
         );
 
         try {
-            $this->httpClient->post('callbacks', [
-                'json' => $callbackCollection->data,
-            ]);
+            $this->httpClient->post($url, ['json' => $callbackCollection->data]);
             $this->logger->info('Send callback successfully');
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage());
