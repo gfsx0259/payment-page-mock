@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\ViewInjection\CommonViewInjection;
-use App\ViewInjection\LayoutViewInjection;
 use App\ViewInjection\LinkTagsViewInjection;
 use App\ViewInjection\MetaTagsViewInjection;
 use Yiisoft\Assets\AssetManager;
@@ -115,7 +114,6 @@ return [
         'injections' => [
             Reference::to(CommonViewInjection::class),
             Reference::to(CsrfViewInjection::class),
-            Reference::to(LayoutViewInjection::class),
             Reference::to(LinkTagsViewInjection::class),
             Reference::to(MetaTagsViewInjection::class),
         ],

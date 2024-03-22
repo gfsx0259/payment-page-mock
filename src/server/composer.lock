@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2bca80cf8e91a6874b0ce3f3f6012eb5",
+    "content-hash": "82490faaa5995f2bd544f95e63088bb7",
     "packages": [
         {
             "name": "alexkart/curl-builder",
@@ -5526,70 +5526,6 @@
             "time": "2022-07-18T14:29:53+00:00"
         },
         {
-            "name": "yiisoft/auth",
-            "version": "3.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/auth.git",
-                "reference": "532d0376331262836f937c86fd92b346756ac3b0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/auth/zipball/532d0376331262836f937c86fd92b346756ac3b0",
-                "reference": "532d0376331262836f937c86fd92b346756ac3b0",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.4|^8.0",
-                "psr/http-message": "^1.0",
-                "psr/http-server-handler": "^1.0",
-                "psr/http-server-middleware": "^1.0",
-                "yiisoft/http": "^1.0",
-                "yiisoft/strings": "^2.0"
-            },
-            "require-dev": {
-                "nyholm/psr7": "^1.3",
-                "phpunit/phpunit": "^9.4",
-                "roave/infection-static-analysis-plugin": "^1.5",
-                "spatie/phpunit-watcher": "^1.23",
-                "vimeo/psalm": "^4.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Yiisoft\\Auth\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Yii auth",
-            "homepage": "http://www.yiiframework.com/",
-            "keywords": [
-                "auth",
-                "middleware"
-            ],
-            "support": {
-                "forum": "http://www.yiiframework.com/forum/",
-                "irc": "irc://irc.freenode.net/yii",
-                "issues": "https://github.com/yiisoft/auth/issues?state=open",
-                "source": "https://github.com/yiisoft/auth",
-                "wiki": "http://www.yiiframework.com/wiki/"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/yiisoft",
-                    "type": "github"
-                },
-                {
-                    "url": "https://opencollective.com/yiisoft",
-                    "type": "open_collective"
-                }
-            ],
-            "time": "2021-02-10T21:44:32+00:00"
-        },
-        {
             "name": "yiisoft/cache",
             "version": "2.0.0",
             "source": {
@@ -8145,27 +8081,29 @@
         },
         {
             "name": "yiisoft/strings",
-            "version": "2.1.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/strings.git",
-                "reference": "714ebfbddf8a169194f0820adf0dd9f910363535"
+                "reference": "ff519d31e1c2518f42554fb5410e31bbb74b8108"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/strings/zipball/714ebfbddf8a169194f0820adf0dd9f910363535",
-                "reference": "714ebfbddf8a169194f0820adf0dd9f910363535",
+                "url": "https://api.github.com/repos/yiisoft/strings/zipball/ff519d31e1c2518f42554fb5410e31bbb74b8108",
+                "reference": "ff519d31e1c2518f42554fb5410e31bbb74b8108",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": "^7.4|^8.0"
+                "php": "^8.0"
             },
             "require-dev": {
+                "maglnet/composer-require-checker": "^4.2",
                 "phpunit/phpunit": "^9.5",
+                "rector/rector": "^0.18.3",
                 "roave/infection-static-analysis-plugin": "^1.16",
                 "spatie/phpunit-watcher": "^1.23",
-                "vimeo/psalm": "^4.18"
+                "vimeo/psalm": "^4.30|^5.8"
             },
             "type": "library",
             "autoload": {
@@ -8202,7 +8140,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2022-08-20T04:26:16+00:00"
+            "time": "2023-12-22T07:29:39+00:00"
         },
         {
             "name": "yiisoft/translator",
@@ -8352,89 +8290,6 @@
                 }
             ],
             "time": "2022-11-08T07:22:15+00:00"
-        },
-        {
-            "name": "yiisoft/user",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/user.git",
-                "reference": "cbdc391a322e8405b55c51f0ab85cbbaf735ae89"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/user/zipball/cbdc391a322e8405b55c51f0ab85cbbaf735ae89",
-                "reference": "cbdc391a322e8405b55c51f0ab85cbbaf735ae89",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "^7.4|^8.0",
-                "psr/event-dispatcher": "^1.0",
-                "psr/http-factory": "^1.0",
-                "psr/http-message": "^1.0",
-                "psr/http-server-handler": "^1.0",
-                "psr/http-server-middleware": "^1.0",
-                "psr/log": "^1.1|^2.0|^3.0",
-                "yiisoft/access": "^1.0",
-                "yiisoft/auth": "^2.0|^3.0",
-                "yiisoft/cookies": "^1.2",
-                "yiisoft/http": "^1.2",
-                "yiisoft/session": "^1.0"
-            },
-            "require-dev": {
-                "httpsoft/http-message": "^1.0",
-                "phpunit/phpunit": "^9.5",
-                "roave/infection-static-analysis-plugin": "^1.16",
-                "spatie/phpunit-watcher": "^1.23",
-                "vimeo/psalm": "^4.18",
-                "yiisoft/di": "^1.0",
-                "yiisoft/test-support": "^1.3"
-            },
-            "type": "library",
-            "extra": {
-                "config-plugin-options": {
-                    "source-directory": "config"
-                },
-                "config-plugin": {
-                    "params": "params.php",
-                    "web": "web.php"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Yiisoft\\User\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Convenient user identity management and access checking",
-            "homepage": "https://www.yiiframework.com/",
-            "keywords": [
-                "user",
-                "yiisoft"
-            ],
-            "support": {
-                "chat": "https://t.me/yii3en",
-                "forum": "https://www.yiiframework.com/forum/",
-                "irc": "irc://irc.freenode.net/yii",
-                "issues": "https://github.com/yiisoft/user/issues?state=open",
-                "source": "https://github.com/yiisoft/user",
-                "wiki": "https://www.yiiframework.com/wiki/"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/yiisoft",
-                    "type": "github"
-                },
-                {
-                    "url": "https://opencollective.com/yiisoft",
-                    "type": "opencollective"
-                }
-            ],
-            "time": "2022-06-15T09:15:55+00:00"
         },
         {
             "name": "yiisoft/validator",
@@ -16355,5 +16210,5 @@
         "ext-pdo_sqlite": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
