@@ -130,6 +130,11 @@ class Route implements ArrayableInterface
         return $this->stubs;
     }
 
+    public function addStubs(Stub $stub): void
+    {
+        $this->stubs->add($stub);
+    }
+
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
     {
         return [

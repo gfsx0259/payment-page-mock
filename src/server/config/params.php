@@ -45,6 +45,7 @@ return [
             '@vendor' => '@root/vendor',
             '@layout' => '@root/views/layout',
             '@views' => '@root/views',
+            '@fixture' => '@root/fixture',
         ],
     ],
 
@@ -129,6 +130,7 @@ return [
             'user/create' => App\User\Console\CreateCommand::class,
             'user/assignRole' => App\User\Console\AssignRoleCommand::class,
             'fixture/add' => App\Command\Fixture\AddCommand::class,
+            'fixture/load' => App\Command\Fixture\LoadCommand::class,
             'router/list' => App\Command\Router\ListCommand::class,
             'translator/translate' => App\Command\Translation\TranslateCommand::class,
             'queue/listen' => App\Command\Queue\ListenCommand::class,
@@ -198,9 +200,9 @@ return [
             ],
 
             \Yiisoft\Yii\Cycle\Schema\Provider\FromConveyorSchemaProvider::class => [
-                'generators' => [
-                    Cycle\Schema\Generator\SyncTables::class, // sync table changes to database
-                ],
+//                'generators' => [
+//                    Cycle\Schema\Generator\SyncTables::class, // sync table changes to database
+//                ],
             ],
         ],
 

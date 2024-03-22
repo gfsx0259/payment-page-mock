@@ -51,7 +51,7 @@ final class CallbackController extends EntityController
         } else {
             $stub = $this->stubRepository->findByPK((int)$data->stubId);
             $index = $stub->getCallbacks()->count();
-            $callback = new Callback($stub->getId(), json_encode($data->callback), $index);
+            $callback = new Callback(json_encode($data->callback), $index, $stub->getId());
         }
 
         $entityWriter->write([$callback]);

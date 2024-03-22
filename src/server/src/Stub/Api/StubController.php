@@ -42,10 +42,10 @@ final class StubController extends EntityController
     {
         $data = json_decode($request->getBody()->getContents());
         $stub = new Stub(
-            (int)$data->relationId,
             $data->title,
             $data->description,
-            $data->creator_telegram_alias
+            $data->creator_telegram_alias,
+            (int)$data->relationId,
         );
         $entityWriter->write([$stub]);
 

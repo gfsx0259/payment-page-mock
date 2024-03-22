@@ -5,15 +5,14 @@ ARG GID
 
 WORKDIR /var/www
 
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions \
-        zip \
-        bcmath \
-        intl \
-        opcache \
-        pdo_mysql \
-        memcached \
-        gd
+RUN curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o - | sh -s \
+    zip \
+    bcmath \
+    intl \
+    opcache \
+    pdo_mysql \
+    memcached \
+    gd
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -40,4 +39,9 @@ ENTRYPOINT ["php-fpm"]
 
 FROM production as development
 
-RUN install-php-extensions xdebug
+USER root
+
+RUN curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o - | sh -s \
+    xdebug
+
+USER $UID

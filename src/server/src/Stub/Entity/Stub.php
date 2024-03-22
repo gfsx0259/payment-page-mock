@@ -21,7 +21,7 @@ class Stub implements ArrayableInterface
     private int $id;
 
     #[Column(type: 'integer')]
-    private int $route_id;
+    private ?int $route_id;
 
     #[Column(type: 'string(191)')]
     private string $title = '';
@@ -39,16 +39,17 @@ class Stub implements ArrayableInterface
     private ArrayCollection $callbacks;
 
     /**
-     * @param int $routeId
      * @param string $title
      * @param string $description
+     * @param string $telegramAlias
+     * @param int|null $routeId
      */
-    public function __construct(int $routeId, string $title, string $description, string $telegramAlias)
+    public function __construct(string $title, string $description, string $telegramAlias, ?int $routeId = null)
     {
-        $this->route_id = $routeId;
         $this->title = $title;
         $this->description = $description;
         $this->creator_telegram_alias = $telegramAlias;
+        $this->route_id = $routeId;
         $this->callbacks = new ArrayCollection();
     }
 
@@ -90,6 +91,11 @@ class Stub implements ArrayableInterface
     public function getCallbacks(): ArrayCollection
     {
         return $this->callbacks;
+    }
+
+    public function addCallback(Callback $callback): void
+    {
+        $this->callbacks->add($callback);
     }
 
     /**

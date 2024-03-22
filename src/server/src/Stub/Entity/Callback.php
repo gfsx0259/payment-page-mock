@@ -19,7 +19,7 @@ class Callback implements ArrayableInterface
     private int $id;
 
     #[Column(type: 'integer')]
-    private int $stub_id;
+    private ?int $stub_id;
 
     #[Column(type: 'integer')]
     private int $order;
@@ -28,14 +28,15 @@ class Callback implements ArrayableInterface
     private string $body;
 
     /**
-     * @param int $stubId
      * @param string $body
+     * @param int $order
+     * @param int|null $stubId
      */
-    public function __construct(int $stubId, string $body, int $order)
+    public function __construct(string $body, int $order, ?int $stubId = null)
     {
-        $this->stub_id = $stubId;
         $this->body = $body;
         $this->order = $order;
+        $this->stub_id = $stubId;
     }
 
     public function getId(): int

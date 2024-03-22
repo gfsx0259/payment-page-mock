@@ -69,15 +69,16 @@ services:
 
     dummy-db:
         container_name: dummy-db
-        image: mysql:latest
+        image: mysql:5.7.42
         environment:
             MYSQL_ROOT_PASSWORD: $DUMMY_DB_ROOT_PASSWORD
             MYSQL_DATABASE: $DUMMY_DB_NAME
             MYSQL_USER: $DUMMY_DB_USER
             MYSQL_PASSWORD: $DUMMY_DB_PASSWORD
         volumes:
-            - ./build/example/dump:/docker-entrypoint-initdb.d
             - dbdata:/var/lib/mysql
+        ports:
+            - "${DUMMY_DB_EXTERNAL_PORT}:3306"
 
 volumes:
     dbdata:

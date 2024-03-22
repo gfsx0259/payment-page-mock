@@ -182,8 +182,12 @@ return [
                 ->action([ActionController::class, 'completeClarification']),
             Route::post('/payment/{route:[\w\/-_]+}')
                 ->action([StubController::class, 'sale']),
-            Route::post('/customer/{route:[\w\/-_]+}')
+            Route::post('/customer/card/tokenize')
                 ->action([StubController::class, 'sale']),
+            Route::post('/customer/saved_account/delete')
+                ->action(function (DataResponseFactoryInterface $responseFactory) {
+                    return $responseFactory->createResponse([]);
+                }),
         ),
 
     Group::create('/actions')
