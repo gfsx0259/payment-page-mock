@@ -42,10 +42,10 @@ final class SendCallbackJobTest extends Unit
             $this->make(CallbackResolver::class, [
                 'resolve' => function (State $state) use ($cursor) {
                     if ($state->getCursor() === $cursor) {
-                        return new Callback(1, json_encode(self::CALLBACK), $cursor);
+                        return new Callback(json_encode(self::CALLBACK), $cursor, 1);
                     }
 
-                    return new Callback(2, json_encode(['invalid callback']), $state->getCursor());
+                    return new Callback(json_encode(['invalid callback']), $state->getCursor(), 2);
                 }
             ]),
             $this->make(CallbackProcessor::class, [

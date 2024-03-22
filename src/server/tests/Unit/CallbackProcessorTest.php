@@ -28,7 +28,7 @@ final class CallbackProcessorTest extends Unit
     {
         $state = $this->tester->makeState();
         $cursor = $state->getCursor();
-        $callback = new Callback(1, json_encode(self::CALLBACK), $cursor);
+        $callback = new Callback(json_encode(self::CALLBACK), $cursor, 1);
 
         $overridingApplied = false;
         $stateCursorSwitched = false;
@@ -69,7 +69,7 @@ final class CallbackProcessorTest extends Unit
     {
         $state = $this->tester->makeState();
         $cursor = $state->getCursor();
-        $callback = new Callback(1, json_encode(self::CALLBACK), $cursor);
+        $callback = new Callback(json_encode(self::CALLBACK), $cursor, 1);
 
         $overridingApplied = false;
         $actionRegistered = false;
@@ -118,7 +118,7 @@ final class CallbackProcessorTest extends Unit
     {
         $state = $this->tester->makeState();
         $cursor = $state->getCursor();
-        $callback = new Callback(1, json_encode(self::CALLBACK), $cursor);
+        $callback = new Callback(json_encode(self::CALLBACK), $cursor, 1);
 
         $overridingApplied = false;
         $stateCursorSwitched = false;
