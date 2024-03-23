@@ -111,7 +111,7 @@ final class StubController
             ->createResponse([
                 'payment' => ['status' => 'error'],
                 'errors' => [
-                    ['code' => 3061, 'message' => 'Transaction not found'],
+                    ['code' => '3061', 'message' => 'Transaction not found'],
                 ],
             ]);
     }
