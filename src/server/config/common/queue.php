@@ -17,9 +17,9 @@ use Bunny\Client;
 return [
     BrokerInterface::class => function () {
         $client = new Client([
-            'host' => ArrayHelper::getValue($_ENV, 'RABBITMQ_HOST'),
-            'user' => ArrayHelper::getValue($_ENV, 'RABBITMQ_DEFAULT_USER'),
-            'password' => ArrayHelper::getValue($_ENV, 'RABBITMQ_DEFAULT_PASS'),
+            'host' => ArrayHelper::getValue($_ENV, 'DUMMY_RABBITMQ_HOST'),
+            'user' => ArrayHelper::getValue($_ENV, 'DUMMY_RABBITMQ_DEFAULT_USER'),
+            'password' => ArrayHelper::getValue($_ENV, 'DUMMY_RABBITMQ_DEFAULT_PASS'),
         ]);
 
         return new RabbitMQBroker($client);
@@ -30,7 +30,7 @@ return [
         }
 
         $mapping = [
-            ['queue_name' => ArrayHelper::getValue($_ENV, 'DUMMY_API_CALLBACKS_QUEUE_NAME'), 'jobs' => [SendCallbackJob::class]],
+            ['queue_name' => ArrayHelper::getValue($_ENV, 'DUMMY_API_CALLBACKS_QUEUE'), 'jobs' => [SendCallbackJob::class]],
         ];
 
         return $injector->make(Queue::class, ['mapping' => $mapping]);

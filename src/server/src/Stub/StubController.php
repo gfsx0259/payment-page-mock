@@ -66,7 +66,7 @@ final class StubController
         CurrentRoute $currentRoute
     ): ResponseInterface {
         if (!$route = $this->routeRepository->findByPath($currentRoute->getArgument('route'))) {
-            $this->responseFactory
+            return $this->responseFactory
                 ->createResponse()
                 ->withStatus(Status::NOT_FOUND);
         }
