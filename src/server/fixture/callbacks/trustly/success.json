@@ -1,0 +1,122 @@
+{
+    "sum_request": {
+        "amount": 80100,
+        "currency": "EUR"
+    },
+    "request_id": "13edc362924541da43aebf02871063b03f8cedf3-9569f6041e71ae297c4420531f1951defebb86b3-00006584",
+    "transaction": {
+        "id": 6583000051416,
+        "date": "2023-10-19T12:05:02+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "trustly",
+        "date": "2023-10-19T12:05:02+0000",
+        "result_code": "9999",
+        "result_message": "Awaiting processing",
+        "status": "awaiting clarification",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "EP7e63-f0b3",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "split_with_redirect": false,
+        "method_id": 104,
+        "provider_id": 1407
+    },
+    "sum_real": {
+        "amount": 80100,
+        "currency": "EUR"
+    },
+    "customer": {
+        "id": "superuser"
+    },
+    "clarification_fields": {
+        "customer": {
+            "type": "object",
+            "description": "Payer's data is required to proceed with payment",
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "maxLength": 35
+                },
+                "last_name": {
+                    "type": "string",
+                    "maxLength": 35
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "format": "email"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string",
+                    "format": "regex",
+                    "pattern": "^[a-zA-Z]{2}$"
+                }
+            },
+            "required": [
+                "first_name",
+                "last_name",
+                "email",
+                "language",
+                "country"
+            ],
+            "errors": [
+                {
+                    "property": "customer.first_name",
+                    "message": "The property first_name is required",
+                    "constraint": "required"
+                },
+                {
+                    "property": "customer.last_name",
+                    "message": "The property last_name is required",
+                    "constraint": "required"
+                },
+                {
+                    "property": "customer.email",
+                    "message": "The property email is required",
+                    "constraint": "required"
+                },
+                {
+                    "property": "customer.country",
+                    "message": "The property country is required",
+                    "constraint": "required"
+                }
+            ]
+        }
+    },
+    "rrn": "",
+    "company": {
+        "id": 1,
+        "title": "QA Company"
+    },
+    "general": {
+        "project_id": 981,
+        "payment_id": "EP7e63-f0b3",
+        "signature": "MkfudYkF1O/qpPGPT2rJ2/bQ96VK1ROSpYlxywsiwHYXYvacNLVWWyP4+OFTlirYkebi2GOTxsq0gYvBBCzOjA=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 6583000060324,
+            "type": "sale",
+            "status": "awaiting clarification",
+            "date": "2023-10-19T12:05:02+0000",
+            "processing_time": null,
+            "request_id": "13edc362924541da43aebf02871063b03f8cedf3-9569f6041e71ae297c4420531f1951defebb86b3-00006584",
+            "sum": {
+                "amount": 80100,
+                "currency": "EUR"
+            },
+            "code": "9999",
+            "message": "Awaiting processing",
+            "provider": {
+                "id": 1407
+            }
+        }
+    ]
+}

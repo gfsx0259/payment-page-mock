@@ -1,0 +1,41 @@
+{
+    "sum_request": {
+        "amount": 90000,
+        "currency": "EUR"
+    },
+    "request_id": "59cc94754a557d1fcc3f46ac3f76d7dce2137cd7-2318fc6209f9165dcf91e8830ab2db2887948ca3-05046179",
+    "transaction": {
+        "type": "purchase"
+    },
+    "payment": {
+        "id": "280158",
+        "status": "error",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "cascading_with_redirect": false,
+        "split_with_redirect": false,
+        "need_confirm_retry": false
+    },
+    "customer": {
+        "id": "1030467"
+    },
+    "account": {
+        "number": "490729******1796"
+    },
+    "rrn": "",
+    "general": {
+        "project_id": 19131,
+        "payment_id": "280158",
+        "signature": "ntgRRgrLPdsMk9mForwi3TwgobG/fAF9H+9G4N/b8Bt2I3OHe5wKEnzI1Ven1TeU9zCzMcEDekPh0pDSKP23mg=="
+    },
+    "errors": [
+        {
+            "code": "502",
+            "message": "Validation error"
+        }
+    ],
+    "project_id": 19131,
+    "payment_id": "280158",
+    "customer_id": "1030467",
+    "logger_id": "frqdfjv0c6gep6laiuc5f9i3vu0rvnj0tli61ermtf3f3n6p"
+}

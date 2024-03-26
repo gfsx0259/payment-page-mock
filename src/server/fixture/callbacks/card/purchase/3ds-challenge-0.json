@@ -1,0 +1,86 @@
+{
+    "sum_request": {
+        "amount": 11000,
+        "currency": "USD"
+    },
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 100,
+        "date": "2022-07-27T08:28:15+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "card",
+        "date": "2022-07-27T08:28:15+0000",
+        "result_code": "9999",
+        "result_message": "Awaiting processing",
+        "status": "awaiting 3ds result",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "EPf826-de8c",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "split_with_redirect": false,
+        "provider_id": 402
+    },
+    "sum_real": {
+        "amount": 11000,
+        "currency": "USD"
+    },
+    "account": {
+        "number": "424242******4242",
+        "type": "visa",
+        "card_holder": "TEST TESTOV",
+        "expiry_month": "07",
+        "expiry_year": "2024"
+    },
+    "rrn": "",
+    "threeds2": {
+        "iframe": {
+            "url": "{{ACS_IFRAME_URL}}",
+            "params": {
+                "3DSMethodData": "16589104951172",
+                "threeDSMethodData": "16589104951172"
+            }
+        }
+    },
+    "mpi_result": {
+        "mpi_operation_id": "",
+        "ds_operation_id": "",
+        "acs_operation_id": "",
+        "mpi_timestamp": "",
+        "cardholder_info": "",
+        "authentication_flow": "01"
+    },
+    "company": {
+        "id": 1,
+        "title": "QA Company"
+    },
+    "general": {
+        "project_id": 2401,
+        "payment_id": "EPf826-de8c",
+        "signature": "8mAAabyQGOi+xRDcHSwyiB57tjSTq3Fko+PP3YelmXSYhRfEOSPkabvGBffPzyPWrmpZ6HcbVuGhFfp9LcUhlA=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 106,
+            "type": "sale",
+            "status": "awaiting 3ds result",
+            "date": "2022-07-27T08:28:15+0000",
+            "processing_time": null,
+            "request_id": "{{REQUEST_ID}}",
+            "sum": {
+                "amount": 11000,
+                "currency": "USD"
+            },
+            "code": "9999",
+            "message": "Awaiting processing",
+            "provider": {
+                "id": 402
+            }
+        }
+    ],
+    "status": "awaiting 3ds result",
+    "received_at": 1658910497.512741
+}

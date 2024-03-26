@@ -9,16 +9,16 @@ class ScenarioDto
     /**
      * @param string $title
      * @param bool $isDefault
-     * @param string $description
      * @param string $telegramAlias
      * @param string[] $callbacks
+     *  @param string $description
      */
     public function __construct(
         public string $title,
         public bool $isDefault = false,
-        public string $description = '...',
         public string $telegramAlias = '@username',
         public array $callbacks = [],
+        public string $description = '...',
     )
     {
     }

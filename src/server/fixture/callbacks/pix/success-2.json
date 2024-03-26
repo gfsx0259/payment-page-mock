@@ -1,0 +1,60 @@
+{
+    "sum_request": {
+        "amount": 1000,
+        "currency": "KRW"
+    },
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 91,
+        "date": "2022-04-13T08:56:24+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "pix",
+        "date": "2022-04-13T08:56:24+0000",
+        "result_code": "9999",
+        "result_message": "success",
+        "status": "success",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "EP8adf-6913",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "split_with_redirect": false,
+        "provider_id": 2780
+    },
+    "sum_real": {
+        "amount": 1000,
+        "currency": "KRW"
+    },
+    "rrn": "",
+    "company": {
+        "id": 1,
+        "title": "QA Company"
+    },
+    "general": {
+        "project_id": 3899,
+        "payment_id": "EP8adf-6913",
+        "signature": "ht8GuFN3NiCAZ1BgR9ZEQCI1B95dOhAz80xhn6T/Givv5qiTB1FVz6kHznwD9lZNSUw1LiZXL3E0YAeqSpSt8g=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 91,
+            "type": "sale",
+            "status": "success",
+            "date": "2022-04-13T08:56:23+0000",
+            "processing_time": null,
+            "request_id": "2f5645b79dbe582cd524379654467cc7b034f3e3-495659ce9f36c71cd3740aca7cfce90f4eed88a3-00000001",
+            "sum": {
+                "amount": 1000,
+                "currency": "KRW"
+            },
+            "code": "9999",
+            "message": "Awaiting processing",
+            "provider": {
+                "id": 2780
+            }
+        }
+    ]
+}

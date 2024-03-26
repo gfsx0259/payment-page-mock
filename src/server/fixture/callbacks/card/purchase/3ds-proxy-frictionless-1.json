@@ -1,0 +1,84 @@
+{
+    "request_id": "{{REQUEST_ID}}",
+    "general": {
+        "project_id": 402,
+        "payment_id": "ORDER_PROXY_1",
+        "signature": "bDSvqnpC5IXT5WH9UsaTPNSZk8oE1I8Ozfz5PR/Lg/EfloEpFf3l5QCKBpb5HcfOJBijzokvPhNlTjoeHD7TFw=="
+    },
+    "payment": {
+        "id": "ORDER_PROXY_1",
+        "type": "purchase",
+        "status": "awaiting 3ds result",
+        "date": "2022-10-31T13:36:36+0000",
+        "method": "card",
+        "sum": {
+            "amount": 11000,
+            "currency": "RUB"
+        },
+        "description": ""
+    },
+    "account": {
+        "number": "448599******5064",
+        "type": "visa",
+        "card_holder": "****************",
+        "expiry_month": "**",
+        "expiry_year": "****"
+    },
+    "customer": {
+        "id": "challenge1667223392888"
+    },
+    "operations": [
+        {
+            "id": 905000010921,
+            "type": "sale",
+            "status": "awaiting 3ds result",
+            "date": "2022-10-31T13:36:36+0000",
+            "created_date": "2022-10-31T13:36:35+0000",
+            "request_id": "8e8b5ff8bb0ebb80fe3cee4335b2b2b861c41066-5d7c705e81ae3075b5ad93c394e59356f9a340bb-00000906",
+            "sum_initial": {
+                "amount": 11000,
+                "currency": "RUB"
+            },
+            "sum_converted": {
+                "amount": 11000,
+                "currency": "RUB"
+            },
+            "code": "9999",
+            "message": "Awaiting processing",
+            "provider": {
+                "id": 3,
+                "payment_id": "",
+                "endpoint_id": 3
+            }
+        }
+    ],
+    "acs": {
+        "pa_req": {
+            "threeds2": {
+                "pares": {
+                    "acsTransID": "9264000010809",
+                    "threeDSServerTransID": "cpi_SEFJZML6TU7GW9AK",
+                    "messageType": "CRes",
+                    "messageVersion": "2.1.0",
+                    "transStatus": "Y"
+                }
+            }
+        },
+        "acs_url": "http://proxy.terminal.test/?sid=9ab7059ab644f396b867c4dfcdcd1f480b3998ff8f2ffa92102f81aa1ac44a6e&tdsid=1d0f508f7e38fbe52e066c6a6d866d96",
+        "md": "eyJwdXJjaGFzZV9vcGVyYXRpb25faWQiOjkwNTAwMDAxMDkyMSwicHJvamVjdF9pZCI6MjA1NiwicGF5bWVudF9pZCI6Ik9SREVSX0lEX2VjcHVzZXJfY2hhbGxlbmdlXzIwMjIxMDMxXzE2MzYzMl8yNTAzNTYzNzAiLCJwbHVzX21kIjoiIn0=",
+        "term_url": "{{TERM_URL}}"
+    },
+    "signature": "2dIRyk6EGYpy/+Qq5LV+Q5vPhq0nJEoigvIu1C7X/OlPxf9vZVamkW41CooNYRXdSq+saWHyR0czLvAGIe6aCw==",
+    "@": {
+        "filters": [
+            {
+                "action": "base64",
+                "path": "acs.pa_req.threeds2.pares"
+            },
+            {
+                "action": "base64",
+                "path": "acs.pa_req"
+            }
+        ]
+    }
+}

@@ -1,0 +1,94 @@
+{
+    "sum_request": {
+        "amount": 11000,
+        "currency": "USD"
+    },
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 100,
+        "date": "2022-07-27T08:28:15+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "card",
+        "date": "2022-07-27T08:28:15+0000",
+        "result_code": "9999",
+        "result_message": "Awaiting processing",
+        "status": "awaiting 3ds result",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "EPf826-de8c",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "split_with_redirect": false,
+        "provider_id": 402
+    },
+    "sum_real": {
+        "amount": 11000,
+        "currency": "USD"
+    },
+    "account": {
+        "number": "424242******4242",
+        "type": "visa",
+        "card_holder": "TEST TESTOV",
+        "expiry_month": "07",
+        "expiry_year": "2024"
+    },
+    "rrn": "",
+    "threeds2": {
+        "redirect": {
+            "url": "{{ACS_REDIRECT_URL}}",
+            "params": {
+                "creq": "ewogICAiYWNzVHJhbnNJRCIgOiAiMDAwMDAwMDAtMDAwNS01YTVhLTgwMDAtMDE2ZDg3YjVmNzllIiwKICAgImNoYWxsZW5nZVdpbmRvd1NpemUiIDogIjAzIiwKICAgIm1lc3NhZ2VUeXBlIiA6ICJDUmVxIiwKICAgIm1lc3NhZ2VWZXJzaW9uIiA6ICIyLjEuMCIsCiAgICJ0aHJlZURTU2VydmVyVHJhbnNJRCIgOiAiNGNiODhjNjEtNzZlNy01MThhLTgwMDAtMDAwMDAwMDAxMDE2Igp9",
+                "threeDSSessionData": "106"
+            }
+        }
+    },
+    "mpi_result": {
+        "mpi_operation_id": "4cb88c61-76e7-518a-8000-000000001016",
+        "ds_operation_id": "30632cd6-4f97-5341-8000-00000007a990",
+        "acs_operation_id": "00000000-0005-5a5a-8000-016d87b5f79e",
+        "mpi_timestamp": "",
+        "cardholder_info": "",
+        "authentication_flow": "02"
+    },
+    "company": {
+        "id": 1,
+        "title": "QA Company"
+    },
+    "general": {
+        "project_id": 2401,
+        "payment_id": "EPf826-de8c",
+        "signature": "dy3j1jspsYX4pQGXfEP0V6ZBItfZpApkacYYLYDcwt4ogqf0jlP74RwihkJQjMW/p562jGME8P/K5BSxZxSYqw=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 106,
+            "type": "sale",
+            "status": "awaiting 3ds result",
+            "date": "2022-07-27T08:28:25+0000",
+            "processing_time": null,
+            "request_id": "{{REQUEST_ID}}",
+            "sum": {
+                "amount": 11000,
+                "currency": "USD"
+            },
+            "code": "9999",
+            "message": "Awaiting processing",
+            "provider": {
+                "id": 402
+            }
+        }
+    ],
+    "status": "awaiting 3ds result",
+    "received_at": 1658910506.620571,
+    "redirect": {
+        "url": "{{ACS_REDIRECT_URL}}",
+        "params": {
+            "creq": "ewogICAiYWNzVHJhbnNJRCIgOiAiMDAwMDAwMDAtMDAwNS01YTVhLTgwMDAtMDE2ZDg3YjVmNzllIiwKICAgImNoYWxsZW5nZVdpbmRvd1NpemUiIDogIjAzIiwKICAgIm1lc3NhZ2VUeXBlIiA6ICJDUmVxIiwKICAgIm1lc3NhZ2VWZXJzaW9uIiA6ICIyLjEuMCIsCiAgICJ0aHJlZURTU2VydmVyVHJhbnNJRCIgOiAiNGNiODhjNjEtNzZlNy01MThhLTgwMDAtMDAwMDAwMDAxMDE2Igp9",
+            "threeDSSessionData": "106"
+        },
+        "mode": 0
+    }
+}

@@ -1,0 +1,77 @@
+{
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 5020745010150252,
+        "date": "2022-07-18T13:42:50+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "id": "TEST_PAYMENT_621498",
+        "method": "Estonian Banks",
+        "date": "2022-07-18T13:42:50+0000",
+        "result_code": "29999",
+        "result_message": "Awaiting processing",
+        "status": "awaiting redirect result",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "cascading_with_redirect": false,
+        "split_with_redirect": false,
+        "need_confirm_retry": false,
+        "method_id": 421,
+        "provider_id": 2301
+    },
+    "sum_real": {
+        "amount": 100,
+        "currency": "EUR"
+    },
+    "customer": {
+        "id": "1"
+    },
+    "return_url": {
+        "method": "POST",
+        "body": {
+            "widget_url": "{{NEOFINANCE_JS_RESOURCE}}",
+            "widget_host": "http://localhost:8082",
+            "token": "token",
+            "other": "off",
+            "callback_url": "{{APS_URL}}",
+            "creditor": "LHVBEE22",
+            "default_country": "EE"
+        },
+        "encrypted": [],
+        "url": "{{APS_WIDGET_URL}}",
+        "mode": 2
+    },
+    "rrn": "",
+    "sum_request": {
+        "amount": 100,
+        "currency": "EUR"
+    },
+    "general": {
+        "project_id": 51871,
+        "payment_id": "TEST_PAYMENT_621498",
+        "signature": "x5N/oY0DduBswLh9z7MyWGddToV/m1qnIWwxGAfNKVTwvcySiSU7j0Z7BGYEVPhXeTbL6EXUjuqjCV+ODiJUkA=="
+    },
+    "description": "TEST_PAYMENT_621498",
+    "operations": [
+        {
+            "id": 5020745010189782,
+            "type": "sale",
+            "status": "awaiting redirect result",
+            "date": "2022-07-18T13:42:50+0000",
+            "processing_time": null,
+            "request_id": "{{REQUEST_ID}}",
+            "sum": {
+                "amount": 100,
+                "currency": "EUR"
+            },
+            "code": "29999",
+            "message": "Awaiting processing",
+            "provider": {
+                "id": 2301
+            }
+        }
+    ],
+    "status": "awaiting redirect result",
+    "received_at": 1658151770.631434
+}

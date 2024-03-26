@@ -1,0 +1,66 @@
+{
+    "sum_request": {
+        "amount": 1000,
+        "currency": "USD"
+    },
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 3818000010810,
+        "date": "2023-12-07T06:33:07+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "giropay",
+        "date": "2023-12-07T06:33:07+0000",
+        "result_code": "9999",
+        "result_message": "Awaiting processing",
+        "status": "awaiting clarification",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "{{PAYMENT_ID}}",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "split_with_redirect": false,
+        "method_id": 105,
+        "provider_id": 1285
+    },
+    "sum_real": {
+        "amount": 1000,
+        "currency": "USD"
+    },
+    "clarification_fields": {
+        "customer": [
+            "last_name"
+        ]
+    },
+    "rrn": "",
+    "company": {
+        "id": 1,
+        "title": "QA Company"
+    },
+    "general": {
+        "project_id": 442,
+        "payment_id": "EP88b7-73ab",
+        "signature": "F/ZmPgpFecu6GlEqr9Y5LedoUpvkgyOCrolc8cmWqxWVBq/Zzyvqel5Xn1I+u3Uzo4Q1FmZ9hqB0perV4XnkmA=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 3818000010999,
+            "type": "sale",
+            "status": "awaiting clarification",
+            "date": "2023-12-07T06:33:07+0000",
+            "processing_time": null,
+            "request_id": "c7cf1cb82b6404576ecca7ae9463ab08e2a7b470-db60d79d1858e0d43df46c51696730b2282a9984-00003819",
+            "sum": {
+                "amount": 1000,
+                "currency": "USD"
+            },
+            "code": "9999",
+            "message": "Awaiting processing",
+            "provider": {
+                "id": 1285
+            }
+        }
+    ]
+}

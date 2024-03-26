@@ -1,0 +1,78 @@
+{
+    "acs": {
+        "pa_req": "112442583",
+        "acs_url": "{{ACS_URL}}",
+        "md": "eyJwdXJjaGFzZV9vcGVyYXRpb25faWQiOjUzLCJwcm9qZWN0X2lkIjo0MDIsInBheW1lbnRfaWQiOiJFUDU4ZjQtODdhNSIsInBsdXNfbWQiOiIifQ==",
+        "term_url": "{{TERM_URL}}"
+    },
+    "sum_request": {
+        "amount": 100056,
+        "currency": "RUB"
+    },
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 35,
+        "date": "2022-03-13T17:07:48+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "card",
+        "date": "2022-03-13T17:07:48+0000",
+        "result_code": "0",
+        "result_message": "Success",
+        "status": "awaiting 3ds result",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "EP9cc8-d305",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "actual_amount": 1000,
+        "remaining_refund": 1000,
+        "split_with_redirect": false,
+        "provider_id": 3
+    },
+    "sum_real": {
+        "amount": 1000,
+        "currency": "RUB"
+    },
+    "account": {
+        "number": "424242******4242",
+        "type": "visa",
+        "card_holder": "KO PO",
+        "expiry_month": "10",
+        "expiry_year": "2022"
+    },
+    "rrn": "000047769105",
+    "AuthCode": "563253",
+    "company": {
+        "id": 1,
+        "title": "QA Company"
+    },
+    "general": {
+        "project_id": 402,
+        "payment_id": "EP9cc8-d305",
+        "signature": "bDSvqnpC5IXT5WH9UsaTPNSZk8oE1I8Ozfz5PR/Lg/EfloEpFf3l5QCKBpb5HcfOJBijzokvPhNlTjoeHD7TFw=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 35,
+            "type": "sale",
+            "status": "processing",
+            "date": "2022-03-13T17:07:49+0000",
+            "processing_time": "2022-03-13T17:07:48+0000",
+            "request_id": "dbf1a3922c3d5565be5794d7d56a12e627e2b5ba-8c01825b9f349270e3dd91acd26976c6941b324a-00000001",
+            "sum": {
+                "amount": 1000,
+                "currency": "RUB"
+            },
+            "code": "0",
+            "message": "Success",
+            "provider": {
+                "id": 3,
+                "payment_id": "16471912682712"
+            }
+        }
+    ],
+    "return_url": "http://pp.terminal.test/process/complete-redirect/0ve40f96ssi35bvuln3irp5775/49fb2ae0c4d52bfb"
+}

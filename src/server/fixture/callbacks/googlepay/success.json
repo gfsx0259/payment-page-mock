@@ -1,0 +1,76 @@
+{
+    "sum_request": {
+        "amount": 1000,
+        "currency": "RUB"
+    },
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 7134000012320,
+        "date": "2022-11-07T07:28:39+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "card",
+        "date": "2022-11-07T07:28:39+0000",
+        "result_code": "0",
+        "result_message": "Success",
+        "status": "success",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "{{PAYMENT_ID}}",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "actual_amount": 1000,
+        "remaining_refund": 1000,
+        "split_with_redirect": false,
+        "method_id": 1,
+        "provider_id": 402
+    },
+    "sum_real": {
+        "amount": 1000,
+        "currency": "RUB"
+    },
+    "customer": {
+        "id": "1"
+    },
+    "account": {
+        "number": "411111******1111",
+        "type": "visa",
+        "card_holder": "GOOGLEPAY USER",
+        "expiry_month": "12",
+        "expiry_year": "2027"
+    },
+    "rrn": "003036609714",
+    "AuthCode": "82837Z",
+    "company": {
+        "id": 147,
+        "title": "ad2regress2303"
+    },
+    "general": {
+        "project_id": 1905,
+        "payment_id": "EP869a-0dda",
+        "signature": "XqeUP+n0pptOyfbA5toG3L65I3uWmPDHzeB8sqmKzrcrEEKGQDs2hswkQavprLNG/FAGqGaq4k6SOiHXRZFaag=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 7134000012926,
+            "type": "sale",
+            "status": "success",
+            "date": "2022-11-07T07:28:39+0000",
+            "processing_time": "2022-11-07T07:28:37+0000",
+            "request_id": "e4f304903a286625ac9ffee9a0f2a29f06bd93e0-0fb9988cb03aa0565a534ee3432eefad1b4762aa-00007135",
+            "sum": {
+                "amount": 1000,
+                "currency": "RUB"
+            },
+            "code": "0",
+            "message": "Success",
+            "provider": {
+                "id": 402,
+                "payment_id": "0030000005770365"
+            }
+        }
+    ],
+    "return_url": "https://paymentpage.westresscode.net/process/complete-redirect/fd503h7id0t9gfbihu87c3pfcj/601a40b93c8de36e"
+}

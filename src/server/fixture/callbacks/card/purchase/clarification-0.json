@@ -1,0 +1,73 @@
+{
+    "sum_request": {
+        "amount": 1000,
+        "currency": "RUB"
+    },
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 32,
+        "date": "2022-05-11T14:12:32+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "card",
+        "date": "2022-05-11T14:12:32+0000",
+        "result_code": "9999",
+        "result_message": "Awaiting processing",
+        "status": "awaiting clarification",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "EPb727-dd9f",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "split_with_redirect": false,
+        "provider_id": 3
+    },
+    "sum_real": {
+        "amount": 1000,
+        "currency": "RUB"
+    },
+    "account": {
+        "number": "444444******3333",
+        "type": "visa",
+        "card_holder": "TEST TESTOV",
+        "expiry_month": "05",
+        "expiry_year": "2022"
+    },
+    "clarification_fields": {
+        "avs_data": [
+            "avs_post_code",
+            "avs_street_address"
+        ]
+    },
+    "rrn": "",
+    "company": {
+        "id": 1,
+        "title": "QA Company"
+    },
+    "general": {
+        "project_id": 2052,
+        "payment_id": "EPb727-dd9f",
+        "signature": "oNJKxeYaFGOY4uodMYYMf3s2Ss37h1UKK0BOYA6BHBFx4yhAr4exGZVmjry4oysX+/mh/P5AxyAD/BGCLD0gtg=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 32,
+            "type": "sale",
+            "status": "awaiting clarification",
+            "date": "2022-05-11T14:12:32+0000",
+            "processing_time": null,
+            "request_id": "a546aa84c3fbf12af8508da21caf9a1136a95037-7d8f34fcd173ef282745e02f13b872e69ed65766-00000001",
+            "sum": {
+                "amount": 1000,
+                "currency": "RUB"
+            },
+            "code": "9999",
+            "message": "Awaiting processing",
+            "provider": {
+                "id": 3
+            }
+        }
+    ]
+}

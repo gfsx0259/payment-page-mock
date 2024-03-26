@@ -1,0 +1,83 @@
+{
+    "sum_request": {
+        "amount": 11000,
+        "currency": "USD"
+    },
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 100,
+        "date": "2022-07-27T08:29:02+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "card",
+        "date": "2022-07-27T08:29:02+0000",
+        "result_code": "0",
+        "result_message": "Success",
+        "status": "success",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "ORDER_PROXY_1",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "actual_amount": 11000,
+        "remaining_refund": 11000,
+        "split_with_redirect": false,
+        "provider_id": 402
+    },
+    "sum_real": {
+        "amount": 11000,
+        "currency": "USD"
+    },
+    "account": {
+        "number": "424242******4242",
+        "type": "visa",
+        "card_holder": "TEST TESTOV",
+        "expiry_month": "07",
+        "expiry_year": "2024"
+    },
+    "avs_result": "X",
+    "rrn": "002028454453",
+    "AuthCode": "HOSTOK",
+    "mpi_result": {
+        "mpi_operation_id": "a27e7bd8-0761-5aef-8000-0000000009dc",
+        "ds_operation_id": "a0dc40c1-72e1-571b-8000-000000077acf",
+        "acs_operation_id": "a02aff79-8f50-40b4-88e9-38101c74c997",
+        "mpi_timestamp": 202207270828,
+        "cardholder_info": "",
+        "authentication_flow": "02"
+    },
+    "company": {
+        "id": 1,
+        "title": "QA Company"
+    },
+    "general": {
+        "project_id": 2401,
+        "payment_id": "ORDER_PROXY_1",
+        "signature": "FIcuqIg80GhXFqwFUzgO4vBfAcpQPLz6kCP1de2T69l1qis3qhSuuNw5Gwys7RGR/sK1ZrFfEb6u6uMCW5kO1w=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 106,
+            "type": "sale",
+            "status": "success",
+            "date": "2022-07-27T08:29:02+0000",
+            "processing_time": "2022-07-27T08:29:01+0000",
+            "request_id": "{{REQUEST_ID}}",
+            "sum": {
+                "amount": 11000,
+                "currency": "USD"
+            },
+            "code": "0",
+            "message": "Success",
+            "provider": {
+                "id": 402,
+                "payment_id": "16589105411179"
+            }
+        }
+    ],
+    "return_url": "http://pp.terminal.test/process/complete-redirect/hrpirh4fsthkcf7e0dbdih2rcc/b7a7ba0a51755c1f",
+    "status": "success",
+    "received_at": 1658910546.686789
+}

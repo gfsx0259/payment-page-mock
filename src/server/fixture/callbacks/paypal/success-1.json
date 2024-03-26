@@ -1,0 +1,66 @@
+{
+    "request_id": "{{REQUEST_ID}}",
+    "transaction": {
+        "id": 146,
+        "date": "2022-05-26T12:44:35+0000",
+        "type": "purchase"
+    },
+    "payment": {
+        "method": "Gcash wallet",
+        "date": "2022-05-26T12:44:35+0000",
+        "result_code": "0",
+        "result_message": "Success",
+        "status": "success",
+        "is_new_attempts_available": false,
+        "attempts_timeout": 0,
+        "id": "EP8949-1fa2",
+        "cascading_with_redirect": false,
+        "is_cascading": false,
+        "actual_amount": 1000,
+        "split_with_redirect": false,
+        "provider_id": 1794
+    },
+    "sum_real": {
+        "amount": 1000,
+        "currency": "PHP"
+    },
+    "account": {
+        "number": "pp@pp.pp"
+    },
+    "rrn": "",
+    "sum_request": {
+        "amount": 1000,
+        "currency": "PHP"
+    },
+    "company": {
+        "id": 3,
+        "title": "Regress company 1"
+    },
+    "general": {
+        "project_id": 445,
+        "payment_id": "EP8949-1fa2",
+        "signature": "/6Y7tZ4eN8magGoCP1Z9iT3+isf237gmOrSt3AYMSKsw+sxM1O1Xpxps3qtqBhF7FN7LTdmu3onf5NCV6U5MLw=="
+    },
+    "description": "",
+    "operations": [
+        {
+            "id": 146,
+            "type": "sale",
+            "status": "success",
+            "date": "2022-05-26T12:44:35+0000",
+            "processing_time": "2020-02-13T08:31:32+0000",
+            "request_id": "cd8a62bfd04885fcc917fdd9d9821a71373c7761-6e9dfb31133e8e1f5f0f7bc1c90c122418ba851c-00000001",
+            "sum": {
+                "amount": 1000,
+                "currency": "PHP"
+            },
+            "code": "0",
+            "message": "Success",
+            "provider": {
+                "id": 1794,
+                "payment_id": "PAC3WK06"
+            }
+        }
+    ],
+    "return_url": "http://pp.terminal.test/process/complete-redirect/i4jceeap8v4g4s1ibba3taaq1f/c245134d8c0f0f4a"
+}
