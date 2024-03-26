@@ -1,0 +1,27 @@
+{
+    "customer": {
+        "id": "1",
+        "project_id": 24461,
+        "country": "SI",
+        "phone": "",
+        "email": "****************",
+        "day_of_birth": "",
+        "first_name": "John",
+        "last_name": "Wick",
+        "address": "",
+        "zip": "",
+        "city": "",
+        "street": "",
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+        "ip_address": "188.255.14.169",
+        "billing": {
+            "country": "",
+            "region": "",
+            "city": "",
+            "address": "",
+            "postal": ""
+        },
+        "created_at": "27-09-2022 11:29:40"
+    },
+    "signature": "w1dTP2q/gi+LkgABeNnvrpgwBD3rI+lqz2Q/jbQ0Ynzk6vBjNs6EE5DDrdpfoQIaPDjfF9Vr7V0VcDRGcHob/w=="
+}

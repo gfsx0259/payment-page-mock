@@ -1,0 +1,85 @@
+{
+    "accounts": [
+        {
+            "id": 928054631,
+            "number": "535456******6644",
+            "type": "card",
+            "additional": {
+                "country": "",
+                "phone": "",
+                "email": "",
+                "card": {
+                    "expiry": "11/27",
+                    "holder": "SAMIR ANDREAS AGISILAOU",
+                    "type": "mastercard",
+                    "country": "CY",
+                    "product_name": "Debit Other Embossed MasterCard Card",
+                    "bank_name": "REVOLUT LTD"
+                },
+                "recurring_enable": false
+            },
+            "last_deposit_date": "2024-01-10 20:29:40",
+            "last_payout_date": "2024-01-09 21:04:44",
+            "last_tokenize_date": null,
+            "operation_type": [
+                "purchase",
+                "payout"
+            ],
+            "token": "a18871******c875"
+        },
+        {
+            "id": 972019571,
+            "number": "454891******5961",
+            "type": "card",
+            "additional": {
+                "country": "",
+                "phone": "",
+                "email": "",
+                "card": {
+                    "expiry": "07/24",
+                    "holder": "SAMIR ANDREAS AGISILAOU",
+                    "type": "visa",
+                    "country": "CY",
+                    "product_name": "Visa classic",
+                    "bank_name": "Bank of Cyprus Public Company Limited"
+                },
+                "recurring_enable": false
+            },
+            "last_deposit_date": "2023-10-02 16:51:03",
+            "last_payout_date": null,
+            "last_tokenize_date": null,
+            "operation_type": [
+                "purchase"
+            ],
+            "token": "2e8450******6397"
+        },
+        {
+            "id": 926985321,
+            "number": "454891******1111",
+            "type": "card",
+            "additional": {
+                "country": "",
+                "phone": "",
+                "email": "",
+                "card": {
+                    "expiry": "07/23",
+                    "holder": "SAMIRFOTI ANDREAS",
+                    "type": "visa",
+                    "country": "CY",
+                    "product_name": "Visa classic",
+                    "bank_name": "Bank of Cyprus Public Company Limited"
+                },
+                "recurring_enable": false
+            },
+            "last_deposit_date": "2023-07-30 11:17:05",
+            "last_payout_date": "2023-06-24 18:59:30",
+            "last_tokenize_date": null,
+            "operation_type": [
+                "purchase",
+                "payout"
+            ],
+            "token": "5920ef******6526"
+        }
+    ],
+    "signature": "Nkx73dcwbLHgDMwlrTTVxetrEwCXeK9RbmoxWvFARRo5y/5fqWgQHpbmuMP3pC2/0FTKHGZm4dX1LAqZl2cLQA=="
+}

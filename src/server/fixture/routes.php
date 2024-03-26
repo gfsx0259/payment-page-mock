@@ -14,24 +14,24 @@ return [
         logo: 'card.svg',
         type: ROUTE_TYPE_CARD,
         scenarios: [
-            new ScenarioDto('Success', true, telegramAlias: '@kopopov', callbacks: ['card/purchase/success']),
-            new ScenarioDto('Decline', true, telegramAlias: '@kopopov', callbacks: ['card/purchase/decline']),
-            new ScenarioDto('Error', true, telegramAlias: '@kopopov', callbacks: ['card/purchase/error']),
-            new ScenarioDto('Clarification', true, telegramAlias: '@fsafsd', callbacks: [
+            new ScenarioDto('Success', isDefault: true, telegramAlias: '@kopopov', callbacks: ['card/purchase/success']),
+            new ScenarioDto('Decline', telegramAlias: '@kopopov', callbacks: ['card/purchase/decline']),
+            new ScenarioDto('Error', telegramAlias: '@kopopov', callbacks: ['card/purchase/error']),
+            new ScenarioDto('Clarification', telegramAlias: '@fsafsd', callbacks: [
                 'card/purchase/clarification-0',
                 'card/purchase/clarification-1',
                 'card/purchase/clarification-2',
             ]),
-            new ScenarioDto('3ds', true, telegramAlias: '@kopopov', callbacks: [
+            new ScenarioDto('3ds', telegramAlias: '@kopopov', callbacks: [
                 'card/purchase/3ds-0',
                 'card/purchase/3ds-1',
             ]),
-            new ScenarioDto('3ds challenge', true, telegramAlias: '@fsafsd', callbacks: [
+            new ScenarioDto('3ds challenge', telegramAlias: '@fsafsd', callbacks: [
                 'card/purchase/3ds-challenge-0',
                 'card/purchase/3ds-challenge-1',
                 'card/purchase/3ds-challenge-2',
             ]),
-            new ScenarioDto('3ds proxy (legacy PP) frictionless', true, telegramAlias: '@kopopov', callbacks: [
+            new ScenarioDto('3ds proxy (legacy PP) frictionless', telegramAlias: '@kopopov', callbacks: [
                 'card/purchase/3ds-proxy-frictionless-0',
                 'card/purchase/3ds-proxy-frictionless-1',
                 'card/purchase/3ds-proxy-frictionless-2',

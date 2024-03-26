@@ -1,0 +1,1 @@
+let NEOWidget={initialize:function(a,b,c){window.location.replace(c.callback_url)},serialize:function(a){let c=[];for(let b in a)a.hasOwnProperty(b)&&c.push(encodeURIComponent(b)+"="+encodeURIComponent(a[b]));return c.join("&")}}

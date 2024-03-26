@@ -9,7 +9,8 @@ use Yiisoft\Injector\Injector;
 return [
     DataLoader::class => function (Aliases $aliases, Injector $injector) {
         return $injector->make(DataLoader::class, [
-            'routeDefinitions' => require $aliases->get('@fixture/schema.php'),
+            'routeDefinitions' => require $aliases->get('@fixture/routes.php'),
+            'resourceDefinitions' => require $aliases->get('@fixture/resources.php'),
         ]);
     }
 ];

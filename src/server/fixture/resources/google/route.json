@@ -1,0 +1,24 @@
+{
+    "status": "success",
+    "project_id": 1905,
+    "operation": {
+        "sum_initial": {
+            "amount": 1000,
+            "currency": "RUB"
+        },
+        "sum_converted": {
+            "amount": 1000,
+            "currency": "RUB"
+        },
+        "provider": {
+            "id": 2034,
+            "name": "GooglePayViaHost",
+            "class": "GooglePayViaHost"
+        },
+        "merchant_account": {
+            "id": 2509
+        }
+    },
+    "payment_id": "EPb73f-927f",
+    "split": false
+}

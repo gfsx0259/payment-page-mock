@@ -1,0 +1,122 @@
+[
+    {
+        "id": 2914,
+        "abbr": "CREDIT-MUTUEL",
+        "name": "Credit Mutuel",
+        "nativeName": "Crédit Mutuel",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "alias": "EUR",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2915,
+        "abbr": "CIC-BANK",
+        "name": "CIC Bank",
+        "nativeName": "CIC Bank",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "alias": "EUR",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2916,
+        "abbr": "BNP-PARIBAS",
+        "name": "BNP Paribas (MaBanque)",
+        "nativeName": "BNP Paribas (MaBanque)",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "alias": "EUR",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2917,
+        "abbr": "HELLO-BANK",
+        "name": "Hello Bank",
+        "nativeName": "Hello Bank",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "alias": "EUR",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2918,
+        "abbr": "ING-FRANCE",
+        "name": "ING France",
+        "nativeName": "ING France",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "alias": "EUR",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2919,
+        "abbr": "LA-BANQUE-POSTALE",
+        "name": "La Banque Postale",
+        "nativeName": "La Banque Postale",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "alias": "EUR",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2920,
+        "abbr": "SOCIETE-GENERALE",
+        "name": "Societe Generale",
+        "nativeName": "Société Générale",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "alias": "EUR",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2920,
+        "abbr": "wise",
+        "name": "Wise",
+        "nativeName": "Wise",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "alias": "EUR",
+                "exponent": 2
+            }
+        ]
+    }
+]

@@ -1,0 +1,114 @@
+[
+    {
+        "id": 888,
+        "abbr": "SEB",
+        "name": "SEB bank",
+        "nativeName": "AS SEB Pank",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 889,
+        "abbr": "SWEDBANK",
+        "name": "Swedbank",
+        "nativeName": "Swedbank AS",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 890,
+        "abbr": "LHV",
+        "name": "LHV bank",
+        "nativeName": "LHV pank",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 1229,
+        "abbr": "LUMINOR",
+        "name": "Luminor",
+        "nativeName": "Luminor",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 1230,
+        "abbr": "CITADELE",
+        "name": "Citadele",
+        "nativeName": "Citadele",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2867,
+        "abbr": "REVOLUT",
+        "name": "Revolut",
+        "nativeName": "Revolut",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 2913,
+        "abbr": "COOP",
+        "name": "COOP",
+        "nativeName": "COOP",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "exponent": 2
+            }
+        ]
+    },
+    {
+        "id": 35541,
+        "abbr": "PAYSERA",
+        "name": "Paysera",
+        "nativeName": "Paysera",
+        "currencies": [
+            {
+                "id": 978,
+                "alpha_3_4217": "EUR",
+                "number_3_4217": "978",
+                "exponent": 2
+            }
+        ]
+    }
+]
