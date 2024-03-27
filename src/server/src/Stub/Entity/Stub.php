@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Stub\Entity;
 
 use App\Stub\Repository\StubRepository;
+use App\Stub\Service\Specification\SpecificationEntityInterface;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\HasMany;
@@ -13,7 +14,7 @@ use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayableTrait;
 
 #[Entity(repository: StubRepository::class)]
-class Stub implements ArrayableInterface
+class Stub implements ArrayableInterface, SpecificationEntityInterface
 {
     use ArrayableTrait;
 
@@ -33,7 +34,10 @@ class Stub implements ArrayableInterface
     private string $creator_telegram_alias = '';
 
     #[Column(type: 'boolean', default: false)]
-    private bool $default;
+    private bool $default = false;
+
+    #[Column(type: 'json')]
+    private string $conditions = '';
 
     #[HasMany(Callback::class, orderBy: ['order' => 'asc'])]
     private ArrayCollection $callbacks;
@@ -42,14 +46,16 @@ class Stub implements ArrayableInterface
      * @param string $title
      * @param string $description
      * @param string $telegramAlias
+     * @param string $conditions
      * @param int|null $routeId
      */
-    public function __construct(string $title, string $description, string $telegramAlias, ?int $routeId = null)
+    public function __construct(string $title, string $description, string $telegramAlias, string $conditions, ?int $routeId = null)
     {
         $this->title = $title;
         $this->description = $description;
         $this->creator_telegram_alias = $telegramAlias;
         $this->route_id = $routeId;
+        $this->conditions = $conditions;
         $this->callbacks = new ArrayCollection();
     }
 
@@ -59,6 +65,12 @@ class Stub implements ArrayableInterface
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId($id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -108,11 +120,12 @@ class Stub implements ArrayableInterface
 
     /**
      * @param bool $default
-     * @return void
+     * @return self
      */
-    public function setDefault(bool $default): void
+    public function setDefault(bool $default): self
     {
         $this->default = $default;
+        return $this;
     }
 
     /**
@@ -140,6 +153,16 @@ class Stub implements ArrayableInterface
     public function setCreatorTelegramAlias(string $alias): void
     {
         $this->creator_telegram_alias = $alias;
+    }
+
+    public function getSpecification(): array
+    {
+        return json_decode($this->conditions, true) ?? [];
+    }
+
+    public function getIsDefault(): bool
+    {
+        return $this->default;
     }
 
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
