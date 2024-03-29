@@ -1,34 +1,30 @@
 #!/usr/bin/make
-include .env
-export
 
-STACK_NAME := dummy
-STACK_CONFIG := docker-compose.prod.yml
-
-install: pull deploy
+install: pull env deploy
 
 pull:
-	sudo docker image pull konstantinpopov/dummy-fpm:main
-	sudo docker image pull konstantinpopov/dummy-spa:main
+	docker image pull konstantinpopov/dummy-fpm:main
+	docker image pull konstantinpopov/dummy-spa:main
+
+env:
+ifeq (,$(wildcard .env))
+	cp .env.example .env
+endif
 
 deploy:
-	envsubst < $(STACK_CONFIG) | sudo docker stack deploy -c - $(STACK_NAME)
+	docker-compose up -d
 
-deps:
-	docker-compose exec dummy-fpm composer install
+exec:
+	docker-compose exec dummy-fpm bash
+
+composer:
+	docker-compose exec dummy-fpm composer i
+
+migrate:
+	docker compose exec dummy-fpm ./yii migrate/up -q
+	docker compose exec dummy-fpm ./yii fixture/load
 
 test:
 	docker-compose exec dummy-fpm composer test
-
-clear:
-	sudo docker stack rm $(STACK_NAME)
-
-status:
-	sudo docker stack services $(STACK_NAME)
-
-load:
-	docker compose exec dummy-fpm ./yii migrate/up -q
-	docker compose exec dummy-fpm ./yii fixture/load
-	docker compose cp ./src/server/public/uploads/route dummy-fpm:/var/www/public/uploads
 
 

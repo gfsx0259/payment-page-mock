@@ -2,6 +2,7 @@
 
 namespace App\Stub\Service\Callback;
 
+use App\Stub\Service\Specification\SpecificationEntityCollectionResolver;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Stub\Entity\Callback;
 use App\Stub\Repository\StubRepository;
@@ -16,6 +17,7 @@ class CallbackResolver
 {
     public function __construct(
         private StubRepository $stubRepository,
+        private SpecificationEntityCollectionResolver $entityCollectionResolver,
     ) {}
 
     public function resolve(State $state): Callback
@@ -34,8 +36,13 @@ class CallbackResolver
 
     private function getCallbacks(State $state): ArrayCollection
     {
-        $stub = $this->stubRepository->findDefaultByRoute($state->getRouteId());
+        $stubs = $this->stubRepository->findByRoute($state->getRouteId());
+        $currentStub = $this->entityCollectionResolver->resolveMostPriority(
+            $state->getInitialRequest()->data,
+            $stubs
+        );
 
-        return $stub->getCallbacks();
+
+        return $currentStub->getCallbacks();
     }
 }

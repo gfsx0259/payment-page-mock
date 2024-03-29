@@ -45,6 +45,7 @@ final class StubController extends EntityController
             $data->title,
             $data->description,
             $data->creator_telegram_alias,
+            (array)$data->conditions,
             (int)$data->relationId,
         );
         $entityWriter->write([$stub]);
@@ -71,6 +72,7 @@ final class StubController extends EntityController
         $stub->setTitle($data->title);
         $stub->setDescription($data->description);
         $stub->setCreatorTelegramAlias($data->creator_telegram_alias);
+        $stub->setSpecification((array)$data->conditions);
 
         $entityWriter->write([$stub]);
 
@@ -88,7 +90,7 @@ final class StubController extends EntityController
         $stubs = $route->getStubs();
 
         foreach ($stubs as $stub) {
-            $stub->setDefault($stub->getId() === $data->stubId);
+            $stub->setIsDefault($stub->getId() === $data->stubId);
         }
 
         $entityWriter->write($stubs);

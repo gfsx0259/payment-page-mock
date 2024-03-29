@@ -9,6 +9,7 @@
       <CTableHeaderCell> Title </CTableHeaderCell>
       <CTableHeaderCell> Description </CTableHeaderCell>
       <CTableHeaderCell> Creator`s telegram alias </CTableHeaderCell>
+      <CTableHeaderCell> Conditions </CTableHeaderCell>
       <CTableHeaderCell />
       <CTableHeaderCell />
     </CTableHead>
@@ -20,6 +21,18 @@
         <CTableDataCell>{{ stub.title }}</CTableDataCell>
         <CTableDataCell>{{ stub.description }}</CTableDataCell>
         <CTableDataCell>{{ stub.creator_telegram_alias }}</CTableDataCell>
+        <CTableDataCell>
+          <div class="d-flex flex-wrap conditions-container">
+            <CBadge
+              v-for="(value, name, index) in stub.conditions"
+              :key="index"
+              color="dark"
+              class="d-inline-block m-1"
+            >
+              {{ name }} = {{ value }}
+            </CBadge>
+          </div>
+        </CTableDataCell>
         <CTableDataCell class="text-center">
           <router-link :to="'/route/' + routeId + '/stub/' + stub.id">
             <CButton color="dark">Callbacks</CButton>
@@ -72,6 +85,9 @@ export default {
 </script>
 
 <style scoped>
+.conditions-container {
+  width: 200px;
+}
 .active .icon {
   color: darkred;
 }

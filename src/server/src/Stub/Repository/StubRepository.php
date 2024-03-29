@@ -13,17 +13,12 @@ use Cycle\ORM\Select;
  */
 final class StubRepository extends Select\Repository
 {
-    /**
-     * @param int $routeId
-     * @return Stub
-     */
-    public function findDefaultByRoute(int $routeId): Stub
+    public function findByRoute(int $routeId): array
     {
         $where = [
             'route_id' => $routeId,
-            'default' => true,
         ];
 
-        return $this->select()->fetchOne($where);
+        return $this->select()->where($where)->fetchAll();
     }
 }

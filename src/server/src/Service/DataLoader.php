@@ -74,7 +74,7 @@ final class DataLoader
                 $stub->addCallback(new Callback($callbackBody, $index));
             }
 
-            $stub->setDefault($scenario->isDefault);
+            $stub->setIsDefault($scenario->isDefault);
 
             $route->addStubs($stub);
         }

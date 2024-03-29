@@ -49,10 +49,10 @@ final class SpecificationEntityCollectionResolverTest extends Unit
         ];
     }
 
-    private function buildScenario(int $id, array $data, bool $default = false): Stub
+    private function buildScenario(int $id, array $conditions, bool $isDefault = false): Stub
     {
-        return (new Stub('', '', '', json_encode($data)))
+        return (new Stub('', '', '', $conditions))
             ->setId($id)
-            ->setDefault($default);
+            ->setIsDefault($isDefault);
     }
 }

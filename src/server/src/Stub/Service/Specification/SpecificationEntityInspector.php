@@ -22,7 +22,7 @@ final class SpecificationEntityInspector
         }
 
         foreach ($conditions as $key => $value) {
-            if (ArrayHelper::getValueByPath($payload, $key) === $value) {
+            if (ArrayHelper::getValueByPath($payload, $key) == $value) {
                 $score += 1;
             }
         }

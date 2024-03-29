@@ -99,12 +99,18 @@ export default class BaseStore {
           return false;
         }
 
+        const data = Object.assign(
+          state.form,
+          state.relationId ? { relationId: state.relationId } : {}
+        );
+
+        if (data.conditions) {
+          data.conditions = Object.fromEntries(data.conditions);
+        }
+
         dispatch("request", {
           method: state.form.id ? "PUT" : "POST",
-          data: Object.assign(
-            state.form,
-            state.relationId ? { relationId: state.relationId } : {}
-          ),
+          data,
         });
 
         return true;
