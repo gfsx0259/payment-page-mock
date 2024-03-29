@@ -41,18 +41,29 @@ final class CallbackController extends EntityController
     /**
      * @throws Throwable
      */
+    public function create(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
+    {
+        $data = json_decode($request->getBody()->getContents());
+
+        $stub = $this->stubRepository->findByPK((int)$data->relationId);
+        $index = $stub->getCallbacks()->count();
+        $callback = new Callback(json_encode($data->payload), $index, $stub->getId());
+
+        $entityWriter->write([$callback]);
+
+        return $this->responseFactory
+            ->createResponse($callback->toArray());
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function update(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
     {
         $data = json_decode($request->getBody()->getContents());
 
-        if (isset($data->id)) {
-            $callback = $this->callbackRepository->findByPK($data->id);
-            $callback->setBody((array)$data->callback);
-        } else {
-            $stub = $this->stubRepository->findByPK((int)$data->stubId);
-            $index = $stub->getCallbacks()->count();
-            $callback = new Callback(json_encode($data->callback), $index, $stub->getId());
-        }
+        $callback = $this->callbackRepository->findByPK($data->id);
+        $callback->setBody((array)$data->payload);
 
         $entityWriter->write([$callback]);
 

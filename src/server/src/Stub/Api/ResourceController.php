@@ -43,7 +43,7 @@ final class ResourceController extends EntityController
             ->createResponse(['success' => $data]);
     }
 
-    public function update(ServerRequestInterface $request, EntityWriter $entityWriter,): ResponseInterface
+    public function update(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
     {
         $data = json_decode($request->getBody()->getContents());
         $resource = $this->resourceRepository->findByPK($data->id);

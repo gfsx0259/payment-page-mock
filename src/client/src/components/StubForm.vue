@@ -35,6 +35,9 @@
           @click="addCondition"
         />
       </div>
+      <div v-if="!this.conditions.length" class="text-black-50 text-center">
+        conditions are not specified
+      </div>
       <div v-for="(condition, index) in this.conditions" :key="index">
         <CInputGroup class="mb-3">
           <CFormInput

@@ -59,7 +59,7 @@ export default class StubStore extends BaseStore {
         state.form.title = "";
         state.form.description = "";
         state.form.creator_telegram_alias = "";
-        state.form.conditions = [[]];
+        state.form.conditions = [];
       },
       setDefault(state, id) {
         state.entities.map((stub) => {
