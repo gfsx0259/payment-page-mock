@@ -15,6 +15,7 @@ use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Yii\Console\Application;
 use Yiisoft\Yii\Console\Command\Serve;
 use Yiisoft\Yii\Cycle\Schema\Conveyor\AttributedSchemaConveyor;
+use Yiisoft\Yii\Cycle\Schema\Provider\PhpFileSchemaProvider;
 use Yiisoft\Yii\View\CsrfViewInjection;
 
 return [
@@ -27,6 +28,10 @@ return [
     'middlewares' => [
         ErrorCatcher::class,
         Router::class,
+    ],
+
+    'yiisoft/yii-debug' => [
+        'enabled' => false,
     ],
 
     'yiisoft/aliases' => [
@@ -125,8 +130,6 @@ return [
         'autoExit' => false,
         'commands' => [
             'serve' => Serve::class,
-            'user/create' => App\User\Console\CreateCommand::class,
-            'user/assignRole' => App\User\Console\AssignRoleCommand::class,
             'fixture/add' => App\Command\Fixture\AddCommand::class,
             'fixture/load' => App\Command\Fixture\LoadCommand::class,
             'router/list' => App\Command\Router\ListCommand::class,
@@ -189,11 +192,11 @@ return [
          */
         'schema-providers' => [
             // Uncomment next line to enable a Schema caching in the common cache
-             \Yiisoft\Yii\Cycle\Schema\Provider\SimpleCacheSchemaProvider::class => ['key' => 'cycle-orm-cache-key'],
+//             \Yiisoft\Yii\Cycle\Schema\Provider\SimpleCacheSchemaProvider::class => ['key' => 'cycle-orm-cache-key'],
 
             // Store generated Schema in the file
-            \Yiisoft\Yii\Cycle\Schema\Provider\PhpFileSchemaProvider::class => [
-                'mode' => \Yiisoft\Yii\Cycle\Schema\Provider\PhpFileSchemaProvider::MODE_WRITE_ONLY,
+            PhpFileSchemaProvider::class => [
+                'mode' => PhpFileSchemaProvider::MODE_READ_AND_WRITE,
                 'file' => 'runtime/schema.php',
             ],
 

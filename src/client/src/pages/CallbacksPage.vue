@@ -32,19 +32,19 @@ export default {
   methods: {
     ...mapMutations({
       add: "callback/add",
-      setStub: "callback/setFormStubId",
+      setStub: "callback/setRelationId",
     }),
     ...mapActions({
       fetch: "callback/fetch",
       fetchDynamicTemplateVariables: "callback/fetchDynamicTemplateVariables",
-      update: "callback/update",
+      update: "callback/save",
       remove: "callback/remove",
       changeOrder: "callback/changeOrder",
     }),
   },
   computed: {
     ...mapState({
-      callbacks: (state) => state.callback.callbacks,
+      callbacks: (state) => state.callback.entities,
       dynamicTemplateVariables: (state) =>
         state.callback.dynamicTemplateVariables,
       isLoading: (state) => state.callback.isLoading,

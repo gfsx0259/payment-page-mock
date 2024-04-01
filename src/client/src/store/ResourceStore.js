@@ -1,5 +1,6 @@
 import BaseStore from "@/store/BaseStore";
 import { MODULE_RESOURCE } from "@/constants";
+import HttpClient from "@/network/client";
 
 export default class ResourceStore extends BaseStore {
   endpoint() {
@@ -16,6 +17,7 @@ export default class ResourceStore extends BaseStore {
         description: "",
         content_type: "application/json",
         content: "",
+        conditions: [[]],
       },
     };
   }
@@ -54,6 +56,7 @@ export default class ResourceStore extends BaseStore {
         state.form.description = resource.description;
         state.form.content_type = resource.content_type;
         state.form.content = resource.content;
+        state.form.conditions = Object.entries(resource.conditions);
         state.invalidFormFields = [];
       },
       cleanForm(state) {
@@ -64,6 +67,39 @@ export default class ResourceStore extends BaseStore {
         state.form.content_type = "application/json";
         state.form.content = "";
         state.invalidFormFields = [];
+      },
+      setDefault(state, id) {
+        const defaultStub = state.entities.find(
+          (resource) => resource.id === id
+        );
+
+        state.entities.forEach((resource) => {
+          if (resource.path === defaultStub.path) {
+            resource.default = resource.id === defaultStub.id;
+          }
+        });
+      },
+      setCondition(state, condition) {
+        state.form.conditions[condition.index][condition.type] =
+          condition.value;
+      },
+      addCondition(state) {
+        state.form.conditions.push([]);
+      },
+    };
+  }
+
+  actions() {
+    return {
+      ...super.actions(),
+      saveDefault: async ({ dispatch, commit }, id) => {
+        try {
+          await HttpClient.post(`${this.endpoint()}/setDefault`, { id });
+
+          dispatch("fetch");
+        } catch (error) {
+          commit("setMessage", { text: error }, { root: true });
+        }
       },
     };
   }

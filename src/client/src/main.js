@@ -9,6 +9,7 @@ import {
   cilCopy,
   cilArrowThickLeft,
   cilArrowThickRight,
+  cilPlaylistAdd,
 } from "@coreui/icons";
 import * as Components from "@coreui/vue";
 import { SnackbarPlugin } from "snackbar-vue";
@@ -60,6 +61,8 @@ const UIComponents = [
   Components.CSpinner,
   Components.CPlaceholder,
   Components.CBadge,
+  Components.CInputGroup,
+  Components.CInputGroupText,
   Components.COffcanvas,
   Components.COffcanvasHeader,
   Components.COffcanvasBody,
@@ -86,6 +89,7 @@ app.provide("icons", {
   cilCopy,
   cilArrowThickLeft,
   cilArrowThickRight,
+  cilPlaylistAdd,
 });
 
 app.use(SnackbarPlugin, SnackbarConfig);

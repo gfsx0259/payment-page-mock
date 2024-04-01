@@ -14,6 +14,7 @@
       :resources="resources"
       @edit="editFormShow($event)"
       @remove="remove($event)"
+      @setDefault="changeDefault"
     ></ResourceItems>
   </CRow>
 </template>
@@ -42,13 +43,19 @@ export default {
   methods: {
     ...mapActions({
       fetch: "resource/fetch",
+      saveDefault: "resource/saveDefault",
       save: "resource/save",
       remove: "resource/remove",
     }),
     ...mapMutations({
       loadFormByResource: "resource/loadFormByResource",
       cleanForm: "resource/cleanForm",
+      setDefault: "resource/setDefault",
     }),
+    changeDefault(id) {
+      this.setDefault(id);
+      this.saveDefault(id);
+    },
     createFormShow() {
       this.title = "Create resource";
 

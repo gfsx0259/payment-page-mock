@@ -14,6 +14,7 @@ export default class StubStore extends BaseStore {
         title: "",
         description: "",
         creator_telegram_alias: "",
+        conditions: [[]],
       },
     };
   }
@@ -44,12 +45,21 @@ export default class StubStore extends BaseStore {
         state.form.title = stub.title;
         state.form.description = stub.description;
         state.form.creator_telegram_alias = stub.creator_telegram_alias;
+        state.form.conditions = Object.entries(stub.conditions);
+      },
+      setCondition(state, condition) {
+        state.form.conditions[condition.index][condition.type] =
+          condition.value;
+      },
+      addCondition(state) {
+        state.form.conditions.push([]);
       },
       cleanForm(state) {
         state.form.id = null;
         state.form.title = "";
         state.form.description = "";
         state.form.creator_telegram_alias = "";
+        state.form.conditions = [];
       },
       setDefault(state, id) {
         state.entities.map((stub) => {

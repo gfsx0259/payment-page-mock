@@ -4,16 +4,25 @@ declare(strict_types=1);
 
 namespace App\Stub\Entity;
 
+use App\Cycle\JsonTypecast;
 use App\Stub\Repository\StubRepository;
+use App\Stub\Service\Specification\SpecificationEntityInterface;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\HasMany;
+use Cycle\ORM\Parser\Typecast;
 use Doctrine\Common\Collections\ArrayCollection;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayableTrait;
 
-#[Entity(repository: StubRepository::class)]
-class Stub implements ArrayableInterface
+#[Entity(
+    repository: StubRepository::class,
+    typecast: [
+        Typecast::class,
+        JsonTypecast::class,
+    ]
+)]
+class Stub implements ArrayableInterface, SpecificationEntityInterface
 {
     use ArrayableTrait;
 
@@ -24,122 +33,113 @@ class Stub implements ArrayableInterface
     private ?int $route_id;
 
     #[Column(type: 'string(191)')]
-    private string $title = '';
+    private string $title;
 
     #[Column(type: 'text')]
-    private string $description = '';
+    private string $description;
 
     #[Column(type: 'string(191)')]
-    private string $creator_telegram_alias = '';
+    private string $creator_telegram_alias;
 
     #[Column(type: 'boolean', default: false)]
-    private bool $default;
+    private bool $default = false;
+
+    #[Column(type: 'json', typecast: 'json')]
+    private array $conditions;
 
     #[HasMany(Callback::class, orderBy: ['order' => 'asc'])]
     private ArrayCollection $callbacks;
 
-    /**
-     * @param string $title
-     * @param string $description
-     * @param string $telegramAlias
-     * @param int|null $routeId
-     */
-    public function __construct(string $title, string $description, string $telegramAlias, ?int $routeId = null)
-    {
+    public function __construct(
+        string $title,
+        string $description,
+        string $telegramAlias,
+        array $conditions = [],
+        ?int $routeId = null
+    ) {
         $this->title = $title;
         $this->description = $description;
         $this->creator_telegram_alias = $telegramAlias;
         $this->route_id = $routeId;
+        $this->conditions = $conditions;
         $this->callbacks = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
+    public function setId($id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+        return $this;
+    }
+
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @return string
-     */
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
     public function getCreatorTelegramAlias(): string
     {
         return $this->creator_telegram_alias;
     }
 
-    /**
-     * @return ArrayCollection
-     */
+    public function setCreatorTelegramAlias(string $alias): self
+    {
+        $this->creator_telegram_alias = $alias;
+        return $this;
+    }
+
     public function getCallbacks(): ArrayCollection
     {
         return $this->callbacks;
     }
 
-    public function addCallback(Callback $callback): void
+    public function addCallback(Callback $callback): self
     {
         $this->callbacks->add($callback);
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function getDefault(): bool
+    public function getIsDefault(): bool
     {
         return $this->default;
     }
 
-    /**
-     * @param bool $default
-     * @return void
-     */
-    public function setDefault(bool $default): void
+    public function setIsDefault(bool $default): self
     {
         $this->default = $default;
+        return $this;
     }
 
-    /**
-     * @param string $title
-     * @return void
-     */
-    public function setTitle(string $title): void
+    public function getSpecification(): array
     {
-        $this->title = $title;
+        return $this->conditions ?? [];
     }
 
-    /**
-     * @param string $description
-     * @return void
-     */
-    public function setDescription(string $description): void
+    public function setSpecification(array $specification): self
     {
-        $this->description = $description;
-    }
-
-    /**
-     * @param string $alias
-     * @return void
-     */
-    public function setCreatorTelegramAlias(string $alias): void
-    {
-        $this->creator_telegram_alias = $alias;
+        $this->conditions = $specification;
+        return $this;
     }
 
     public function toArray(array $fields = [], array $expand = [], bool $recursive = true): array
@@ -149,8 +149,9 @@ class Stub implements ArrayableInterface
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'creator_telegram_alias' => $this->getCreatorTelegramAlias(),
-            'default' => $this->getDefault(),
+            'default' => $this->getIsDefault(),
             'callbacks' => $this->getCallbacks()->map(fn (Callback $callback) => $callback->toArray()),
+            'conditions' => $this->getSpecification(),
         ];
     }
 }

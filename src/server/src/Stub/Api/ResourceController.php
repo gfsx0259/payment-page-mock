@@ -35,6 +35,7 @@ final class ResourceController extends EntityController
             $data->description,
             $data->content_type,
             $data->content,
+            (array)$data->conditions,
         );
 
         $entityWriter->write([$resource]);
@@ -43,7 +44,7 @@ final class ResourceController extends EntityController
             ->createResponse(['success' => $data]);
     }
 
-    public function update(ServerRequestInterface $request, EntityWriter $entityWriter,): ResponseInterface
+    public function update(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
     {
         $data = json_decode($request->getBody()->getContents());
         $resource = $this->resourceRepository->findByPK($data->id);
@@ -57,8 +58,26 @@ final class ResourceController extends EntityController
         $resource->setDescription($data->description);
         $resource->setContentType($data->content_type);
         $resource->setContent($data->content);
+        $resource->setSpecification((array)$data->conditions);
 
         $entityWriter->write([$resource]);
+
+        return $this->responseFactory
+            ->createResponse(['success' => $data]);
+    }
+
+    public function setDefault(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
+    {
+        $data = json_decode($request->getBody()->getContents());
+        $newDefaultResource = $this->resourceRepository->findByPK($data->id);
+
+        $otherResources = $this->resourceRepository->findByPath($newDefaultResource->getPath());
+
+        foreach ($otherResources as $resource) {
+            $resource->setIsDefault($resource->getId() === $newDefaultResource->getId());
+        }
+
+        $entityWriter->write($otherResources);
 
         return $this->responseFactory
             ->createResponse(['success' => $data]);

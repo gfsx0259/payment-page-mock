@@ -86,7 +86,9 @@ return [
                     Route::patch('/callback/{stubId}')
                         ->action([CallbackController::class, 'changeOrder'])
                         ->name('api/callback/changeOrder'),
-                    Route::methods([Method::OPTIONS, Method::POST], '/stub/callback')
+                    Route::methods([Method::OPTIONS, Method::POST], '/callback')
+                        ->action([CallbackController::class, 'create']),
+                    Route::methods([ Method::PUT], '/callback')
                         ->action([CallbackController::class, 'update']),
                     Route::methods([Method::OPTIONS, Method::DELETE], '/callback/{id}')
                         ->action([CallbackController::class, 'delete']),
@@ -104,6 +106,8 @@ return [
                     Route::methods([Method::OPTIONS, Method::DELETE], '/resource/{id}')
                         ->name('api/resource/delete')
                         ->action([ResourceController::class, 'delete']),
+                    Route::methods([Method::OPTIONS, Method::POST], '/resource/setDefault')
+                        ->action([ResourceController::class, 'setDefault']),
                 ),
         ),
 

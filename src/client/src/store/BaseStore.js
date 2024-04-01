@@ -81,6 +81,11 @@ export default class BaseStore {
       remove: async ({ commit, dispatch }, id) => {
         commit("remove", id);
 
+        if (id === null) {
+          commit("setMessage", { text: `Remove unsaved` }, { root: true });
+          return;
+        }
+
         HttpClient.delete(`${this.endpoint()}/${id}`).catch(({ response }) => {
           const data = response.data;
 
@@ -92,19 +97,26 @@ export default class BaseStore {
           dispatch("fetch");
         });
       },
-      save: async ({ state, dispatch }) => {
+      save: async ({ state, dispatch }, actionData) => {
         dispatch("validate");
 
         if (state.invalidFormFields.length) {
           return false;
         }
 
+        const data = Object.assign(
+          state.form,
+          state.relationId ? { relationId: state.relationId } : {},
+          actionData
+        );
+
+        if (data.conditions) {
+          data.conditions = Object.fromEntries(data.conditions);
+        }
+
         dispatch("request", {
           method: state.form.id ? "PUT" : "POST",
-          data: Object.assign(
-            state.form,
-            state.relationId ? { relationId: state.relationId } : {}
-          ),
+          data,
         });
 
         return true;

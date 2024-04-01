@@ -67,8 +67,8 @@ export default {
     onAdd() {
       this.$emit("add");
     },
-    onUpdate(id, callback) {
-      this.$emit("update", { id, callback });
+    onUpdate(id, payload) {
+      this.$emit("update", { id, payload });
     },
     onRemove(id) {
       if (confirm("Are you sure?")) {
