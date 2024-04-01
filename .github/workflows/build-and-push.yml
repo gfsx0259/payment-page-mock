@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - *
+      - '*'
 jobs:
   build-and-push:
     name: Build and push images
