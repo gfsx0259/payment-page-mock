@@ -106,6 +106,8 @@ return [
                     Route::methods([Method::OPTIONS, Method::DELETE], '/resource/{id}')
                         ->name('api/resource/delete')
                         ->action([ResourceController::class, 'delete']),
+                    Route::methods([Method::OPTIONS, Method::POST], '/resource/setDefault')
+                        ->action([ResourceController::class, 'setDefault']),
                 ),
         ),
 

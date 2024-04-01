@@ -64,6 +64,23 @@ final class ResourceController extends EntityController
             ->createResponse(['success' => $data]);
     }
 
+    public function setDefault(ServerRequestInterface $request, EntityWriter $entityWriter): ResponseInterface
+    {
+        $data = json_decode($request->getBody()->getContents());
+        $newDefaultResource = $this->resourceRepository->findByPK($data->id);
+
+        $otherResources = $this->resourceRepository->findByPath($newDefaultResource->getPath());
+
+        foreach ($otherResources as $resource) {
+            $resource->setIsDefault($resource->getId() === $newDefaultResource->getId());
+        }
+
+        $entityWriter->write($otherResources);
+
+        return $this->responseFactory
+            ->createResponse(['success' => $data]);
+    }
+
     public function getTemplateVariables(): ResponseInterface
     {
         $resources = $this->resourceRepository->findAll();

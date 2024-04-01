@@ -36,6 +36,9 @@ class Resource implements ArrayableInterface
     #[Column(type: 'text')]
     private string $content;
 
+    #[Column(type: 'boolean', default: false)]
+    private bool $default = false;
+
     public function __construct(
         string $path,
         string $alias,
@@ -105,6 +108,17 @@ class Resource implements ArrayableInterface
         $this->description = $description;
     }
 
+    public function getIsDefault(): bool
+    {
+        return $this->default;
+    }
+
+    public function setIsDefault(bool $default): self
+    {
+        $this->default = $default;
+        return $this;
+    }
+
     public function getTemplateVariable(): string
     {
         return $this->getAlias() . '_RESOURCE';
@@ -114,6 +128,7 @@ class Resource implements ArrayableInterface
     {
         return [
             'id' => $this->getId(),
+            'default' => $this->getIsDefault(),
             'content_type' => $this->getContentType(),
             'content' => $this->getContent(),
             'path' => $this->getPath(),

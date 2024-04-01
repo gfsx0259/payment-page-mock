@@ -1,6 +1,7 @@
 <template>
   <CTable bordered striped>
     <CTableHead>
+      <CTableHeaderCell class="text-center"> Default </CTableHeaderCell>
       <CTableHeaderCell class="text-center"> Alias </CTableHeaderCell>
       <CTableHeaderCell> Content Type </CTableHeaderCell>
       <CTableHeaderCell> Path </CTableHeaderCell>
@@ -10,6 +11,16 @@
     </CTableHead>
     <CTableBody>
       <CTableRow v-for="resource in this.resources" :key="resource">
+        <CTableDataCell
+          class="text-center"
+          :class="{ active: resource.default }"
+        >
+          <CIcon
+            icon="cilFlagAlt"
+            size="xxl"
+            @click="setDefault(resource.id)"
+          />
+        </CTableDataCell>
         <CTableDataCell class="text-center">{{
           resource.alias
         }}</CTableDataCell>
@@ -44,6 +55,9 @@ export default {
     },
   },
   methods: {
+    setDefault(id) {
+      this.$emit("setDefault", id);
+    },
     remove(id) {
       if (confirm("Are you sure?")) {
         this.$emit("remove", id);
@@ -57,6 +71,9 @@ export default {
 </script>
 
 <style scoped>
+.active .icon {
+  color: darkred;
+}
 .cursor-pointer {
   cursor: pointer;
 }

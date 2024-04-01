@@ -21,7 +21,7 @@
           :src="this.getImagePath(route.logo)"
         />
         <CCardBody>
-          <CCardTitle class="mb-3">{{ route.path }}</CCardTitle>
+          <CCardTitle class="mb-3 fs-6">{{ route.path }}</CCardTitle>
           <router-link :to="'/route/' + route.id">
             <CButton color="dark">Stubs</CButton>
           </router-link>
