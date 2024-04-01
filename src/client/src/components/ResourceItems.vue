@@ -6,6 +6,7 @@
       <CTableHeaderCell> Content Type </CTableHeaderCell>
       <CTableHeaderCell> Path </CTableHeaderCell>
       <CTableHeaderCell> Description </CTableHeaderCell>
+      <CTableHeaderCell> Conditions </CTableHeaderCell>
       <CTableHeaderCell />
       <CTableHeaderCell />
     </CTableHead>
@@ -27,6 +28,18 @@
         <CTableDataCell>{{ resource.content_type }}</CTableDataCell>
         <CTableDataCell>{{ resource.path }}</CTableDataCell>
         <CTableDataCell>{{ resource.description }}</CTableDataCell>
+        <CTableDataCell>
+          <div class="d-flex flex-wrap conditions-container">
+            <CBadge
+              v-for="(value, name, index) in resource.conditions"
+              :key="index"
+              color="dark"
+              class="d-inline-block m-1"
+            >
+              {{ name }} = {{ value }}
+            </CBadge>
+          </div>
+        </CTableDataCell>
         <CTableDataCell class="text-center">
           <CIcon
             icon="cilPencil"

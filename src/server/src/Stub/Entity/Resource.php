@@ -4,17 +4,26 @@ declare(strict_types=1);
 
 namespace App\Stub\Entity;
 
+use App\Cycle\JsonTypecast;
 use App\Stub\Repository\ResourceRepository;
+use App\Stub\Service\Specification\SpecificationEntityInterface;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Table\Index;
+use Cycle\ORM\Parser\Typecast;
 use Yiisoft\Arrays\ArrayableInterface;
 use Yiisoft\Arrays\ArrayableTrait;
 
-#[Entity(repository: ResourceRepository::class)]
+#[Entity(
+    repository: ResourceRepository::class,
+    typecast: [
+        Typecast::class,
+        JsonTypecast::class,
+    ]
+)]
 #[Index(columns: ['alias'], unique: true)]
 #[Index(columns: ['path'], unique: true)]
-class Resource implements ArrayableInterface
+class Resource implements ArrayableInterface, SpecificationEntityInterface
 {
     use ArrayableTrait;
 
@@ -39,18 +48,23 @@ class Resource implements ArrayableInterface
     #[Column(type: 'boolean', default: false)]
     private bool $default = false;
 
+    #[Column(type: 'json', typecast: 'json')]
+    private array $conditions;
+
     public function __construct(
         string $path,
         string $alias,
         string $description,
         string $content_type,
-        string $content
+        string $content,
+        array $conditions = [],
     ) {
         $this->path = $path;
         $this->alias = $alias;
         $this->description = $description;
         $this->content_type = $content_type;
         $this->content = $content;
+        $this->conditions = $conditions;
     }
 
     public function getId(): int
@@ -119,6 +133,17 @@ class Resource implements ArrayableInterface
         return $this;
     }
 
+    public function getSpecification(): array
+    {
+        return $this->conditions ?? [];
+    }
+
+    public function setSpecification(array $specification): self
+    {
+        $this->conditions = $specification;
+        return $this;
+    }
+
     public function getTemplateVariable(): string
     {
         return $this->getAlias() . '_RESOURCE';
@@ -134,6 +159,7 @@ class Resource implements ArrayableInterface
             'path' => $this->getPath(),
             'alias' => $this->getAlias(),
             'description' => $this->getDescription(),
+            'conditions' => $this->getSpecification(),
         ];
     }
 }

@@ -35,6 +35,7 @@ final class ResourceController extends EntityController
             $data->description,
             $data->content_type,
             $data->content,
+            (array)$data->conditions,
         );
 
         $entityWriter->write([$resource]);
@@ -57,6 +58,7 @@ final class ResourceController extends EntityController
         $resource->setDescription($data->description);
         $resource->setContentType($data->content_type);
         $resource->setContent($data->content);
+        $resource->setSpecification((array)$data->conditions);
 
         $entityWriter->write([$resource]);
 

@@ -13,6 +13,7 @@ class SpecificationEntityCollectionResolver
      * @param array $payload
      * @param SpecificationEntityInterface[] $specificationProviders
      * @return SpecificationEntityInterface
+     * @throws SpecificationEntityCollectionException
      */
     public function resolveMostPriority(array $payload, array $specificationProviders): SpecificationEntityInterface
     {
@@ -38,6 +39,10 @@ class SpecificationEntityCollectionResolver
             );
         }
 
-        return current($filteredCollection);
+        if (!$detectedElement = current($filteredCollection)) {
+            throw new SpecificationEntityCollectionException();
+        }
+
+        return $detectedElement;
     }
 }

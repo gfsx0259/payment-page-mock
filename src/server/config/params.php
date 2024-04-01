@@ -30,6 +30,10 @@ return [
         Router::class,
     ],
 
+    'yiisoft/yii-debug' => [
+        'enabled' => false,
+    ],
+
     'yiisoft/aliases' => [
         'aliases' => [
             '@root' => dirname(__DIR__),

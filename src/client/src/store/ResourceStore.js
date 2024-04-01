@@ -17,6 +17,7 @@ export default class ResourceStore extends BaseStore {
         description: "",
         content_type: "application/json",
         content: "",
+        conditions: [[]],
       },
     };
   }
@@ -55,6 +56,7 @@ export default class ResourceStore extends BaseStore {
         state.form.description = resource.description;
         state.form.content_type = resource.content_type;
         state.form.content = resource.content;
+        state.form.conditions = Object.entries(resource.conditions);
         state.invalidFormFields = [];
       },
       cleanForm(state) {
@@ -76,6 +78,13 @@ export default class ResourceStore extends BaseStore {
             resource.default = resource.id === defaultStub.id;
           }
         });
+      },
+      setCondition(state, condition) {
+        state.form.conditions[condition.index][condition.type] =
+          condition.value;
+      },
+      addCondition(state) {
+        state.form.conditions.push([]);
       },
     };
   }
