@@ -1,7 +1,7 @@
 ## Description
-Payment page mock application
+Payment page dummy application
 
-![UI example](./build/example/github/example.png)
+![UI example](./build/docs/interface.png)
 
 ## Run for develop
 
