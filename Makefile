@@ -3,8 +3,8 @@
 install: pull env deploy
 
 pull:
-	docker image pull konstantinpopov/dummy-fpm:main
-	docker image pull konstantinpopov/dummy-spa:main
+	docker image pull konstantinpopov/dummy-fpm:latest
+	docker image pull konstantinpopov/dummy-spa:latest
 
 env:
 ifeq (,$(wildcard .env))
