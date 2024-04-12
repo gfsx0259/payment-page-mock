@@ -131,7 +131,7 @@ return [
                 ->action([ActionController::class, 'completeAcs']),
             Route::post('/payment/clarification')
                 ->action([ActionController::class, 'completeClarification']),
-            Route::post('/payment/{route:[\w\/-_]+}')
+            Route::post('/payment/{route:[\w\/\-_]+}')
                 ->action([StubController::class, 'sale']),
             Route::post('/customer/card/tokenize')
                 ->action([StubController::class, 'sale']),
