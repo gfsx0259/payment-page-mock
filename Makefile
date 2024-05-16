@@ -1,6 +1,6 @@
 #!/usr/bin/make
 
-install: pull env deploy
+install: pull env deploy composer migrate
 
 pull:
 	docker image pull konstantinpopov/dummy-fpm:latest
@@ -12,19 +12,19 @@ ifeq (,$(wildcard .env))
 endif
 
 deploy:
-	docker-compose up -d
+	docker compose up -d
 
 exec:
-	docker-compose exec dummy-fpm bash
+	docker compose exec dummy-fpm bash
 
 composer:
-	docker-compose exec dummy-fpm composer i
+	docker compose exec dummy-fpm composer i
 
 migrate:
 	docker compose exec dummy-fpm ./yii migrate/up -q
 	docker compose exec dummy-fpm ./yii fixture/load
 
 test:
-	docker-compose exec dummy-fpm composer test
+	docker compose exec dummy-fpm composer test
 
 

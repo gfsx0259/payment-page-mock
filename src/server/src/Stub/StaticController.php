@@ -36,7 +36,7 @@ final class StaticController
         }
 
         try {
-            $resource = $entityCollectionResolver->resolveMostPriority($requestData, $resources);
+            $resource = $entityCollectionResolver->resolveMostPriority($requestData ?? [], $resources);
         } catch (SpecificationEntityCollectionException) {
             return $controllerService->getNotFoundResponse();
         }
