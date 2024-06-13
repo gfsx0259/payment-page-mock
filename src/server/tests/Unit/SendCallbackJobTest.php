@@ -23,7 +23,8 @@ final class SendCallbackJobTest extends Unit
 
     public function testRun(): void
     {
-        $state = $this->tester->makeState();
+        $callbackUrl = 'some';
+        $state = $this->tester->makeState(['general' => ['terminal_callback_url' => $callbackUrl]]);
         $cursor = $state->getCursor();
 
         $correctCallbackSent = false;
@@ -35,8 +36,8 @@ final class SendCallbackJobTest extends Unit
                 }
             ]),
             $this->make(CallbackSender::class, [
-                'send' => function (ArrayCollection $callback) use (&$correctCallbackSent) {
-                    $correctCallbackSent = $callback->data === self::CALLBACK;
+                'send' => function (string $url, ArrayCollection $callback) use (&$correctCallbackSent, $callbackUrl) {
+                    $correctCallbackSent = $callback->data === self::CALLBACK && $url === $callbackUrl;
                 }
             ]),
             $this->make(CallbackResolver::class, [

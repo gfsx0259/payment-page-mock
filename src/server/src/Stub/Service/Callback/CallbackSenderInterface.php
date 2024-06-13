@@ -9,5 +9,5 @@ use App\Stub\Collection\ArrayCollection;
  */
 interface CallbackSenderInterface
 {
-    public function send(ArrayCollection $callbackCollection): void;
+    public function send(string $url, ArrayCollection $callbackCollection): void;
 }
