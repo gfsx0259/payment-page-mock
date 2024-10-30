@@ -39,4 +39,14 @@ return [
         alias: 'GOOGLE_PAY_ROUTE',
         contentPath: 'google/route.json'
     ),
+    new ResourceDto(
+        path: '/card_type_regex/?preset=default',
+        alias: 'DICT_CARD_TYPE_DEFAULT',
+        contentPath: 'card/default.json'
+    ),
+    new ResourceDto(
+        path: '/card_type_regex/?preset=mir',
+        alias: 'DICT_CARD_TYPE_MIR',
+        contentPath: 'card/mir.json'
+    ),
 ];

@@ -25,7 +25,11 @@ final class StaticController
         ServerRequestInterface $serverRequest,
         SpecificationEntityCollectionResolver $entityCollectionResolver,
     ): ResponseInterface {
-        $requestData = json_decode($serverRequest->getBody()->getContents(), true);
+        $requestData = array_merge(
+            json_decode($serverRequest->getBody()->getContents(), true) ?? [],
+            $serverRequest->getQueryParams()
+        );
+
         $destination = $currentRoute->getArgument('destination');
 
         $resources = $resourceRepository->findByPath($destination);
@@ -36,7 +40,7 @@ final class StaticController
         }
 
         try {
-            $resource = $entityCollectionResolver->resolveMostPriority($requestData ?? [], $resources);
+            $resource = $entityCollectionResolver->resolveMostPriority($requestData, $resources);
         } catch (SpecificationEntityCollectionException) {
             return $controllerService->getNotFoundResponse();
         }
