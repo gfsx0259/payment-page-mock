@@ -18,13 +18,8 @@ $this->setTitle('Aps page');
 
 <h2>APS emulation page</h2>
 <div class="col-12 col-md-6 col-lg-6 col-xl-8">
-    <?= Form::tag()
-        ->post($completeUrl)
-        ->id('form-aps-page')
-        ->open()
-    ?>
-    <?= Input::hidden('uniqueKey', $uniqueKey)->render(); ?>
-
-    <?= Field::submitButton('Подтвердить') ?>
-    <?= Form::tag()->close() ?>
+    <form action="<?= $completeUrl ?>" method="post">
+        <input type="hidden" name="<?= 'uniqueKey' ?>" value="<?= $uniqueKey ?>">
+        <input type="submit" value="Отправить">
+    </form>
 </div>
