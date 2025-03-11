@@ -36,6 +36,7 @@
         "psr/http-server-middleware": "^1.0",
         "psr/log": "^3.0",
         "symfony/console": "^6.0",
+        "thecodingmachine/safe": "^2.5",
         "tuupola/cors-middleware": "^1.4",
         "vlucas/phpdotenv": "^5.3",
         "yiisoft/access": "^1.0",
