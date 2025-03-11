@@ -88,7 +88,8 @@ final class OverrideProcessorTest extends Unit
             $this->make(StateManager::class, ['generateAccessKey' => '']),
             $this->make(QrGenerator::class),
             $this->makeEmpty(LoggerInterface::class),
-            'host'
+            'host',
+            'dummy'
         );
     }
 }
