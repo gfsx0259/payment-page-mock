@@ -21,7 +21,8 @@ class ActionFactory
 {
     private const
         DISPLAY_DATA_TYPE_RAW = 'qr_data',
-        DISPLAY_DATA_TYPE_IMG = 'qr_img';
+        DISPLAY_DATA_TYPE_IMG = 'qr_img',
+        DISPLAY_DATA_TYPE_URL = 'qr_url';
 
     public function __construct(
         private Injector $injector,
@@ -56,6 +57,8 @@ class ActionFactory
             } elseif ($callback->get('clarification_fields')) {
                 return new ClarificationAction($callback, $state);
             } elseif ($callback->get('display_data.0.type') === self::DISPLAY_DATA_TYPE_RAW) {
+                return $this->injector->make(QrDataAction::class, [$callback, $state]);
+            } elseif ($callback->get('display_data.0.type') === self::DISPLAY_DATA_TYPE_URL) {
                 return $this->injector->make(QrDataAction::class, [$callback, $state]);
             } elseif ($callback->get('display_data.0.type') === self::DISPLAY_DATA_TYPE_IMG) {
                 return $this->injector->make(QrImageAction::class, [$callback, $state]);

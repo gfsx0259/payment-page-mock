@@ -25,6 +25,7 @@ return [
         'senderEmail' => 'sender@example.com',
     ],
     'host' => getenv('DUMMY_API_URL'),
+    'hostApp' => getenv('DUMMY_API_MOBILE_SCHEME'),
     'middlewares' => [
         ErrorCatcher::class,
         Router::class,

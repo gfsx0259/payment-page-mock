@@ -6,7 +6,7 @@ services:
     build:
       context: ./src/client
       dockerfile: ../../build/images/client/Dockerfile
-      target: development
+      target: production
     environment:
       NODE_ENV: $DUMMY_SPA_NODE_ENV
       VUE_APP_API_URL: $DUMMY_API_URL
@@ -14,13 +14,15 @@ services:
       - ./src/client/src:/home/node/app/src:rw
     ports:
       - "${DUMMY_SPA_PORT}:8080"
+    networks:
+      - dev-ecommpay-pp-network
 
   dummy-fpm: &server_app
     container_name: dummy-fpm
     build:
       context: ./src/server
       dockerfile: ../../build/images/server/Dockerfile
-      target: development
+      target: production
       args:
         UID: 1000
         GID: 1000
@@ -34,6 +36,8 @@ services:
     volumes:
       - ./src/server:/var/www:rw
       - webFront:/var/www/public
+    networks:
+      - dev-ecommpay-pp-network
 
   dummy-api:
     container_name: dummy-api
@@ -43,11 +47,18 @@ services:
       NGINX_ROOT: /var/www/public
     ports:
       - "${DUMMY_API_PORT}:80"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dummy_https.rule=Host(`dummy.paymentpage.localhost`) || HostRegexp(`^dummy-paymentpage-[-\d]+\.nip\.io$$`)
+      - traefik.http.routers.dummy_https.tls=false
+      - traefik.http.routers.dummy_https.entrypoints=http
     volumes:
       - ./build/images/nginx:/etc/nginx/templates
       - webFront:/var/www/public
     links:
       - dummy-fpm
+    networks:
+      - dev-ecommpay-pp-network
 
   dummy-callbacks_queue_consumer:
     <<: *server_app
@@ -58,6 +69,8 @@ services:
   dummy-rabbit:
     container_name: dummy-rabbit
     image: rabbitmq:latest
+    networks:
+      - dev-ecommpay-pp-network
     environment:
       RABBITMQ_HOST: $DUMMY_RABBITMQ_HOST
       RABBITMQ_DEFAULT_USER: $DUMMY_RABBITMQ_DEFAULT_USER
@@ -65,11 +78,15 @@ services:
 
   dummy-memcached:
     container_name: dummy-memcached
+    networks:
+      - dev-ecommpay-pp-network
     image: memcached:latest
 
   dummy-db:
     container_name: dummy-db
     image: mysql:5.7.42
+    networks:
+      - dev-ecommpay-pp-network
     environment:
       MYSQL_ROOT_PASSWORD: $DUMMY_DB_ROOT_PASSWORD
       MYSQL_DATABASE: $DUMMY_DB_NAME
@@ -83,3 +100,8 @@ services:
 volumes:
   dbdata:
   webFront:
+
+networks:
+  dev-ecommpay-pp-network:
+    name: dev-ecommpay-pp-network
+    external: true

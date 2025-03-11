@@ -30,6 +30,7 @@ return [
         $qrGenerator,
         $logger,
         $params['host'],
+        $params['hostApp'],
     ),
     CallbackSenderInterface::class => function (LoggerInterface $logger) {
         if (ArrayHelper::getValue($_ENV, 'DUMMY_API_DISABLE_SENDING_CALLBACKS')) {

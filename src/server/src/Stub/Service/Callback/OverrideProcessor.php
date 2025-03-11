@@ -31,6 +31,7 @@ class OverrideProcessor implements ProcessorInterface
         'ACS_IFRAME_URL' => 'acs_iframe_url',
         'ACS_REDIRECT_URL' => 'acs_redirect_url',
         'APS_URL' => 'aps_url',
+        'APS_APP_URL' => 'aps_app_url',
         'APS_WIDGET_URL' => 'additional_data.aps_widget_url',
         'QR_ACCEPT_LINK' => 'qr_accept_link',
         'QR_ACCEPT_IMAGE' => 'qr_accept_image',
@@ -43,6 +44,7 @@ class OverrideProcessor implements ProcessorInterface
         private QrGenerator $qrGenerator,
         private LoggerInterface $logger,
         private string $host,
+        private string $hostApp,
     ) {}
 
     public function process(ArrayCollection $callback, State $state): ArrayCollection
@@ -54,6 +56,7 @@ class OverrideProcessor implements ProcessorInterface
         $source->set('acs_iframe_url', $this->generateAcsIframeUrl($state));
         $source->set('acs_redirect_url', $this->generateAcsRedirectUrl($state));
         $source->set('aps_url', $this->generateApsUrl($state));
+        $source->set('aps_app_url', $this->generateApsAppUrl($state));
 
         $qrLink = $this->generateQrAcceptUrl($state);
 
@@ -93,6 +96,18 @@ class OverrideProcessor implements ProcessorInterface
         return new Uri($this->host . $this->urlGenerator->generate('actions/renderAps', [
             'uniqueKey' => $this->stateManager->generateAccessKey($state),
         ]));
+    }
+
+    private function generateApsAppUrl(State $state): string
+    {
+        $appUri = $this->urlGenerator->generateAbsolute(
+            'app/complete',
+            queryParameters: ['uniqueKey' => $this->stateManager->generateAccessKey($state)],
+            scheme: $this->hostApp,
+            host: '',
+        );
+
+        return $this->hostApp . '://' . $appUri;
     }
 
     private function generateAcsIframeUrl(State $state): string

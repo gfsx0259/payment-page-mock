@@ -45,7 +45,12 @@ abstract class RedirectAction extends AbstractAction
 
         if ($completeRequest === null) {
             $redirectUrl = $this->getRedirectUrl();
-            $actionKey = $this->routeMatcher->parseArgument($redirectUrl, $identityKeyName);
+
+            if (isset($_ENV['DUMMY_API_MOBILE_SCHEME']) && str_starts_with($redirectUrl, $_ENV['DUMMY_API_MOBILE_SCHEME'])) {
+                $actionKey = $this->parseUniqueKey($redirectUrl);
+            } else {
+                $actionKey = $this->routeMatcher->parseArgument($redirectUrl, $identityKeyName);
+            }
 
             if ($actionKey) {
                 return $actionKey;
@@ -69,5 +74,12 @@ abstract class RedirectAction extends AbstractAction
     protected function getIdentityKeyName(): string
     {
         return 'uniqueKey';
+    }
+
+    private function parseUniqueKey(string $url): string
+    {
+        $params = [];
+        parse_str(parse_url($url, PHP_URL_QUERY), $params);
+        return $params['uniqueKey'];
     }
 }

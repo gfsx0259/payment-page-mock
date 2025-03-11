@@ -161,6 +161,7 @@ return [
                 ->action([DummyPageController::class, 'renderConfirmationQr']),
             Route::post('/completeAps')
                 ->name('actions/completeAps')
+                ->middleware(ApiRequestParser::class)
                 ->action([ActionController::class, 'completeAps']),
             Route::post('/completeConfirmationQr')
                 ->name('actions/completeConfirmationQr')
@@ -174,6 +175,9 @@ return [
             Route::methods([Method::GET, Method::POST], '{destination:[\/\-\w.]+}')
                 ->action([StaticController::class, 'render'])
         ),
+
+    Route::get('render')
+        ->name('app/complete'),
 
     // Swagger routes
     Group::create('/swagger')
