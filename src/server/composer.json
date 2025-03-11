@@ -96,7 +96,6 @@
         "codeception/module-phpbrowser": "^2.0",
         "idimsh/better-bypass-finals": "dev-master",
         "phpunit/phpunit": "^9.5",
-        "roave/infection-static-analysis-plugin": "^1.16",
         "roave/security-advisories": "dev-master",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.18",
