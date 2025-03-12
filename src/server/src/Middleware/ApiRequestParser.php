@@ -18,7 +18,7 @@ final class ApiRequestParser implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if ($request->getHeader(Header::CONTENT_TYPE)[0] === 'application/json') {
+        if (str_contains($request->getHeader(Header::CONTENT_TYPE)[0], 'application/json')) {
             $request = $request->withParsedBody(\Safe\json_decode($request->getBody()->getContents(), true));
         }
 
