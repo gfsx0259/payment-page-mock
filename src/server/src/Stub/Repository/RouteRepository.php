@@ -15,9 +15,9 @@ final class RouteRepository extends Select\Repository
 {
     /**
      * @param string $path
-     * @return Route
+     * @return Route|null
      */
-    public function findByPath(string $path): Route
+    public function findByPath(string $path): ?Route
     {
         return $this->select()->where(['route' => $path])->fetchOne();
     }
